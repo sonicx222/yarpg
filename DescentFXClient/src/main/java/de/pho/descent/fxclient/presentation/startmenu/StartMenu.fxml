@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="VBox" alignment="CENTER" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.startmenu.StartMenuPresenter">
+    <stylesheets> <!-- TODO check the tags 'styleClass' and 'stylesheets' same result? -->
+        <URL value="@startmenu.css" />
+    </stylesheets>
+   <children>
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1034.0" prefWidth="1040.0">
+         <children>
+            <ImageView fitHeight="1034.0" fitWidth="1040.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cover.jpg" />
+               </image>
+            </ImageView>
+            <VBox layoutX="700.0" layoutY="500.0" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line fx:id="lineContinue" endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneContinue" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemContinue" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textContinue" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="CONTINUE">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneCampaign" onMouseClicked="#handleNewCampaign" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemCampaign" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textCampaign" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="NEW CAMPAIGN">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneSettings" onMouseClicked="#handleSettings" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemSettings" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textSettings" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SETTINGS">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneLogout" onMouseClicked="#handleLogout" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemLogout" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textLogout" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGOUT">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneExit" onMouseClicked="#handleExit" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemExit" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textExit" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="EXIT">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</VBox>

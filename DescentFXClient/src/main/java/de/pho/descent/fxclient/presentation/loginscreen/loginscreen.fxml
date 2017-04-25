@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="VBox" alignment="CENTER" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.loginscreen.LoginscreenPresenter">
+    <stylesheets> <!-- TODO check the tags 'styleClass' and 'stylesheets' same result? -->
+        <URL value="@loginscreen.css" />
+    </stylesheets>
+   <children>
+      <StackPane prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="1034.0" fitWidth="1040.0" pickOnBounds="true" preserveRatio="true">
+               <effect>
+                  <BoxBlur height="10.0" iterations="3" width="10.0" />
+               </effect>
+               <image>
+                  <Image url="@cover.jpg" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <TextField fx:id="loginUserText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.5" prefHeight="40.0" prefWidth="200.0" promptText="User" style="-fx-background-color: black;">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <PasswordField fx:id="loginPwdText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.5" prefHeight="40.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: black;">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </PasswordField>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <Line endX="200.0" stroke="DARKGRAY">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Line>
+                  <StackPane fx:id="paneRegister" onMouseClicked="#handleRegister">
+                     <children>
+                        <Rectangle fx:id="itemRegister" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.4" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textRegister" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REGISTER">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneLogin" onMouseClicked="#handleLogin">
+                     <children>
+                        <Rectangle fx:id="itemLogin" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.4" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textLogin" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneExit" onMouseClicked="#handleExit">
+                     <children>
+                        <Rectangle fx:id="itemExit" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.4" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textExit" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="EXIT">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+</VBox>

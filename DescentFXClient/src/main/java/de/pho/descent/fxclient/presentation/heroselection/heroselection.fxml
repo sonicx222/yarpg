@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.heroselection.HeroSelectionPresenter">
+   <children>
+      <ListView fx:id="heroesListView" layoutX="38.0" layoutY="226.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="200.0" />
+      <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="600.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="600.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</Pane>
