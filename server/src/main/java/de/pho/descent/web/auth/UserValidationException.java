@@ -1,6 +1,6 @@
 package de.pho.descent.web.auth;
 
-import de.pho.descent.web.model.User;
+import de.pho.descent.shared.model.Player;
 import java.util.HashSet;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -16,9 +16,9 @@ public class UserValidationException extends Exception {
     public UserValidationException() {
     }
 
-    private Set<ConstraintViolation<User>> violations = new HashSet<>();
+    private Set<ConstraintViolation<Player>> violations = new HashSet<>();
 
-    public UserValidationException(Set<ConstraintViolation<User>> violations) {
+    public UserValidationException(Set<ConstraintViolation<Player>> violations) {
         this.violations = violations;
     }
 
@@ -26,11 +26,11 @@ public class UserValidationException extends Exception {
         super(message);
     }
 
-    public Set<ConstraintViolation<User>> getViolations() {
+    public Set<ConstraintViolation<Player>> getViolations() {
         return violations;
     }
 
-    public void setViolations(Set<ConstraintViolation<User>> violations) {
+    public void setViolations(Set<ConstraintViolation<Player>> violations) {
         this.violations = violations;
     }
 }

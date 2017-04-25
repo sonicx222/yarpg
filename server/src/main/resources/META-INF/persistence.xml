@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="DescentWebPU" transaction-type="JTA">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>java:/jboss/datasources/ExampleDS</jta-data-source>
-        <properties>
-            <!--<property name="hibernate.default_schema" value="descent"/>-->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-      
-            <property name="hibernate.max_fetch_depth" value="3" />
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-            <property name="hibernate.show_sql" value="false" />
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.use_sql_comments" value="true"/>
-
-        </properties>
-    </persistence-unit>
+  <persistence-unit name="PostgresPU" transaction-type="JTA">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <jta-data-source>ArgosSpielplatzDS</jta-data-source>
+    <class>de.pho.descent.shared.model.Player</class>
+    <class>de.pho.descent.shared.model.GameMaster</class>
+    <class>de.pho.descent.shared.model.GameMap</class>
+    <class>de.pho.descent.shared.model.MapField</class>
+    <class>de.pho.descent.shared.model.campaign.Campaign</class>
+    <class>de.pho.descent.shared.model.quest.QuestEncounter</class>
+    <class>de.pho.descent.shared.model.hero.GameHero</class>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="hibernate.default_schema" value="descent"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+      <property name="hibernate.archive.autodetection" value="class, hbm"/>
+      <property name="hibernate.max_fetch_depth" value="3"/>
+      <property name="hibernate.hbm2ddl.auto" value="create"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.use_sql_comments" value="true"/>
+      <!--
+              if you don't have a database already created
+              append ;create=true to end of the jdbc url
+            -->
+      <!--            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/pho"/>
+            <property name="javax.persistence.jdbc.user" value="descent"/>
+            <property name="javax.persistence.jdbc.password" value="descent"/>-->
+    </properties>
+  </persistence-unit>
 </persistence>

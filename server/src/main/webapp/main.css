@@ -1,7 +1,15 @@
 .gameboard {
-    background: url('img/encounter01/First_Blood.png') no-repeat;
     height: 864px;
     width: 936px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.map {
+    background: url('img/encounter/First_Blood.png') no-repeat;
+    height: 864px;
+    width: 936px;
+    z-index: 10;
 }
 
 .mapfield{
@@ -10,5 +18,15 @@
     height: 72px;
     /*border: 1px solid blue;*/
     overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.5);
 }
+
+.grisbane{
+    float: left;
+    width: 72px;
+    height: 72px;
+    /*border: 1px solid blue;*/
+    overflow: hidden;
+    background: url('img/heroes/Grisbane_Field.png') no-repeat;
+    z-index: 20;
+}
+

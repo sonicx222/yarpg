@@ -1,12 +1,10 @@
 package de.pho.descent.web.auth;
 
-import de.pho.descent.web.model.User;
+import de.pho.descent.shared.auth.SecurityTools;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -17,23 +15,22 @@ public class WSAuthenticationInterceptor {
     private static final Logger LOG = Logger.getLogger(WSAuthenticationInterceptor.class.getName());
 
     @Inject
-    private LoginService loginService;
-
-    @Inject
-    private User user;
+    private PlayerController playerController;
 
     @AroundInvoke
     public Object authenticate(InvocationContext context) throws Exception {
         Object[] parameters = context.getParameters();
-
-        String username = String.valueOf(parameters[0]);
-        String password = String.valueOf(parameters[1]);
-
+        String encodedAuthData;
+        
         try {
-            user = loginService.doLogin(username, password);
-        } catch (UserNotFoundException | UserValidationException ex) {
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
+            encodedAuthData = String.valueOf(parameters[0]);
+            String[] authData = SecurityTools.extractDataFromAuthHeaderValue(encodedAuthData);
+        String decodedUser = authData[0];
+        String digestHash = authData[1];
+        } catch (NullPointerException npe) {
+            throw new UserValidationException("No credentials sent");
         }
+//        playerController.doAuthenticate(username, password, null, null);
 
         return context.proceed();
     }
