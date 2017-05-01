@@ -24,7 +24,7 @@ public class WSAuthenticationInterceptor {
         
         try {
             encodedAuthData = String.valueOf(parameters[0]);
-            String[] authData = SecurityTools.extractDataFromAuthHeaderValue(encodedAuthData);
+            String[] authData = SecurityTools.extractDataFromAuthenticationToken(encodedAuthData);
         String decodedUser = authData[0];
         String digestHash = authData[1];
         } catch (NullPointerException npe) {

@@ -4,7 +4,6 @@
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <jta-data-source>ArgosSpielplatzDS</jta-data-source>
     <class>de.pho.descent.shared.model.Player</class>
-    <class>de.pho.descent.shared.model.GameMaster</class>
     <class>de.pho.descent.shared.model.GameMap</class>
     <class>de.pho.descent.shared.model.MapField</class>
     <class>de.pho.descent.shared.model.campaign.Campaign</class>
@@ -18,7 +17,7 @@
       <property name="hibernate.archive.autodetection" value="class, hbm"/>
       <property name="hibernate.max_fetch_depth" value="3"/>
       <property name="hibernate.hbm2ddl.auto" value="create"/>
-      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.show_sql" value="false"/>
       <property name="hibernate.format_sql" value="true"/>
       <property name="hibernate.use_sql_comments" value="true"/>
       <!--

@@ -4,6 +4,7 @@ import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
 import java.net.URI;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -58,16 +59,9 @@ public class PlayerBoundary {
             @Context UriInfo uriInfo)
             throws UserValidationException {
 
-        String[] authData = SecurityTools.extractDataFromAuthHeaderValue(encodedAuthData);
-        String decodedUser = authData[0];
-        String digestHash = authData[1];
-
-        if (!username.equals(decodedUser)) {
-            throw new UserValidationException("Wrong username");
-        }
-
         String uriPath = uriInfo.getRequestUri().getPath();
-        Player player = playerController.doLogin(username, HttpMethod.GET, uriPath, digestHash);
+        Player player = playerController.doAuthenticate(HttpMethod.GET, uriPath, encodedAuthData);
+        LOG.log(Level.INFO, "User {0} logged in.", player.getUsername());
 
         return Response.accepted(player).build();
     }
@@ -79,7 +73,7 @@ public class PlayerBoundary {
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @PathParam(ParamValue.USERNAME) String username, Player player) {
         Response response;
-        if (SecurityTools.extractDataFromAuthHeaderValue(authToken)[0].equals(username)) {
+        if (SecurityTools.extractDataFromAuthenticationToken(authToken)[0].equals(username)) {
             player.setUsername(username);
             Player updatedPlayer = playerController.updatePlayer(player);
             response = Response.accepted(updatedPlayer).build();

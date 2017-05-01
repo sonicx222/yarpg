@@ -44,11 +44,18 @@ public class PlayerController {
     public List<Player> getAllPlayers() {
         return playerService.getAllPlayers();
     }
+    
+    public Player doAuthenticate(String restMethod, String restURI, String authToken) throws UserValidationException {
+        if (authToken == null) {
+            throw new UserValidationException("No auth token");
+        }
 
-    public Player doLogin(String username, String restMethod, String restURI, String digestHash) throws UserValidationException {
-        LOG.log(Level.INFO, "Log in player: {0}", username);
+        String[] authData = SecurityTools.extractDataFromAuthenticationToken(authToken);
+        String decodedUser = authData[0];
+        String digestHash = authData[1];
 
-        Player player = playerService.getPlayerByUsername(username);
+        LOG.log(Level.INFO, "Authenticate player: {0}", decodedUser);
+        Player player = playerService.getPlayerByUsername(decodedUser);
         if (player == null) {
             throw new UserValidationException("Login failed! User not found");
         }
@@ -60,16 +67,7 @@ public class PlayerController {
 
         authenticate(player.getPassword(), restMethod, restURI, digestHash);
 
-        LOG.log(Level.INFO, "User {0} logged in.",
-                new Object[]{player.getUsername()});
-
         return player;
-    }
-    
-    public boolean doAuthenticate(String username, String restMethod, String restURI, String authDigest) throws UserValidationException {
-        Player player = playerService.getPlayerByUsername(username);
-        
-        return authenticate(player.getPassword(), restMethod, restURI, authDigest);
     }
 
     private boolean authenticate(String pwdHash, String restMethod, String restURI, String authDigest) throws UserValidationException {

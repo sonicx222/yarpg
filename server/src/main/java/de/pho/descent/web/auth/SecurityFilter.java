@@ -1,8 +1,8 @@
 package de.pho.descent.web.auth;
 
 import static de.pho.descent.shared.auth.ParamValue.*;
-import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.exception.ErrorMessage;
+import de.pho.descent.shared.model.Player;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,13 +32,11 @@ public class SecurityFilter implements ContainerRequestFilter {
         if (requestContext.getUriInfo().getPath().contains(SECURED_URL)) {
             List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
             if (authHeader != null && authHeader.size() > 0) {
-                String[] authData = SecurityTools.extractDataFromAuthHeaderValue(authHeader.get(0));
-                String decodedUser = authData[0];
-                String digestHash = authData[1];
                 String uriPath = requestContext.getUriInfo().getRequestUri().getPath();
 
                 try {
-                    if (playerController.doAuthenticate(decodedUser, requestContext.getMethod(), uriPath, digestHash)) {
+                    Player p = playerController.doAuthenticate(requestContext.getMethod(), uriPath, authHeader.get(0));
+                    if (p != null) {
                         return;
                     }
                 } catch (UserValidationException ex) {

@@ -41,8 +41,8 @@ public class CampaignBoundary {
     }
 
     @POST
-    public Response createNewCampaign(@Context UriInfo uriInfo) throws URISyntaxException {
-        Campaign campaign = campaignController.createNewCampaign();
+    public Response createNewCampaign(Campaign unsavedCampaign, @Context UriInfo uriInfo) throws URISyntaxException {
+        Campaign campaign = campaignController.createNewCampaign(unsavedCampaign);
         URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(campaign.getId())).build();
 
         return Response.created(uri).entity(campaign).build();

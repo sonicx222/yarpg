@@ -1,12 +1,10 @@
 package de.pho.descent.web.campaign;
 
-import de.pho.descent.shared.model.GameMaster;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.hero.HeroTemplate;
-import de.pho.descent.shared.model.quest.Quest;
 import static de.pho.descent.shared.model.quest.Quest.FIRST_BLOOD;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestPart;
@@ -40,8 +38,7 @@ public class CampaignController {
         return campaignService.getAllCampaigns();
     }
 
-    public Campaign createNewCampaign() {
-        Campaign c = new Campaign();
+    public Campaign createNewCampaign(Campaign c) {
         c.setPhase(CampaignPhase.HERO_SELECTION);
         c.setActiveQuest(questController.loadQuestEncounter(FIRST_BLOOD, QuestPart.FIRST));
 
@@ -53,11 +50,6 @@ public class CampaignController {
         Campaign c = new Campaign();
         c.setPhase(CampaignPhase.HERO_SELECTION);
         c = persistenceService.update(c);
-
-        GameMaster gm = new GameMaster();
-        gm.setCampaign(c);
-        gm.setPlayer(players.get(0));
-        c.setGameMaster(gm);
 
         HeroSelection hs = new HeroSelection();
         hs.setCampaign(c);
