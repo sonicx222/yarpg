@@ -11,6 +11,9 @@ public class Credentials {
 
     private Player player;
 
+    public Credentials() {
+    }
+    
     @PostConstruct
     public void init() {
     }

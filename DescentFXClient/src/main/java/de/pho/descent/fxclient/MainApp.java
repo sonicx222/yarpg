@@ -29,8 +29,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        LoginscreenView startMenuView = new LoginscreenView();
-        Scene scene = new Scene(startMenuView.getView());
+        LoginscreenView loginscreenView = new LoginscreenView();
+        Scene scene = new Scene(loginscreenView.getView());
 
         showSceneInFullscreen(stage, scene);
     }

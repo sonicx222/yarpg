@@ -6,6 +6,7 @@ import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
+import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -115,15 +116,14 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleNewCampaign(MouseEvent event) {
+        
         if (credentials == null || !credentials.isValid()) {
             Notifications.create()
                     .darkStyle().position(Pos.TOP_RIGHT)
                     .text("No credentials found. Please log in first")
                     .showInformation();
         } else {
-            Campaign campaign = CampaignClient.createCampaign(
-                    credentials.getPlayer().getUsername(),
-                    credentials.getPlayer().getPassword());
+            Campaign campaign = CampaignClient.createCampaign(credentials);
 
             if (campaign != null) {
                 gameDataModel.setCampaign(campaign);

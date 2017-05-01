@@ -58,7 +58,10 @@ public class PlayerClient extends BaseRESTClient {
             WebTarget loginPlayerTarget = playersTarget.path("{" + ParamValue.USERNAME + "}");
 
             String uriPath = loginPlayerTarget.resolveTemplate(ParamValue.USERNAME, username).getUri().getPath();
-            String authToken = SecurityTools.createAuthHeaderValue(username, password, HttpMethod.GET, uriPath);
+            String authToken = SecurityTools.createAuthenticationToken(username,
+                    SecurityTools.createHash(password, false),
+                    HttpMethod.GET,
+                    uriPath);
             LOG.info("Login Authorization : " + authToken);
             
             Player player = null;
