@@ -13,8 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author pho
  */
-@Entity
-@XmlRootElement
 public class GameMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +27,14 @@ public class GameMaster implements Serializable {
     @OneToOne
     private Player player;
 
+    public GameMaster() {
+    }
+    
+    public GameMaster(Campaign campaign, Player player) {
+        this.campaign = campaign;
+        this.player = player;
+    }
+    
     public Long getId() {
         return id;
     }

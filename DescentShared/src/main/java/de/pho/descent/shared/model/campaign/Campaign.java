@@ -1,7 +1,7 @@
 package de.pho.descent.shared.model.campaign;
 
 import de.pho.descent.shared.model.hero.GameHero;
-import de.pho.descent.shared.model.GameMaster;
+import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import java.io.Serializable;
 import java.util.Date;
@@ -32,20 +32,18 @@ public class Campaign implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String findAll = "de.pho.descent.shared.model.Campaign.findAll";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Temporal(TemporalType.DATE)
     private Date createdOn = new Date();
-    
+
     @Enumerated(EnumType.STRING)
     private CampaignPhase phase;
-    
-    @OneToOne
-    @JoinColumn(name = "gm_id")
-    private GameMaster gameMaster;
+
+    private Player overlord;
 
     @OneToOne
     private QuestEncounter activeQuest;
@@ -54,7 +52,6 @@ public class Campaign implements Serializable {
     @JoinColumn(name = "hero_id")
     private Set<GameHero> heroes;
 
-    
     public Long getId() {
         return id;
     }
@@ -83,12 +80,12 @@ public class Campaign implements Serializable {
         this.phase = phase;
     }
 
-    public GameMaster getGameMaster() {
-        return gameMaster;
+    public Player getOverlord() {
+        return overlord;
     }
 
-    public void setGameMaster(GameMaster gameMaster) {
-        this.gameMaster = gameMaster;
+    public void setOverlord(Player overlord) {
+        this.overlord = overlord;
     }
 
     public Set<GameHero> getHeroes() {

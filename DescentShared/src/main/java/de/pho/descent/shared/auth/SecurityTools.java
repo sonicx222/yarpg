@@ -25,11 +25,13 @@ public class SecurityTools {
             + "5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesPB";
 
     public static boolean checkAuthenticationDigest(String passwordHash, String restMethod, String restURI, String authDigest) {
-        StringBuilder sb = new StringBuilder(passwordHash);
-        sb.append("+").append(restMethod);
-        sb.append("+").append(restURI);
+        String digestToCheck = createAuthenticationDigest(passwordHash, restMethod, restURI);
 
-        return checkPassword(sb.toString(), authDigest);
+        if (authDigest == null || authDigest.length() < 30) {
+            return false;
+        }
+
+        return digestToCheck.equals(authDigest);
     }
 
     public static boolean checkPassword(String clearText, String hash) {
@@ -52,15 +54,14 @@ public class SecurityTools {
         }
     }
 
-    public static String createAuthHeaderValue(String username, String password, String restMethod, String restURI) {
-        String pwdHash = SecurityTools.createHash(password, false);
+    public static String createAuthenticationToken(String username, String pwdHash, String restMethod, String restURI) {
         String authDigest = createAuthenticationDigest(pwdHash, restMethod, restURI);
         String combined = username + ":" + authDigest;
 
         return Base64.encodeBase64String(combined.getBytes());
     }
 
-    public static String[] extractDataFromAuthHeaderValue(String authToken) {
+    public static String[] extractDataFromAuthenticationToken(String authToken) {
         String combined = new String(Base64.decodeBase64(authToken));
 
         return combined.split(":");
@@ -71,7 +72,7 @@ public class SecurityTools {
         sb.append("+").append(restMethod);
         sb.append("+").append(restURI);
 
-        return createHash(sb.toString(), true);
+        return createHash(sb.toString(), false);
     }
 
     public static String createHash(String password, boolean randomSecret) {
