@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -12,5 +14,32 @@
       <ListView fx:id="heroesListView" layoutX="38.0" layoutY="226.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="200.0" />
       <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="600.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="600.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true" />
+      <VBox layoutX="710.0" layoutY="510.0" nodeOrientation="LEFT_TO_RIGHT">
+         <children>
+            <Line fx:id="lineContinue" endX="200.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneAction" onMouseClicked="#handleToggleReady" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+               <children>
+                  <Rectangle fx:id="itemAction" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Text fx:id="textAction" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="READY">
+                     <font>
+                        <Font name="Tw Cen MT Condensed" size="22.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Line endX="200.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+               <children>
+                  <Rectangle fx:id="itemBBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
+                     <font>
+                        <Font name="Tw Cen MT Condensed" size="22.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Line endX="200.0" stroke="DARKGRAY" />
+         </children>
+      </VBox>
    </children>
 </Pane>

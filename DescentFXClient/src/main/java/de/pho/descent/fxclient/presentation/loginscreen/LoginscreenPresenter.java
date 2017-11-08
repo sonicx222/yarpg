@@ -3,6 +3,7 @@ package de.pho.descent.fxclient.presentation.loginscreen;
 import static de.pho.descent.fxclient.MainApp.*;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
+import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.model.Player;
 import java.net.URL;
@@ -138,8 +139,12 @@ public class LoginscreenPresenter implements Initializable {
 
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {
-
-            Player player = PlayerClient.registerPlayer(loginUserText.getText(), loginPwdText.getText());
+            Player player = null;
+            try {
+                player = PlayerClient.registerPlayer(loginUserText.getText(), loginPwdText.getText());
+            } catch (ServerException ex) {
+                showError(ex);
+            }
             if (player != null) {
                 Notifications tmp = Notifications.create();
                 tmp.darkStyle().position(Pos.TOP_RIGHT).text("Player " + loginUserText.getText() + " registered").showInformation();
@@ -152,8 +157,12 @@ public class LoginscreenPresenter implements Initializable {
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {
 
-            Player player = PlayerClient.loginPlayer(loginUserText.getText(), loginPwdText.getText());
-
+            Player player = null;
+            try {
+                player = PlayerClient.loginPlayer(loginUserText.getText(), loginPwdText.getText());
+            } catch (ServerException ex) {
+                showError(ex);
+            }
             if (player != null) {
                 credentials.setPlayer(player);
                 switchFullscreenScene(event, new StartMenuView());

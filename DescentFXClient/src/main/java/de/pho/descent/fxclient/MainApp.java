@@ -1,15 +1,20 @@
 package de.pho.descent.fxclient;
 
 import com.airhacks.afterburner.views.FXMLView;
+import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
+import de.pho.descent.shared.exception.ErrorMessage;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 public class MainApp extends Application {
 
@@ -67,5 +72,13 @@ public class MainApp extends Application {
         stage.setScene(scene);
 
         stage.show();
+    }
+
+    public static void showError(ServerException exception) {
+        ErrorMessage errorMsg = exception.getErrorResponse().readEntity(ErrorMessage.class);
+        LOGGER.log(Level.SEVERE, errorMsg.getErrorMessage());
+
+        Notifications tmp = Notifications.create();
+        tmp.darkStyle().position(Pos.TOP_RIGHT).text(errorMsg.getErrorMessage()).showError();
     }
 }

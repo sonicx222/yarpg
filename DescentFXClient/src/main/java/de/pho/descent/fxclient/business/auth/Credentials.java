@@ -14,6 +14,10 @@ public class Credentials {
     public Credentials() {
     }
     
+    public Credentials(Player player) {
+        this.player = player;
+    }
+    
     @PostConstruct
     public void init() {
     }

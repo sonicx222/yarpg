@@ -1,5 +1,6 @@
 package de.pho.descent.fxclient.presentation.general;
 
+import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.campaign.Campaign;
 import javax.annotation.PostConstruct;
 
@@ -9,18 +10,18 @@ import javax.annotation.PostConstruct;
  */
 public class GameDataModel {
     
-    private Campaign campaign;
+    private WsCampaign campaign;
     
     @PostConstruct
     public void init() {
 
     }
 
-    public Campaign getCampaign() {
+    public WsCampaign getCampaign() {
         return campaign;
     }
 
-    public void setCampaign(Campaign campaign) {
+    public void setCampaign(WsCampaign campaign) {
         this.campaign = campaign;
     }
     

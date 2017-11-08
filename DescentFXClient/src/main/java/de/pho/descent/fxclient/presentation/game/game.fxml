@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" onMouseClicked="#handleBackNavigation" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.GamePresenter">
+   <children>
+      <ImageView fx:id="mapImageView" fitHeight="864.0" fitWidth="936.0" layoutX="200.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

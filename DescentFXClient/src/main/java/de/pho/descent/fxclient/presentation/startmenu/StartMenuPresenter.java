@@ -1,13 +1,14 @@
 package de.pho.descent.fxclient.presentation.startmenu;
 
+import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
+import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.game.GameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
-import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
-import de.pho.descent.shared.model.Player;
-import de.pho.descent.shared.model.campaign.Campaign;
+import de.pho.descent.shared.dto.WsCampaign;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -116,18 +117,23 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleNewCampaign(MouseEvent event) {
-        
+
         if (credentials == null || !credentials.isValid()) {
             Notifications.create()
                     .darkStyle().position(Pos.TOP_RIGHT)
                     .text("No credentials found. Please log in first")
                     .showInformation();
         } else {
-            Campaign campaign = CampaignClient.createCampaign(credentials);
-
+            WsCampaign campaign = null;
+            try {
+                campaign = CampaignClient.createCampaign(credentials);
+            } catch (ServerException ex) {
+                showError(ex);
+            }
             if (campaign != null) {
                 gameDataModel.setCampaign(campaign);
-                switchFullscreenScene(event, new HeroSelectionView());;
+                switchFullscreenScene(event, new GameView());
+//                switchFullscreenScene(event, new HeroSelectionView());
             }
         }
     }

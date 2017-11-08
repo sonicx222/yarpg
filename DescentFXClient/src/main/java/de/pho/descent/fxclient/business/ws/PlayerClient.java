@@ -3,8 +3,8 @@ package de.pho.descent.fxclient.business.ws;
 import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -21,7 +21,7 @@ public class PlayerClient extends BaseRESTClient {
 
     private static final Logger LOG = Logger.getLogger(PlayerClient.class.getName());
 
-    public static Player registerPlayer(String username, String password) throws ClientErrorException {
+    public static Player registerPlayer(String username, String password) throws ServerException {
         Client client = null;
 
         try {
@@ -36,7 +36,7 @@ public class PlayerClient extends BaseRESTClient {
             if (postResponse.getStatus() == Status.CREATED.getStatusCode()) {
                 player = postResponse.readEntity(Player.class);
             } else {
-                showError(postResponse);
+                throw new ServerException(postResponse);
             }
 
             return player;
@@ -47,7 +47,7 @@ public class PlayerClient extends BaseRESTClient {
         }
     }
 
-    public static Player loginPlayer(String username, String password) throws ClientErrorException {
+    public static Player loginPlayer(String username, String password) throws ServerException {
         Client client = null;
 
         try {
@@ -62,7 +62,7 @@ public class PlayerClient extends BaseRESTClient {
                     SecurityTools.createHash(password, false),
                     HttpMethod.GET,
                     uriPath);
-            LOG.info("Login Authorization : " + authToken);
+            LOG.log(Level.INFO, "Login Authorization : {0}", authToken);
             
             Player player = null;
             Response getResponse = loginPlayerTarget
@@ -74,7 +74,7 @@ public class PlayerClient extends BaseRESTClient {
             if (getResponse.getStatus() == Status.ACCEPTED.getStatusCode()) {
                 player = getResponse.readEntity(Player.class);
             } else {
-                showError(getResponse);
+                throw new ServerException(getResponse);
             }
 
             return player;
