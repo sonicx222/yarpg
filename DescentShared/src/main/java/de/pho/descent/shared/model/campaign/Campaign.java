@@ -4,15 +4,19 @@ import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,31 +30,33 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Campaign.findAll, query = "select c from Campaign c")
+    @NamedQuery(name = Campaign.FINDACTIVE, query = "select c from Campaign as c "
+            + "where c.phase <> de.pho.descent.shared.model.campaign.CampaignPhase.FINISHED")
 })
 public class Campaign implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final String findAll = "de.pho.descent.shared.model.Campaign.findAll";
+    public static final String FINDACTIVE = "de.pho.descent.shared.model.Campaign.findActive";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
-    private Date createdOn = new Date();
+    @Temporal(TemporalType.TIMESTAMP)
+    private final Date createdOn = new Date();
 
     @Enumerated(EnumType.STRING)
     private CampaignPhase phase;
 
+    @ManyToOne
     private Player overlord;
 
     @OneToOne
     private QuestEncounter activeQuest;
 
-    @OneToMany
-    @JoinColumn(name = "hero_id")
-    private Set<GameHero> heroes;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "campaign_id")
+    private List<GameHero> heroes = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -88,11 +94,14 @@ public class Campaign implements Serializable {
         this.overlord = overlord;
     }
 
-    public Set<GameHero> getHeroes() {
+    public List<GameHero> getHeroes() { 
+        if (heroes == null) {
+            heroes = new ArrayList<>();
+        }
         return heroes;
     }
 
-    public void setHeroes(Set<GameHero> heroes) {
+    public void setHeroes(List<GameHero> heroes) {
         this.heroes = heroes;
     }
 

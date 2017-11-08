@@ -40,9 +40,8 @@ public class GameMap implements Serializable {
     @OrderBy("xPos, yPos")
     private List<MapField> mapFields;
 
-    @Lob
     @NotNull
-    private byte[] image;
+    private String imagePath;
 
     @Transient
     private Map<Integer, Map<Integer, MapField>> mapLayout;
@@ -98,12 +97,12 @@ public class GameMap implements Serializable {
         this.id = id;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override

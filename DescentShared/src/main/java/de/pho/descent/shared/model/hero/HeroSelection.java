@@ -10,28 +10,38 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author pho
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = HeroSelection.findByCampaign, query = "select hs from HeroSelection as hs "
+            + "where hs.campaign.id = :" + HeroSelection.paramCampaignId)
+})
 public class HeroSelection implements Serializable {
-    
+
     private static final long serialVersionUID = 5L;
-    
+    public static final String findByCampaign = "de.pho.descent.shared.model.hero.HeroSelection.findByCampaign";
+    public static final String paramCampaignId = "campaignIdParam";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     private Campaign campaign;
-    
+
     @ManyToOne
     private Player player;
-    
+
     @Enumerated(EnumType.STRING)
     private HeroTemplate selectedHero;
+    
+    private boolean ready;
 
     public Long getId() {
         return id;
@@ -64,6 +74,13 @@ public class HeroSelection implements Serializable {
     public void setSelectedHero(HeroTemplate selectedHero) {
         this.selectedHero = selectedHero;
     }
-    
-    
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
 }

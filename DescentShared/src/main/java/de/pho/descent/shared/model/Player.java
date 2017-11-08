@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -17,8 +18,6 @@ import javax.persistence.NamedQuery;
 @NamedQueries({
     @NamedQuery(name = Player.findAll, query = "select p from Player as p")
     ,
-    @NamedQuery(name = Player.findById, query = "select p from Player as p where p.id = :" + Player.paramId)
-    ,
     @NamedQuery(name = Player.findAllByUsername, query = "select p from Player as p "
             + "where LOWER(p.username) = LOWER(:" + Player.paramUsername + ") ")})
 public class Player implements Serializable {
@@ -26,9 +25,7 @@ public class Player implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String findAll = "de.pho.descent.shared.model.Player.findAll";
     public static final String findAllByUsername = "de.pho.descent.shared.model.Player.findAllByUsername";
-    public static final String findById = "de.pho.descent.shared.model.Player.findById";
     public static final String paramUsername = "usernameParam";
-    public static final String paramId = "idParam";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,10 +33,12 @@ public class Player implements Serializable {
 
     private String username;
 
+    @XmlTransient
     @Column(length = 400)
     private String password;
 
-    private boolean isDeactive;
+    @Column(name = "DEACTIVE")
+    private boolean deactive;
 
     public Player() {
 
@@ -75,11 +74,11 @@ public class Player implements Serializable {
     }
 
     public boolean isDeactive() {
-        return isDeactive;
+        return deactive;
     }
 
     public void setDeactive(boolean deactive) {
-        this.isDeactive = deactive;
+        this.deactive = deactive;
     }
 
     @Override
