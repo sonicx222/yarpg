@@ -1,8 +1,11 @@
-package de.pho.descent.web.auth;
+package de.pho.descent.web.player;
 
 import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
+import de.pho.descent.web.auth.UserValidationException;
+import de.pho.descent.web.auth.WSAuthenticationInterceptor;
+import de.pho.descent.web.exception.NotFoundException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;

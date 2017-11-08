@@ -1,13 +1,15 @@
-package de.pho.descent.web.auth;
+package de.pho.descent.web.player;
 
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
-import de.pho.descent.web.service.PlayerService;
+import de.pho.descent.web.auth.UserValidationException;
+import de.pho.descent.web.exception.NotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.ws.rs.Path;
 
 /**
@@ -44,7 +46,34 @@ public class PlayerController {
     public List<Player> getAllPlayers() {
         return playerService.getAllPlayers();
     }
-    
+
+    public Player getPlayer(long id) throws NotFoundException {
+        return playerService.getPlayerById(id);
+    }
+
+    public Player getPlayerByName(String username) {
+        return playerService.getPlayerByUsername(username);
+    }
+
+    public Player getPlayerByToken(String authToken) throws UserValidationException {
+        String[] authData = SecurityTools.extractDataFromAuthenticationToken(authToken);
+        String decodedUser = authData[0];
+        Player player = null;
+
+        try {
+            player = playerService.getPlayerByUsername(decodedUser);
+        } catch (NoResultException ex) {
+            throw new UserValidationException("User not found");
+        }
+
+        // if deactive
+        if (player.isDeactive()) {
+            throw new UserValidationException("User is deactive");
+        }
+
+        return player;
+    }
+
     public Player doAuthenticate(String restMethod, String restURI, String authToken) throws UserValidationException {
         if (authToken == null) {
             throw new UserValidationException("No auth token");
@@ -55,9 +84,11 @@ public class PlayerController {
         String digestHash = authData[1];
 
         LOG.log(Level.INFO, "Authenticate player: {0}", decodedUser);
-        Player player = playerService.getPlayerByUsername(decodedUser);
-        if (player == null) {
-            throw new UserValidationException("Login failed! User not found");
+        Player player = null;
+        try {
+            player = playerService.getPlayerByUsername(decodedUser);
+        } catch (NoResultException ex) {
+            throw new UserValidationException("Login failed! User " + decodedUser + " not found");
         }
 
         // if deactive

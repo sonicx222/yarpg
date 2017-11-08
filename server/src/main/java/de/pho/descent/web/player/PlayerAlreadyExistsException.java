@@ -1,4 +1,4 @@
-package de.pho.descent.web.auth;
+package de.pho.descent.web.player;
 
 /**
  *

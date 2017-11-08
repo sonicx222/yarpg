@@ -1,8 +1,6 @@
 package de.pho.descent.web.quest;
 
 import de.pho.descent.shared.model.quest.Quest;
-import static de.pho.descent.shared.model.quest.Quest.A_FAT_GOBLIN;
-import static de.pho.descent.shared.model.quest.Quest.FIRST_BLOOD;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestPart;
 import javax.ejb.EJB;
