@@ -1,6 +1,6 @@
 package de.pho.descent.web.map;
 
-import de.pho.descent.web.dto.WsGameMap;
+import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.shared.model.GameMap;
 import de.pho.descent.shared.model.MapField;

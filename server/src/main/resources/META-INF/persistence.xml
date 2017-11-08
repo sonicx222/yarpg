@@ -9,6 +9,7 @@
     <class>de.pho.descent.shared.model.campaign.Campaign</class>
     <class>de.pho.descent.shared.model.quest.QuestEncounter</class>
     <class>de.pho.descent.shared.model.hero.GameHero</class>
+    <class>de.pho.descent.shared.model.hero.HeroSelection</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="hibernate.default_schema" value="descent"/>
