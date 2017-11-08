@@ -1,5 +1,6 @@
 package de.pho.descent.web.auth;
 
+import de.pho.descent.web.player.PlayerController;
 import de.pho.descent.shared.auth.SecurityTools;
 import java.util.logging.Logger;
 import javax.inject.Inject;
