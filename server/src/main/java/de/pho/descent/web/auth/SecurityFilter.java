@@ -4,7 +4,6 @@ import de.pho.descent.web.player.PlayerController;
 import static de.pho.descent.shared.auth.ParamValue.*;
 import de.pho.descent.shared.exception.ErrorMessage;
 import de.pho.descent.shared.model.Player;
-import de.pho.descent.web.exception.NotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;

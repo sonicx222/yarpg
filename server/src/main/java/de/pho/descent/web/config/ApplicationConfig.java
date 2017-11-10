@@ -26,18 +26,18 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(de.pho.descent.web.auth.GenericExceptionMapper.class);
         resources.add(de.pho.descent.web.auth.SecurityFilter.class);
         resources.add(de.pho.descent.web.auth.TokenProviderBoundary.class);
         resources.add(de.pho.descent.web.auth.UserValidationExceptionMapper.class);
         resources.add(de.pho.descent.web.campaign.CampaignBoundary.class);
+        resources.add(de.pho.descent.web.campaign.HeroSelectionBoundary.class);
         resources.add(de.pho.descent.web.campaign.HeroSelectionExceptionMapper.class);
+        resources.add(de.pho.descent.web.exception.GenericExceptionMapper.class);
         resources.add(de.pho.descent.web.hero.HeroBoundary.class);
         resources.add(de.pho.descent.web.map.GameMapBoundary.class);
         resources.add(de.pho.descent.web.player.PlayerAlreadyExistsExceptionMapper.class);
         resources.add(de.pho.descent.web.player.PlayerBoundary.class);
         resources.add(de.pho.descent.web.player.PlayerController.class);
-        resources.add(de.pho.descent.web.session.GameSessionBoundary.class);
     }
     
 }

@@ -1,4 +1,4 @@
-package de.pho.descent.web.auth;
+package de.pho.descent.web.exception;
 
 import de.pho.descent.shared.exception.ErrorMessage;
 import java.util.logging.Level;

@@ -82,6 +82,19 @@ public class CampaignController {
         checkCampaignPhase(campaign, phaseToBeChecked);
     }
 
+    /**
+     * 1. check if calling user is overlord of campaign
+     * 2. check if all hero selections within campaign are in status 'ready'
+     * 3. create game heroes based on hero selection
+     * 4. move campaign into 'encounter' phase
+     * 5. determine first hero turn based on initiation attribute
+     * 
+     * @param player
+     * @param campaignId
+     * @throws UserValidationException
+     * @throws HeroSelectionException
+     * @throws NotFoundException 
+     */
     public void startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException {
         
         Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
