@@ -31,7 +31,7 @@ import javax.ws.rs.core.UriInfo;
  * @author pho
  */
 @Stateless
-@Path("secured/campaigns")
+@Path(ParamValue.SECURED_URL + "/campaigns")
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON})
 public class CampaignBoundary {

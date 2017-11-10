@@ -34,7 +34,7 @@ import javax.ws.rs.core.UriInfo;
  * @author pho
  */
 @Stateless
-@Path("secured/campaigns/{" + ParamValue.CAMPAIGN_ID + "}/heroselections")
+@Path(ParamValue.SECURED_URL + "/campaigns/{" + ParamValue.CAMPAIGN_ID + "}/heroselections")
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON})
 public class HeroSelectionBoundary {
