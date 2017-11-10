@@ -2,6 +2,7 @@
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.shared.model.Player;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,6 +12,7 @@ import static org.junit.rules.ExpectedException.none;
  *
  * @author pho
  */
+@Ignore
 public class RegisterTest {
 
     @Rule

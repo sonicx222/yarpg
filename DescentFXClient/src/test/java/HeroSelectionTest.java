@@ -8,6 +8,7 @@ import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.Player;
 import static de.pho.descent.shared.model.hero.HeroTemplate.*;
+import java.util.List;
 import org.junit.Test;
 
 /**
@@ -41,16 +42,25 @@ public class HeroSelectionTest {
 
         // player1 creates campaign as overlord
         campaign1 = CampaignClient.createCampaign(player1);
-        System.out.println(campaign1);
+        System.out.println("Created campaign:\n" + campaign1);
 
         // get available campaigns
         CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
 
         Credentials credentialsP1 = new Credentials(player1);
+        Credentials credentialsP2 = new Credentials(player2);
         WsHeroSelection heroSelection = HeroSelectionClient.saveSelection(credentialsP1, new WsHeroSelection(player1.getUsername(), SYNDRAEL), campaign1);
-        System.out.println(heroSelection);
+        System.out.println("New hero selection:\n" + heroSelection);
         heroSelection.setSelectedHero(ASHRIAN);
         heroSelection = HeroSelectionClient.saveSelection(credentialsP1, heroSelection, campaign1);
-        System.out.println(heroSelection);
+        System.out.println("Updated hero selection:\n" + heroSelection);
+        heroSelection = HeroSelectionClient.saveSelection(credentialsP2, new WsHeroSelection(player2.getUsername(), GRISBAN), campaign1);
+        System.out.println("New hero selection:\n" + heroSelection);
+
+        List<WsHeroSelection> currentSelections = HeroSelectionClient.getCurrentSelections(player1.getUsername(), player1.getPassword(), campaign1);
+        System.out.println("List of current selections:");
+        for (WsHeroSelection hs : currentSelections) {
+            System.out.println(hs);
+        }
     }
 }

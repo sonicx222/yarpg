@@ -54,8 +54,8 @@ public class PlayerClient extends BaseRESTClient {
             client = ClientBuilder.newClient();
 
             WebTarget baseTarget = client.target(getBaseUri());
-            WebTarget playersTarget = baseTarget.path("players");
-            WebTarget loginPlayerTarget = playersTarget.path("{" + ParamValue.USERNAME + "}");
+            WebTarget securedPlayersTarget = baseTarget.path("players").path(ParamValue.SECURED_URL);
+            WebTarget loginPlayerTarget = securedPlayersTarget.path("{" + ParamValue.USERNAME + "}");
 
             String uriPath = loginPlayerTarget.resolveTemplate(ParamValue.USERNAME, username).getUri().getPath();
             String authToken = SecurityTools.createAuthenticationToken(username,

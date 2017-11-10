@@ -83,6 +83,7 @@ public class CampaignClient extends BaseRESTClient {
             String authToken = SecurityTools.createAuthenticationToken(
                     username, password, HttpMethod.GET, uriPath);
 
+            
 //            List<WsCampaign> activeCampaigns = campaignsTarget
 //                    .request(MediaType.APPLICATION_JSON)
 //                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
