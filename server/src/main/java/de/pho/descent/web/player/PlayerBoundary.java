@@ -76,7 +76,7 @@ public class PlayerBoundary {
                 && player.getUsername().equals(username)) {
             player.setUsername(username);
             Player updatedPlayer = playerController.updatePlayer(player);
-            response = Response.accepted(updatedPlayer).build();
+            response = Response.ok(updatedPlayer).build();
         } else {
             throw new UserValidationException("Player resource mismatch with credentials or provided data");
         }

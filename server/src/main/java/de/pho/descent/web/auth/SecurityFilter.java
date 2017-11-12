@@ -34,6 +34,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
             if (authHeader != null && authHeader.size() > 0) {
                 String uriPath = requestContext.getUriInfo().getRequestUri().getPath();
+                ErrorMessage errorMsg = null;
 
                 try {
                     Player p = playerController.doAuthenticate(requestContext.getMethod(), uriPath, authHeader.get(0));
@@ -41,12 +42,13 @@ public class SecurityFilter implements ContainerRequestFilter {
                         return;
                     }
                 } catch (UserValidationException ex) {
+                    errorMsg = new ErrorMessage(ex.getMessage(), Response.Status.UNAUTHORIZED.getStatusCode());
                     LOG.log(Level.SEVERE, ex.getMessage(), ex);
                 }
                 Response unauthorizedStatus = Response
                         .status(Response.Status.UNAUTHORIZED)
                         .type(MediaType.APPLICATION_JSON)
-                        .entity(new ErrorMessage("Access not allowed", Response.Status.UNAUTHORIZED.getStatusCode()))
+                        .entity(errorMsg)
                         .build();
 
                 requestContext.abortWith(unauthorizedStatus);

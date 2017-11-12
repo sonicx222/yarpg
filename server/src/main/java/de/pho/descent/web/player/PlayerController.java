@@ -31,7 +31,7 @@ public class PlayerController {
         Player newPlayer = playerService.createPlayer(username, password);
 
         if (newPlayer == null) {
-            throw new PlayerAlreadyExistsException("Player " + username + " already exists!");
+            throw new PlayerAlreadyExistsException("Player " + username + " already exists");
         }
 
         return newPlayer;
@@ -84,12 +84,7 @@ public class PlayerController {
         String digestHash = authData[1];
 
         LOG.log(Level.INFO, "Authenticate player: {0}", decodedUser);
-        Player player = null;
-        try {
-            player = playerService.getPlayerByUsername(decodedUser);
-        } catch (NoResultException ex) {
-            throw new UserValidationException("Login failed! User " + decodedUser + " not found");
-        }
+        Player player = playerService.getPlayerByUsername(decodedUser);
 
         // if deactive
         if (player.isDeactive()) {

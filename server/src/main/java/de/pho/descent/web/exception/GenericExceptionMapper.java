@@ -19,11 +19,22 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable th) {
-        LOG.log(Level.SEVERE, th.getMessage(), th);
+        Throwable rootCause = getCause(th);
+        LOG.log(Level.SEVERE, rootCause.getMessage(), rootCause);
 
         return Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity(new ErrorMessage(th.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()))
+                .entity(new ErrorMessage(rootCause.getMessage(), Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()))
                 .build();
+    }
+
+    private Throwable getCause(Throwable e) {
+        Throwable cause = null;
+        Throwable result = e;
+
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
     }
 
 }
