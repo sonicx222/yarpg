@@ -5,6 +5,7 @@ import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
+import de.pho.descent.shared.exception.ErrorMessage;
 import de.pho.descent.shared.model.Player;
 import java.util.List;
 import java.util.logging.Level;
@@ -60,7 +61,8 @@ public class CampaignClient extends BaseRESTClient {
             if (postResponse.getStatus() == Status.CREATED.getStatusCode()) {
                 wsCampaign = postResponse.readEntity(WsCampaign.class);
             } else {
-                throw new ServerException(postResponse);
+                ErrorMessage errorMsg = postResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
             }
 
             return wsCampaign;
@@ -99,7 +101,8 @@ public class CampaignClient extends BaseRESTClient {
                 activeCampaigns = getResponse.readEntity(new GenericType<List<WsCampaign>>() {
                 });
             } else {
-                throw new ServerException(getResponse);
+                ErrorMessage errorMsg = getResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
             }
             return activeCampaigns;
         } finally {

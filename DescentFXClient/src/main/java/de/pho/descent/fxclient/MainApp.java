@@ -3,7 +3,6 @@ package de.pho.descent.fxclient;
 import com.airhacks.afterburner.views.FXMLView;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
-import de.pho.descent.shared.exception.ErrorMessage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -75,10 +74,9 @@ public class MainApp extends Application {
     }
 
     public static void showError(ServerException exception) {
-        ErrorMessage errorMsg = exception.getErrorResponse().readEntity(ErrorMessage.class);
-        LOGGER.log(Level.SEVERE, errorMsg.getErrorMessage());
+        LOGGER.log(Level.SEVERE, exception.getMessage());
 
         Notifications tmp = Notifications.create();
-        tmp.darkStyle().position(Pos.TOP_RIGHT).text(errorMsg.getErrorMessage()).showError();
+        tmp.darkStyle().position(Pos.TOP_RIGHT).text(exception.getMessage()).showError();
     }
 }

@@ -6,6 +6,7 @@ import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
+import de.pho.descent.shared.exception.ErrorMessage;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ws.rs.HttpMethod;
@@ -51,7 +52,8 @@ public class HeroSelectionClient extends BaseRESTClient {
             if (postResponse.getStatus() == Response.Status.CREATED.getStatusCode()) {
                 savedSelection = postResponse.readEntity(WsHeroSelection.class);
             } else {
-                throw new ServerException(postResponse);
+                ErrorMessage errorMsg = postResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
             }
 
             return savedSelection;
@@ -86,7 +88,8 @@ public class HeroSelectionClient extends BaseRESTClient {
                 currentSelections = getResponse.readEntity(new GenericType<List<WsHeroSelection>>() {
                 });
             } else {
-                throw new ServerException(getResponse);
+                ErrorMessage errorMsg = getResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
             }
             return currentSelections;
         } finally {
