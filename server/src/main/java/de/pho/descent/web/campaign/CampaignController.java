@@ -111,7 +111,7 @@ public class CampaignController {
         }
     }
 
-    public Campaign createNewCampaign(Player startingPlayer) throws UserValidationException {
+    public Campaign createNewCampaign(Player startingPlayer) {
 
         Campaign c = new Campaign();
         c.setOverlord(startingPlayer);
