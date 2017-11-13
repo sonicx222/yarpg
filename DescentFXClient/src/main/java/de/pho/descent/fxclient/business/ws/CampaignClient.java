@@ -36,7 +36,7 @@ public class CampaignClient extends BaseRESTClient {
         return createCampaign(player.getUsername(), player.getPassword());
     }
 
-    private static WsCampaign createCampaign(String username, String password) throws ServerException {
+    public static WsCampaign createCampaign(String username, String password) throws ServerException {
         LOG.log(Level.INFO, "Player {0} started new campaign", username);
 
         Client client = null;

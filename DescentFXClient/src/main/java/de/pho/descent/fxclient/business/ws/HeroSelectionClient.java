@@ -7,6 +7,7 @@ import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.exception.ErrorMessage;
+import de.pho.descent.shared.model.Player;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ws.rs.HttpMethod;
@@ -27,6 +28,14 @@ public class HeroSelectionClient extends BaseRESTClient {
     private static final Logger LOG = Logger.getLogger(HeroSelectionClient.class.getName());
 
     public static WsHeroSelection saveSelection(Credentials credentials, WsHeroSelection wsHeroSelection, WsCampaign wsCampaign) throws ServerException {
+        return saveSelection(credentials.getPlayer(), wsHeroSelection, wsCampaign);
+    }
+
+    public static WsHeroSelection saveSelection(Player player, WsHeroSelection wsHeroSelection, WsCampaign wsCampaign) throws ServerException {
+        return saveSelection(player.getUsername(), player.getPassword(), wsHeroSelection, wsCampaign);
+    }
+
+    public static WsHeroSelection saveSelection(String username, String password, WsHeroSelection wsHeroSelection, WsCampaign wsCampaign) throws ServerException {
 
         Client client = null;
 
@@ -38,8 +47,7 @@ public class HeroSelectionClient extends BaseRESTClient {
 
             String uriPath = heroSelectionTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId()).getUri().getPath();
             String authToken = SecurityTools.createAuthenticationToken(
-                    credentials.getPlayer().getUsername(),
-                    credentials.getPlayer().getPassword(),
+                    username, password,
                     HttpMethod.POST, uriPath);
 
             Response postResponse = heroSelectionTarget
