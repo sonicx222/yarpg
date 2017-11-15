@@ -17,6 +17,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * Webfilter to parse URI of request and triggers of defined keyword in path. If
+ * keyword is found, the value (auth token) of the Authorization header is being
+ * handled, and the user together with the hashed password is being extracted
+ * and checked for acceptance.
  *
  * @author pho
  */
@@ -30,30 +34,34 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        // trigger
         if (requestContext.getUriInfo().getPath().contains(SECURED_URL)) {
             List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
-            if (authHeader != null && authHeader.size() > 0) {
-                String uriPath = requestContext.getUriInfo().getRequestUri().getPath();
-                ErrorMessage errorMsg = null;
+            ErrorMessage errorMsg = null;
 
-                try {
+            try {
+                if (authHeader == null) {
+                    throw new UserValidationException("Access not allowed");
+                } else if (authHeader != null && !authHeader.isEmpty()) {
+                    String uriPath = requestContext.getUriInfo().getRequestUri().getPath();
                     Player p = playerController.doAuthenticate(requestContext.getMethod(), uriPath, authHeader.get(0));
+
                     if (p != null) {
                         return;
                     }
-                } catch (UserValidationException ex) {
-                    errorMsg = new ErrorMessage(ex.getMessage(), Response.Status.UNAUTHORIZED.getStatusCode());
-                    LOG.log(Level.SEVERE, ex.getMessage(), ex);
                 }
-                Response unauthorizedStatus = Response
-                        .status(Response.Status.UNAUTHORIZED)
-                        .type(MediaType.APPLICATION_JSON)
-                        .entity(errorMsg)
-                        .build();
-
-                requestContext.abortWith(unauthorizedStatus);
+            } catch (UserValidationException ex) {
+                errorMsg = new ErrorMessage(ex.getMessage(), Response.Status.UNAUTHORIZED.getStatusCode());
+                LOG.log(Level.SEVERE, ex.getMessage(), ex);
             }
+            Response unauthorizedStatus = Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .type(MediaType.APPLICATION_JSON)
+                    .entity(errorMsg)
+                    .build();
 
+            requestContext.abortWith(unauthorizedStatus);
         }
+
     }
 }
