@@ -32,7 +32,8 @@ public class HeroSelection implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne()
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Campaign campaign;
 
     @ManyToOne
@@ -40,7 +41,7 @@ public class HeroSelection implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private HeroTemplate selectedHero;
-    
+
     private boolean ready;
 
     public Long getId() {

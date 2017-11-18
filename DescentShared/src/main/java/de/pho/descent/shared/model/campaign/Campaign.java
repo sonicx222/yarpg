@@ -1,13 +1,12 @@
 package de.pho.descent.shared.model.campaign;
 
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.Player;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -44,6 +43,9 @@ public class Campaign implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private final Date createdOn = new Date();
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startedOn;
 
     @Enumerated(EnumType.STRING)
     private CampaignPhase phase;
@@ -78,6 +80,14 @@ public class Campaign implements Serializable {
         return createdOn;
     }
 
+    public Date getStartedOn() {
+        return startedOn;
+    }
+
+    public void setStartedOn(Date startedOn) {
+        this.startedOn = startedOn;
+    }
+
     public CampaignPhase getPhase() {
         return phase;
     }
@@ -94,7 +104,7 @@ public class Campaign implements Serializable {
         this.overlord = overlord;
     }
 
-    public List<GameHero> getHeroes() { 
+    public List<GameHero> getHeroes() {
         if (heroes == null) {
             heroes = new ArrayList<>();
         }

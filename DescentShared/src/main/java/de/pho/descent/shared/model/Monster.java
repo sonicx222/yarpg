@@ -2,34 +2,20 @@ package de.pho.descent.shared.model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
  * @author pho
  */
 @Entity
-public class Monster implements Serializable {
+public class Monster extends GameEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (super.getId() != null ? super.getId().hashCode() : 0);
         return hash;
     }
 
@@ -40,7 +26,7 @@ public class Monster implements Serializable {
             return false;
         }
         Monster other = (Monster) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((super.getId() == null && other.getId() != null) || (super.getId() != null && !super.getId().equals(other.getId()))) {
             return false;
         }
         return true;
@@ -48,7 +34,7 @@ public class Monster implements Serializable {
 
     @Override
     public String toString() {
-        return "de.pho.descent.shared.model.Monster[ id=" + id + " ]";
+        return "de.pho.descent.shared.model.Monster[ id=" + super.getId() + " ]";
     }
-    
+
 }

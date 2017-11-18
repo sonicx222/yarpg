@@ -1,8 +1,8 @@
 package de.pho.descent.shared.model.quest;
 
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.GameMap;
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.hero.GameHero;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-
 
 /**
  *
@@ -114,8 +113,6 @@ public class QuestEncounter implements Serializable {
     public void setMap(GameMap map) {
         this.map = map;
     }
-
-    
 
     @Override
     public int hashCode() {
