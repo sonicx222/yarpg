@@ -1,8 +1,10 @@
 
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
 import java.util.Objects;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -61,7 +63,8 @@ public class PlayerTest {
 
         // deactivate
         player.setDeactive(true);
-        Player deactivePlayer = PlayerClient.updatePlayer(credentials, credentials, player);
+        Player deactivePlayer = PlayerClient.updatePlayer(
+                credentials, SecurityTools.createHash(credentials, false), player);
 
         assert (Objects.equals(player.getId(), deactivePlayer.getId()));
         assert (Objects.equals(player.getUsername(), deactivePlayer.getUsername()));
@@ -78,6 +81,7 @@ public class PlayerTest {
         deactivePlayer.setDeactive(false);
         
         expectedException.expectMessage("Player resource mismatch with credentials or provided data");
-        PlayerClient.updatePlayer(credentials2, credentials2, deactivePlayer);
+        PlayerClient.updatePlayer(
+                credentials2, SecurityTools.createHash(credentials2, false), deactivePlayer);
     }
 }
