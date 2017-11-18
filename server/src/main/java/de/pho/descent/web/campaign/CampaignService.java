@@ -34,8 +34,13 @@ public class CampaignService implements Serializable {
         return campaign;
     }
 
-    public Campaign createCampaign(Campaign c) {
+    public Campaign saveCampaign(Campaign c) {
         return em.merge(c);
+    }
+
+    public void deleteCampaign(long id) {
+        Object ref = em.getReference(Campaign.class, id);
+        em.remove(ref);
     }
 
     public List<HeroSelection> getCurrentSelectionsByCampaignId(long campaignId) {

@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -45,7 +46,10 @@ public class PlayerService implements Serializable {
     }
 
     public Player getPlayerByUsername(String username) {
-        Player player = em.createNamedQuery(Player.findAllByUsername, Player.class).setParameter(Player.paramUsername, username).getSingleResult();
+        TypedQuery<Player> query = em.createNamedQuery(Player.findAllByUsername, Player.class).setParameter(Player.paramUsername, username);
+        System.out.println(query);
+        
+        Player player = query.getSingleResult();
         
         return player;
     }

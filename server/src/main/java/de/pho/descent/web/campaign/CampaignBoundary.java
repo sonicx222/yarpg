@@ -11,12 +11,13 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,10 +39,10 @@ public class CampaignBoundary {
 
     private static final Logger LOG = Logger.getLogger(CampaignBoundary.class.getName());
 
-    @EJB
+    @Inject
     private CampaignController campaignController;
 
-    @EJB
+    @Inject
     private PlayerController playerController;
 
     @GET
@@ -60,21 +61,37 @@ public class CampaignBoundary {
     }
 
     @POST
-    public Response createNewCampaign(
+    public Response createCampaign(
+            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
+            @Context UriInfo uriInfo,
+            WsCampaign wsCampaign)
+            throws URISyntaxException, UserValidationException {
+        Player player = playerController.getPlayerByToken(authToken);
+        LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
+
+        WsCampaign wscampaign = WsCampaign.createInstance(campaignController.createCampaign(wsCampaign));
+        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(wscampaign.getId())).build();
+
+        return Response.created(uri).entity(wscampaign).build();
+    }
+    
+    @POST
+    @Path("/new")
+    public Response newCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @Context UriInfo uriInfo)
             throws URISyntaxException, UserValidationException {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 
-        WsCampaign wscampaign = WsCampaign.createInstance(campaignController.createNewCampaign(player));
+        WsCampaign wscampaign = WsCampaign.createInstance(campaignController.newCampaign(player));
         URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(wscampaign.getId())).build();
 
         return Response.created(uri).entity(wscampaign).build();
     }
 
-    @POST
-    @Path("/{" + ParamValue.CAMPAIGN_ID + "}")
+    @PUT
+    @Path("/{" + ParamValue.CAMPAIGN_ID + "}/start")
     public Response startCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @PathParam(ParamValue.CAMPAIGN_ID) String campaignId)
