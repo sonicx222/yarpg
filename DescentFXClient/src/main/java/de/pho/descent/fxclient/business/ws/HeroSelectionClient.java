@@ -47,7 +47,8 @@ public class HeroSelectionClient extends BaseRESTClient {
 
             String uriPath = heroSelectionTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId()).getUri().getPath();
             String authToken = SecurityTools.createAuthenticationToken(
-                    username, password,
+                    username,
+                    SecurityTools.createHash(password, false),
                     HttpMethod.POST, uriPath);
 
             Response postResponse = heroSelectionTarget

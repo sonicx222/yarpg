@@ -28,16 +28,16 @@ public class CampaignClient extends BaseRESTClient {
 
     private static final Logger LOG = Logger.getLogger(CampaignClient.class.getName());
 
-    public static WsCampaign createCampaign(Credentials credentials) throws ServerException {
-        return createCampaign(credentials.getPlayer().getUsername(), credentials.getPlayer().getPassword());
+    public static WsCampaign createCampaign(Credentials credentials, WsCampaign campaign) throws ServerException {
+        return createCampaign(credentials.getPlayer().getUsername(), credentials.getPlayer().getPassword(), campaign);
     }
 
-    public static WsCampaign createCampaign(Player player) throws ServerException {
-        return createCampaign(player.getUsername(), player.getPassword());
+    public static WsCampaign createCampaign(Player player, WsCampaign campaign) throws ServerException {
+        return createCampaign(player.getUsername(), player.getPassword(), campaign);
     }
 
-    public static WsCampaign createCampaign(String username, String password) throws ServerException {
-        LOG.log(Level.INFO, "Player {0} started new campaign", username);
+    public static WsCampaign createCampaign(String username, String pwdHash, WsCampaign campaign) throws ServerException {
+        LOG.log(Level.INFO, "User {0} created campaign", username);
 
         Client client = null;
 
@@ -47,16 +47,55 @@ public class CampaignClient extends BaseRESTClient {
             WebTarget campaignsTarget = securedTarget.path("campaigns");
 
             String uriPath = campaignsTarget.getUri().getPath();
-            String authToken = SecurityTools.createAuthenticationToken(
-                    username, password, HttpMethod.POST, uriPath);
-            LOG.log(Level.INFO, "Login Authorization: {0}", authToken);
-
-            WsCampaign wsCampaign = null;
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.POST, uriPath);
 
             Response postResponse = campaignsTarget
                     .request(MediaType.APPLICATION_JSON)
                     .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
-                    .post(Entity.json(wsCampaign), Response.class);
+                    .post(Entity.json(campaign), Response.class);
+
+            WsCampaign wsCampaign = null;
+            if (postResponse.getStatus() == Status.CREATED.getStatusCode()) {
+                wsCampaign = postResponse.readEntity(WsCampaign.class);
+            } else {
+                ErrorMessage errorMsg = postResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
+            }
+
+            return wsCampaign;
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+    }
+
+    public static WsCampaign newCampaign(Credentials credentials) throws ServerException {
+        return newCampaign(credentials.getPlayer().getUsername(), credentials.getPlayer().getPassword());
+    }
+
+    public static WsCampaign newCampaign(Player player) throws ServerException {
+        return newCampaign(player.getUsername(), player.getPassword());
+    }
+
+    public static WsCampaign newCampaign(String username, String pwdHash) throws ServerException {
+        LOG.log(Level.INFO, "User {0} started new campaign", username);
+
+        Client client = null;
+
+        try {
+            client = ClientBuilder.newClient();
+            WebTarget securedTarget = client.target(getSecuredBaseUri());
+            WebTarget newCampaignTarget = securedTarget.path("campaigns/new");
+
+            String uriPath = newCampaignTarget.getUri().getPath();
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.POST, uriPath);
+
+            WsCampaign wsCampaign = null;
+            Response postResponse = newCampaignTarget
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
+                    .post(Entity.json(null), Response.class);
 
             if (postResponse.getStatus() == Status.CREATED.getStatusCode()) {
                 wsCampaign = postResponse.readEntity(WsCampaign.class);
@@ -73,7 +112,7 @@ public class CampaignClient extends BaseRESTClient {
         }
     }
 
-    public static List<WsCampaign> getActiveCampaigns(String username, String password) throws ServerException {
+    public static List<WsCampaign> getActiveCampaigns(String username, String pwdHash) throws ServerException {
         Client client = null;
 
         try {
@@ -82,15 +121,8 @@ public class CampaignClient extends BaseRESTClient {
             WebTarget campaignsTarget = securedTarget.path("campaigns");
 
             String uriPath = campaignsTarget.getUri().getPath();
-            String authToken = SecurityTools.createAuthenticationToken(
-                    username, password, HttpMethod.GET, uriPath);
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.GET, uriPath);
 
-            
-//            List<WsCampaign> activeCampaigns = campaignsTarget
-//                    .request(MediaType.APPLICATION_JSON)
-//                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
-//                    .get(new GenericType<List<WsCampaign>>() {
-//                    });
             List<WsCampaign> activeCampaigns = null;
             Response getResponse = campaignsTarget
                     .request(MediaType.APPLICATION_JSON)

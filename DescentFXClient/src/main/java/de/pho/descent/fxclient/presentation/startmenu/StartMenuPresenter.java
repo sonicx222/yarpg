@@ -126,7 +126,7 @@ public class StartMenuPresenter implements Initializable {
         } else {
             WsCampaign campaign = null;
             try {
-                campaign = CampaignClient.createCampaign(credentials);
+                campaign = CampaignClient.newCampaign(credentials);
             } catch (ServerException ex) {
                 showError(ex);
             }

@@ -60,7 +60,8 @@ public class PlayerClient extends BaseRESTClient {
             WebTarget loginPlayerTarget = securedPlayersTarget.path("{" + ParamValue.USERNAME + "}");
 
             String uriPath = loginPlayerTarget.resolveTemplate(ParamValue.USERNAME, username).getUri().getPath();
-            String authToken = SecurityTools.createAuthenticationToken(username,
+            String authToken = SecurityTools.createAuthenticationToken(
+                    username,
                     SecurityTools.createHash(password, false),
                     HttpMethod.GET,
                     uriPath);
@@ -87,7 +88,7 @@ public class PlayerClient extends BaseRESTClient {
         }
     }
 
-    public static Player updatePlayer(String username, String password, Player actualPlayer) throws ServerException {
+    public static Player updatePlayer(String username, String pwdHash, Player actualPlayer) throws ServerException {
         Client client = null;
 
         try {
@@ -99,7 +100,7 @@ public class PlayerClient extends BaseRESTClient {
 
             String uriPath = updatePlayerTarget.resolveTemplate(ParamValue.USERNAME, actualPlayer.getUsername()).getUri().getPath();
             String authToken = SecurityTools.createAuthenticationToken(username,
-                    SecurityTools.createHash(password, false),
+                    pwdHash,
                     HttpMethod.PUT,
                     uriPath);
 
