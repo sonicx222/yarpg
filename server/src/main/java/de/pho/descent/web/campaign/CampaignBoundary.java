@@ -3,6 +3,7 @@ package de.pho.descent.web.campaign;
 import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.Player;
+import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
@@ -17,7 +18,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -69,12 +69,12 @@ public class CampaignBoundary {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 
-        WsCampaign wscampaign = WsCampaign.createInstance(campaignController.createCampaign(wsCampaign));
-        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(wscampaign.getId())).build();
+        Campaign campaign = campaignController.createCampaign(wsCampaign);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(campaign.getId())).build();
 
-        return Response.created(uri).entity(wscampaign).build();
+        return Response.created(uri).entity(WsCampaign.createInstance(campaign)).build();
     }
-    
+
     @POST
     @Path("/new")
     public Response newCampaign(
@@ -84,22 +84,24 @@ public class CampaignBoundary {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 
-        WsCampaign wscampaign = WsCampaign.createInstance(campaignController.newCampaign(player));
-        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(wscampaign.getId())).build();
+        Campaign campaign = campaignController.newCampaign(player);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(campaign.getId())).build();
 
-        return Response.created(uri).entity(wscampaign).build();
+        return Response.created(uri).entity(WsCampaign.createInstance(campaign)).build();
     }
 
-    @PUT
+    @GET
     @Path("/{" + ParamValue.CAMPAIGN_ID + "}/start")
     public Response startCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @PathParam(ParamValue.CAMPAIGN_ID) String campaignId)
             throws UserValidationException, HeroSelectionException, NotFoundException {
         Player overlordPlayer = playerController.getPlayerByToken(authToken);
-        campaignController.startCampaign(overlordPlayer, campaignId);
+        LOG.log(Level.INFO, "Calling startCampaign with Player {0}", overlordPlayer.getUsername());
 
-        return Response.ok().build();
+        Campaign campaign = campaignController.startCampaign(overlordPlayer, campaignId);
+
+        return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
     }
 
 }

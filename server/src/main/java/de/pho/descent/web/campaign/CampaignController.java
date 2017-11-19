@@ -115,7 +115,7 @@ public class CampaignController {
      * @throws HeroSelectionException
      * @throws NotFoundException
      */
-    public void startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException {
+    public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException {
 
         Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
 
@@ -129,6 +129,8 @@ public class CampaignController {
         if (!campaignService.allSelectionsReady(Long.parseLong(campaignId))) {
             throw new HeroSelectionException("Can not start campaign: some selections are not ready");
         }
+        
+        return campaign;
     }
 
     public Campaign createCampaign(WsCampaign wsCampaign) {
@@ -198,11 +200,17 @@ public class CampaignController {
             throw new HeroSelectionException("Hero selection not possible. Group is full");
         }
 
-        HeroSelection selection = new HeroSelection();
-        selection.setId(wsSelection.getId());
+        HeroSelection selection = null;
+        if (wsSelection.getId() > 0) {
+            selection = persistenceService.find(HeroSelection.class, wsSelection.getId());
+        } else {
+            selection = new HeroSelection();
+        }
+
         selection.setCampaign(campaign);
         selection.setPlayer(player);
         selection.setSelectedHero(wsSelection.getSelectedHero());
+        selection.setReady(wsSelection.isReady());
 
         return campaignService.saveSelection(selection);
     }

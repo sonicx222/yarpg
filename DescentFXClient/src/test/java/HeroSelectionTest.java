@@ -79,16 +79,14 @@ public class HeroSelectionTest {
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(1)
                 .extracting("id").contains(campaign1.getId());
 
         activeCampaigns = CampaignClient.getActiveCampaigns(player3.getUsername(), player3.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(1)
                 .extracting("id").contains(campaign1.getId());
 
         activeCampaigns = CampaignClient.getActiveCampaigns(player6.getUsername(), player6.getPassword());
-        assertThat(activeCampaigns).isEmpty();
+        assertThat(activeCampaigns).extracting("id").doesNotContain(campaign1.getId());
 
         // check: full group exception
         expectedException.expect(ServerException.class);
@@ -114,12 +112,10 @@ public class HeroSelectionTest {
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(2)
                 .extracting("id").contains(campaign1.getId(), campaign2.getId());
 
         activeCampaigns = CampaignClient.getActiveCampaigns(player2.getUsername(), player2.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(2)
                 .extracting("id").contains(campaign1.getId(), campaign2.getId());
     }
 
@@ -139,7 +135,6 @@ public class HeroSelectionTest {
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(3)
                 .extracting("id").contains(campaign1.getId(), campaign2.getId(), campaign3.getId());
 
         // check: overlord can not select
@@ -161,7 +156,6 @@ public class HeroSelectionTest {
 
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
         assertThat(activeCampaigns)
-                .hasSize(4)
                 .extracting("id")
                 .contains(campaign1.getId(), campaign2.getId(), campaign3.getId(), campaign4.getId());
 

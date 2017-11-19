@@ -73,8 +73,9 @@ public class CampaignService implements Serializable {
         List<HeroSelection> savedSelections = getCurrentSelectionsByCampaignId(selection.getCampaign().getId());
 
         for (HeroSelection tmpSelection : savedSelections) {
-            if (selection.getSelectedHero().equals(tmpSelection.getSelectedHero())
-                    && selection.getCampaign().equals(tmpSelection.getCampaign())) {
+            if (selection.getCampaign().equals(tmpSelection.getCampaign())
+                    && selection.getSelectedHero().equals(tmpSelection.getSelectedHero())
+                    && !selection.getPlayer().equals(tmpSelection.getPlayer())) {
                 throw new HeroSelectionException("Hero " + selection.getSelectedHero().getName() + " already selected");
             }
         }

@@ -9,13 +9,13 @@ import de.pho.descent.shared.model.hero.HeroTemplate;
  */
 public class WsHeroSelection {
 
-    private Long id;
+    private long id;
 
-    private Long campaignId;
+    private long campaignId;
 
     private String username;
 
-    private Long userId;
+    private long userId;
 
     private HeroTemplate selectedHero;
 
@@ -29,19 +29,19 @@ public class WsHeroSelection {
         this.selectedHero = selectedHero;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Long getCampaignId() {
+    public long getCampaignId() {
         return campaignId;
     }
 
-    public void setCampaignId(Long campaignId) {
+    public void setCampaignId(long campaignId) {
         this.campaignId = campaignId;
     }
 
@@ -53,11 +53,11 @@ public class WsHeroSelection {
         this.username = username;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

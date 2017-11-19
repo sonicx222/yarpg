@@ -73,7 +73,7 @@ public class HeroSelectionClient extends BaseRESTClient {
         }
     }
 
-    public static List<WsHeroSelection> getCurrentSelections(String username, String password, WsCampaign wsCampaign) throws ServerException {
+    public static List<WsHeroSelection> getCurrentSelections(String username, String pwdHash, WsCampaign wsCampaign) throws ServerException {
         Client client = null;
 
         try {
@@ -83,8 +83,7 @@ public class HeroSelectionClient extends BaseRESTClient {
             WebTarget heroSelectionTarget = campaignsTarget.path("{" + ParamValue.CAMPAIGN_ID + "}").path("heroselections");
 
             String uriPath = heroSelectionTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId()).getUri().getPath();
-            String authToken = SecurityTools.createAuthenticationToken(
-                    username, password, HttpMethod.GET, uriPath);
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.GET, uriPath);
 
             List<WsHeroSelection> currentSelections = null;
             Response getResponse = heroSelectionTarget
@@ -107,4 +106,5 @@ public class HeroSelectionClient extends BaseRESTClient {
             }
         }
     }
+   
 }

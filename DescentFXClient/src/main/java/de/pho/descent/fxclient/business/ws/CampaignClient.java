@@ -143,4 +143,37 @@ public class CampaignClient extends BaseRESTClient {
             }
         }
     }
+    
+    public static WsCampaign startCampaign(String username, String pwdHash, WsCampaign wsCampaign) throws ServerException {
+        Client client = null;
+
+        try {
+            client = ClientBuilder.newClient();
+            WebTarget securedTarget = client.target(getSecuredBaseUri());
+            WebTarget campaignsTarget = securedTarget.path("campaigns");
+            WebTarget startCampaignTarget = campaignsTarget.path("{" + ParamValue.CAMPAIGN_ID + "}").path("start");
+
+            String uriPath = startCampaignTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId()).getUri().getPath();
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.GET, uriPath);
+
+            WsCampaign campaign = null;
+            Response putResponse = startCampaignTarget
+                    .resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId())
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
+                    .get();
+
+            if (putResponse.getStatus() == Response.Status.OK.getStatusCode()) {
+                campaign = putResponse.readEntity(WsCampaign.class);
+            } else {
+                ErrorMessage errorMsg = putResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
+            }
+            return campaign;
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+    }
 }
