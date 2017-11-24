@@ -1,5 +1,6 @@
 package de.pho.descent.shared.model;
 
+import de.pho.descent.shared.auth.SecurityTools;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +47,7 @@ public class Player implements Serializable {
 
     public Player(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.password = SecurityTools.createHash(password, false);
     }
 
     public Long getId() {
