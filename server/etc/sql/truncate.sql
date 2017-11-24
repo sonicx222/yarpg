@@ -4,3 +4,4 @@ truncate descent.questencounter cascade;
 truncate descent.player cascade;
 truncate descent.heroselection cascade;
 truncate descent.mapfield cascade;
+truncate descent.gamemap cascade;
