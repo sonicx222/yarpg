@@ -8,10 +8,12 @@ import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.model.Player;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -80,6 +82,13 @@ public class LoginscreenPresenter implements Initializable {
         });
 
         validationSupport.setValidationDecorator(new StyleClassValidationDecoration());
+
+        // return key on pwd field
+        loginPwdText.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleLogin(e);
+            }
+        });
 
         // on Mouse entered
         paneRegister.setOnMouseEntered(event -> {
@@ -154,6 +163,15 @@ public class LoginscreenPresenter implements Initializable {
 
     @FXML
     public void handleLogin(MouseEvent event) {
+        handleLogin((Event) event);
+    }
+
+    @FXML
+    public void handleExit(MouseEvent event) {
+        System.exit(0);
+    }
+
+    private void handleLogin(Event event) {
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {
 
@@ -169,10 +187,4 @@ public class LoginscreenPresenter implements Initializable {
             }
         }
     }
-
-    @FXML
-    public void handleExit(MouseEvent event) {
-        System.exit(0);
-    }
-
 }

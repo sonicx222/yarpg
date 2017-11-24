@@ -15,6 +15,7 @@ import de.pho.descent.shared.model.quest.QuestPart;
 import java.util.List;
 import java.util.Objects;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,6 +26,7 @@ import org.junit.runners.MethodSorters;
  *
  * @author pho
  */
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CampaignTest {
 
@@ -75,14 +77,14 @@ public class CampaignTest {
 
         WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentials2, GRISBAN);
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentials3, JAINFAIRWOOD);
-        heroSelectionP2 = HeroSelectionClient.saveSelection(credentials2, credentials2, heroSelectionP2, campaign1);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentials3, credentials3, heroSelectionP3, campaign1);
+        heroSelectionP2 = HeroSelectionClient.saveSelection(credentials2, SecurityTools.createHash(credentials2, false), heroSelectionP2, campaign1);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentials3, SecurityTools.createHash(credentials3, false), heroSelectionP3, campaign1);
 
         heroSelectionP2.setReady(true);
-        heroSelectionP2 = HeroSelectionClient.saveSelection(credentials2, credentials2, heroSelectionP2, campaign1);
+        heroSelectionP2 = HeroSelectionClient.saveSelection(credentials2, SecurityTools.createHash(credentials2, false), heroSelectionP2, campaign1);
 
         heroSelectionP3.setReady(true);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentials3, credentials3, heroSelectionP3, campaign1);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentials3, SecurityTools.createHash(credentials3, false), heroSelectionP3, campaign1);
 
         List<WsHeroSelection> selections = HeroSelectionClient.getCurrentSelections(credentials3,
                 SecurityTools.createHash(credentials3, false), campaign1);

@@ -1,78 +1,78 @@
-package de.pho.descent.fxclient.presentation.startmenu;
+package de.pho.descent.fxclient.presentation.campaignselection;
 
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
-import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
-import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
+import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
+import de.pho.descent.shared.model.campaign.CampaignPhase;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
-import org.controlsfx.control.Notifications;
 
 /**
  *
  * @author pho
  */
-public class StartMenuPresenter implements Initializable {
+public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     private StackPane paneContinue;
 
     @FXML
-    private Line lineContinue;
+    private TableView campaignsTableView;
 
     @FXML
-    private StackPane paneJoinCampaign;
+    private TableColumn<WsCampaign, Long> campaignIDColumn;
 
     @FXML
-    private Text textJoinCampaign;
+    private TableColumn<WsCampaign, String> campaignOverlordColumn;
 
     @FXML
-    private Line lineJoinCampaign;
+    private TableColumn<WsCampaign, CampaignPhase> campaignPhaseColumn;
 
-    @Inject
-    private Credentials credentials;
+    @FXML
+    private TableColumn<WsCampaign, Date> campaignCreatedColumn;
+
+    @FXML
+    private TableColumn<WsCampaign, Date> campaignStartedColumn;
 
     @Inject
     private GameDataModel gameDataModel;
 
+    @Inject
+    private Credentials credentials;
+
     private LinearGradient gradientMenuItem;
 
+    private ResourceBundle resources = null;
+
+    private WsCampaign selectedCampaign;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        paneContinue.setVisible(false);
-        lineContinue.setVisible(false);
-
-        // load playable campaigns
-        updatePlayableCampaigns();
-
-        // update menu
-        if (gameDataModel.getPlayableCampaigns().isEmpty()) {
-            paneJoinCampaign.setDisable(true);
-            textJoinCampaign.setFill(Color.BLACK);
-        } else {
-            paneJoinCampaign.setDisable(false);
-            textJoinCampaign.setFill(Color.DARKGRAY);
-        }
+    public void initialize(URL location, ResourceBundle resources) {
+        this.resources = resources;
 
         gradientMenuItem = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
             new Stop(0, Color.DARKVIOLET),
@@ -80,6 +80,33 @@ public class StartMenuPresenter implements Initializable {
             new Stop(0.9, Color.BLACK),
             new Stop(1, Color.DARKVIOLET)
         });
+
+        // disable continue button, until selection made
+        paneContinue.setDisable(true);
+
+        // populate table view
+        campaignsTableView.setItems(gameDataModel.getPlayableCampaigns());
+        campaignsTableView.setEditable(false);
+
+        // columns
+        campaignIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        campaignOverlordColumn.setCellValueFactory(new PropertyValueFactory<>("overlord"));
+        campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));
+        campaignCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("createdOn"));
+        campaignStartedColumn.setCellValueFactory(new PropertyValueFactory<>("startedOn"));
+
+        // selection action
+        campaignsTableView.getSelectionModel().selectedItemProperty()
+                .addListener((ObservableValue observale, Object oldValue, Object newValue) -> {
+                    selectedCampaign = (WsCampaign) campaignsTableView.getSelectionModel().getSelectedItem();
+
+                    if (selectedCampaign != null) {
+                        paneContinue.setDisable(false);
+                    } else {
+                        paneContinue.setDisable(true);
+                    }
+                }
+                );
     }
 
     @FXML
@@ -139,49 +166,20 @@ public class StartMenuPresenter implements Initializable {
     }
 
     @FXML
-    public void handleNewCampaign(MouseEvent event) {
-
-        if (credentials == null || !credentials.isValid()) {
-            switchFullscreenScene(event, new LoginscreenView());
-            Notifications.create()
-                    .darkStyle().position(Pos.TOP_RIGHT)
-                    .text("No credentials found. Please log in first")
-                    .showInformation();
-
-        } else {
-            WsCampaign campaign = null;
-            try {
-                campaign = CampaignClient.newCampaign(credentials);
-            } catch (ServerException ex) {
-                showError(ex);
-            }
-            if (campaign != null) {
-                gameDataModel.setCurrentCampaign(campaign);
-//                switchFullscreenScene(event, new GameView());
-                switchFullscreenScene(event, new HeroSelectionView());
-            }
-        }
+    public void handleBack(MouseEvent event) {
+        switchFullscreenScene(event, new StartMenuView());
     }
 
     @FXML
-    public void handleJoinCampaign(MouseEvent event) {
-        switchFullscreenScene(event, new CampaignSelectionView());
+    public void handleRefresh(MouseEvent event) {
+        updatePlayableCampaigns();
     }
 
     @FXML
-    public void handleSettings(MouseEvent event) {
-
-    }
-
-    @FXML
-    public void handleLogout(MouseEvent event) {
-        credentials.setPlayer(null);
-        switchFullscreenScene(event, new LoginscreenView());
-    }
-
-    @FXML
-    public void handleExit(MouseEvent event) {
-        System.exit(0);
+    public void handleContinue(MouseEvent event) {
+        requireNonNull(selectedCampaign);
+        gameDataModel.setCurrentCampaign(selectedCampaign);
+        switchFullscreenScene(event, new HeroSelectionView());
     }
 
     private void updatePlayableCampaigns() {
@@ -198,4 +196,5 @@ public class StartMenuPresenter implements Initializable {
             gameDataModel.getPlayableCampaigns().addAll(playableCampaigns);
         }
     }
+
 }

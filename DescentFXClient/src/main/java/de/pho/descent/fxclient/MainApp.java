@@ -79,4 +79,11 @@ public class MainApp extends Application {
         Notifications tmp = Notifications.create();
         tmp.darkStyle().position(Pos.TOP_RIGHT).text(exception.getMessage()).showError();
     }
+    
+    public static void showError(String errorMsg) {
+        LOGGER.log(Level.SEVERE, errorMsg);
+
+        Notifications tmp = Notifications.create();
+        tmp.darkStyle().position(Pos.TOP_RIGHT).text(errorMsg).showError();
+    }
 }

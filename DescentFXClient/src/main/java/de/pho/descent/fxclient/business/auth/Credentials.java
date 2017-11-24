@@ -13,20 +13,20 @@ public class Credentials {
 
     public Credentials() {
     }
-    
+
     public Credentials(Player player) {
         this.player = player;
     }
-    
+
     @PostConstruct
     public void init() {
     }
-    
+
     public boolean isValid() {
         return player != null
                 && player.getUsername() != null
                 && !player.getUsername().isEmpty()
-                && player.getPassword()!= null
+                && player.getPassword() != null
                 && !player.getPassword().isEmpty();
     }
 
@@ -36,6 +36,14 @@ public class Credentials {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public String getUsername() {
+        return this.player.getUsername();
+    }
+
+    public String getPassword() {
+        return this.player.getPassword();
     }
 
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionPresenter">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: BLACK;">
+         <children>
+            <TableView fx:id="campaignsTableView" layoutX="250.0" layoutY="255.0" prefHeight="332.0" prefWidth="900.0">
+              <columns>
+                <TableColumn fx:id="campaignIDColumn" prefWidth="63.0" text="ID" />
+                <TableColumn fx:id="campaignOverlordColumn" prefWidth="161.0" text="Overlord" />
+                  <TableColumn fx:id="campaignPhaseColumn" prefWidth="146.0" text="Phase" />
+                  <TableColumn fx:id="campaignCreatedColumn" prefWidth="270.0" text="Created On" />
+                  <TableColumn fx:id="campaignStartedColumn" prefWidth="238.0" text="Started On" />
+              </columns>
+            </TableView>
+            <VBox layoutX="250.0" layoutY="649.0" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneBack" onMouseClicked="#handleBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <VBox layoutX="616.0" layoutY="649.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+               <children>
+                  <Line fx:id="lineContinue1" endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <VBox layoutX="949.0" layoutY="649.0" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line fx:id="lineContinue" endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneContinue" onMouseClicked="#handleContinue" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemContinue" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textContinue" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="CONTINUE">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

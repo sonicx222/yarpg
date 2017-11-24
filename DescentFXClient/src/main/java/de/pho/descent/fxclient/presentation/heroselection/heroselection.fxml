@@ -9,14 +9,43 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.heroselection.HeroSelectionPresenter">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: black; -fx-background-image: url('table.jpg');" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.heroselection.HeroSelectionPresenter">
    <children>
-      <ListView fx:id="heroesListView" layoutX="38.0" layoutY="226.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="200.0" />
-      <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="600.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="600.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true" />
-      <VBox layoutX="710.0" layoutY="510.0" nodeOrientation="LEFT_TO_RIGHT">
+      <ListView fx:id="heroesListView" layoutX="319.0" layoutY="260.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="201.0" />
+      <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="520.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../resources/img/heroes/Grisban.png" />
+         </image></ImageView>
+      <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="520.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Hero_Sheet_Template.png" />
+         </image></ImageView>
+      <VBox layoutX="36.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
          <children>
-            <Line fx:id="lineContinue" endX="200.0" stroke="DARKGRAY" />
+            <Line endX="200.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+               <children>
+                  <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
+                     <font>
+                        <Font name="Tw Cen MT Condensed" size="22.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Line endX="200.0" stroke="DARKGRAY" />
+         </children>
+      </VBox>
+      <TableView fx:id="activeSelectionsTableView" layoutX="461.0" layoutY="49.0" prefHeight="140.0" prefWidth="484.0">
+         <columns>
+            <TableColumn fx:id="selectionHeroColumn" prefWidth="209.0" text="Hero" />
+            <TableColumn fx:id="selectionPlayerColumn" minWidth="0.0" prefWidth="195.0" text="Played By" />
+            <TableColumn fx:id="selectionReadyColumn" minWidth="0.0" prefWidth="77.0" text="Ready?" />
+         </columns>
+      </TableView>
+      <VBox fx:id="vboxAction" layoutX="960.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
+         <children>
+            <Line fx:id="lineContinue1" endX="200.0" stroke="DARKGRAY" />
             <StackPane fx:id="paneAction" onMouseClicked="#handleToggleReady" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
                <children>
                   <Rectangle fx:id="itemAction" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
@@ -28,10 +57,84 @@
                </children>
             </StackPane>
             <Line endX="200.0" stroke="DARKGRAY" />
-            <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+         </children>
+      </VBox>
+      <Label layoutX="539.0" layoutY="14.0" text="Current Hero Selections" textFill="WHITE">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <Label layoutX="319.0" layoutY="229.0" text="Select Your Hero" textFill="WHITE">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelAnnounce" alignment="TOP_LEFT" layoutX="520.0" layoutY="766.0" prefHeight="35.0" prefWidth="600.0" text="Label: Announce" textFill="WHITE" wrapText="true" />
+      <Label fx:id="labelArchetype" alignment="CENTER" contentDisplay="CENTER" layoutX="536.0" layoutY="279.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelSpeed" alignment="CENTER" layoutX="803.0" layoutY="353.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelHealth" alignment="CENTER" layoutX="822.0" layoutY="441.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelStamina" alignment="CENTER" layoutX="826.0" layoutY="531.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelMight" alignment="CENTER" layoutX="592.0" layoutY="653.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="681.0" layoutY="654.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelWillpower" alignment="CENTER" layoutX="573.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelAwareness" alignment="CENTER" layoutX="703.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <VBox layoutX="514.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+         <children>
+            <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
                <children>
-                  <Rectangle fx:id="itemBBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                  <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
+                  <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
+                     <font>
+                        <Font name="Tw Cen MT Condensed" size="22.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Line endX="200.0" stroke="DARKGRAY" />
+         </children>
+      </VBox>
+      <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="887.0" layoutY="323.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="887.0" layoutY="559.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+      <VBox fx:id="vboxStart" layoutX="960.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
+         <children>
+            <Line fx:id="lineStart" endX="200.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneStart" onMouseClicked="#handleStart" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+               <children>
+                  <Rectangle fx:id="itemStart" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                  <Text fx:id="textStart" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="START">
                      <font>
                         <Font name="Tw Cen MT Condensed" size="22.0" />
                      </font>

@@ -1,6 +1,9 @@
 package de.pho.descent.fxclient.presentation.general;
 
 import de.pho.descent.shared.dto.WsCampaign;
+import de.pho.descent.shared.dto.WsHeroSelection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.annotation.PostConstruct;
 
 /**
@@ -9,19 +12,30 @@ import javax.annotation.PostConstruct;
  */
 public class GameDataModel {
 
-    private WsCampaign campaign;
+    private final ObservableList<WsCampaign> playableCampaigns = FXCollections.observableArrayList();
+    private final ObservableList<WsHeroSelection> heroSelections = FXCollections.observableArrayList();
+    
+    private WsCampaign currentCampaign;
 
     @PostConstruct
     public void init() {
-
     }
 
-    public WsCampaign getCampaign() {
-        return campaign;
+    public ObservableList<WsCampaign> getPlayableCampaigns() {
+        return playableCampaigns;
     }
 
-    public void setCampaign(WsCampaign campaign) {
-        this.campaign = campaign;
+    public ObservableList<WsHeroSelection> getHeroSelections() {
+        return heroSelections;
+    }
+    
+
+    public WsCampaign getCurrentCampaign() {
+        return currentCampaign;
+    }
+
+    public void setCurrentCampaign(WsCampaign currentCampaign) {
+        this.currentCampaign = currentCampaign;
     }
 
 }

@@ -3,6 +3,7 @@ import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.Player;
@@ -17,11 +18,13 @@ import static org.junit.rules.ExpectedException.none;
 import org.junit.runners.MethodSorters;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
  * @author pho
  */
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HeroSelectionTest {
 
@@ -71,10 +74,10 @@ public class HeroSelectionTest {
         WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN);
         WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK);
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, WIDOWTARHA);
-        heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, credentialsP2, heroSelectionP2, campaign1);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, credentialsP3, heroSelectionP3, campaign1);
-        heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, credentialsP4, heroSelectionP4, campaign1);
-        heroSelectionP5 = HeroSelectionClient.saveSelection(credentialsP5, credentialsP5, heroSelectionP5, campaign1);
+        heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, SecurityTools.createHash(credentialsP2, false), heroSelectionP2, campaign1);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign1);
+        heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, SecurityTools.createHash(credentialsP4, false), heroSelectionP4, campaign1);
+        heroSelectionP5 = HeroSelectionClient.saveSelection(credentialsP5, SecurityTools.createHash(credentialsP5, false), heroSelectionP5, campaign1);
 
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
@@ -91,7 +94,7 @@ public class HeroSelectionTest {
         // check: full group exception
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Hero selection not possible. Group is full");
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, campaign1);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign1);
     }
 
     @Test
@@ -104,10 +107,10 @@ public class HeroSelectionTest {
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
         WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN);
         WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK);
-        heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, credentialsP1, heroSelectionP1, campaign2);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, credentialsP3, heroSelectionP3, campaign2);
-        heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, credentialsP4, heroSelectionP4, campaign2);
-        heroSelectionP5 = HeroSelectionClient.saveSelection(credentialsP5, credentialsP5, heroSelectionP5, campaign2);
+        heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign2);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign2);
+        heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, SecurityTools.createHash(credentialsP4, false), heroSelectionP4, campaign2);
+        heroSelectionP5 = HeroSelectionClient.saveSelection(credentialsP5, SecurityTools.createHash(credentialsP5, false), heroSelectionP5, campaign2);
 
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
@@ -129,8 +132,8 @@ public class HeroSelectionTest {
         WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN);
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
 
-        heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, credentialsP2, heroSelectionP2, campaign3);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, credentialsP3, heroSelectionP3, campaign3);
+        heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, SecurityTools.createHash(credentialsP2, false), heroSelectionP2, campaign3);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign3);
 
         // check available campaigns for different users
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
@@ -140,7 +143,7 @@ public class HeroSelectionTest {
         // check: overlord can not select
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Overlord can not take part in hero selection");
-        HeroSelectionClient.saveSelection(credentialsP1, credentialsP1, heroSelectionP1, campaign1);
+        HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign1);
     }
 
     @Test
@@ -151,8 +154,8 @@ public class HeroSelectionTest {
         // campaign 4, 2-man group on selection stage WITH user 'P1'
         WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, GRISBAN);
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
-        heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, credentialsP1, heroSelectionP1, campaign4);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, credentialsP3, heroSelectionP3, campaign4);
+        heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign4);
+        heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign4);
 
         List<WsCampaign> activeCampaigns = CampaignClient.getActiveCampaigns(player1.getUsername(), player1.getPassword());
         assertThat(activeCampaigns)
@@ -163,7 +166,7 @@ public class HeroSelectionTest {
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Hero " + JAINFAIRWOOD.getName() + " already selected");
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, campaign4);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign4);
     }
 
     @Test
@@ -176,7 +179,7 @@ public class HeroSelectionTest {
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, campaign5);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign5);
     }
 
     @Test
@@ -188,7 +191,7 @@ public class HeroSelectionTest {
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, campaign6);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign6);
     }
 
     @Test
@@ -212,6 +215,6 @@ public class HeroSelectionTest {
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign with Id: " + falseCampaign.getId() + " not found");
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, falseCampaign);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, falseCampaign);
     }
 }

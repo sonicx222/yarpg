@@ -32,7 +32,7 @@ public class PlayerClient extends BaseRESTClient {
             Player player = null;
             Response postResponse = target.path("players").request()
                     .header(ParamValue.USERNAME, username)
-                    .header(ParamValue.ENCRYPTED_PWD, SecurityTools.createHash(password, false))
+                    .header(ParamValue.PASSWORD, password)
                     .post(null, Response.class);
             if (postResponse.getStatus() == Status.CREATED.getStatusCode()) {
                 player = postResponse.readEntity(Player.class);

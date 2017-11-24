@@ -21,7 +21,7 @@ public class GamePresenter implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mapImageView.setImage(new Image(getClass().getResourceAsStream("/img/encounter/First_Blood.png")));
+        mapImageView.setImage(new Image(getClass().getResourceAsStream("/img/encounter/First_Blood2.png")));
     }
     
     @FXML

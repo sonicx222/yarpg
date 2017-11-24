@@ -14,6 +14,7 @@ import static org.junit.rules.ExpectedException.none;
  *
  * @author pho
  */
+@Ignore
 //@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PlayerTest {
 

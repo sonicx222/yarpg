@@ -35,7 +35,7 @@ public class HeroSelectionClient extends BaseRESTClient {
         return saveSelection(player.getUsername(), player.getPassword(), wsHeroSelection, wsCampaign);
     }
 
-    public static WsHeroSelection saveSelection(String username, String password, WsHeroSelection wsHeroSelection, WsCampaign wsCampaign) throws ServerException {
+    public static WsHeroSelection saveSelection(String username, String pwdHash, WsHeroSelection wsHeroSelection, WsCampaign wsCampaign) throws ServerException {
 
         Client client = null;
 
@@ -46,9 +46,8 @@ public class HeroSelectionClient extends BaseRESTClient {
             WebTarget heroSelectionTarget = campaignsTarget.path("{" + ParamValue.CAMPAIGN_ID + "}").path("heroselections");
 
             String uriPath = heroSelectionTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId()).getUri().getPath();
-            String authToken = SecurityTools.createAuthenticationToken(
-                    username,
-                    SecurityTools.createHash(password, false),
+            String authToken = SecurityTools.createAuthenticationToken(username,
+                    pwdHash,
                     HttpMethod.POST, uriPath);
 
             Response postResponse = heroSelectionTarget
