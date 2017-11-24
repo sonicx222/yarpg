@@ -1,7 +1,6 @@
 package de.pho.descent.web.player;
 
 import de.pho.descent.shared.model.Player;
-import de.pho.descent.web.player.PlayerAlreadyExistsException;
 import de.pho.descent.web.exception.NotFoundException;
 import java.io.Serializable;
 import java.util.List;
@@ -30,7 +29,7 @@ public class PlayerService implements Serializable {
             if (player != null) {
                 throw new PlayerAlreadyExistsException("Player " + username + " already exists");
             }
-        } catch (NoResultException ex) {
+        } catch (NotFoundException ex) {
             player = em.merge(new Player(username, password));
         }
 
@@ -45,13 +44,17 @@ public class PlayerService implements Serializable {
         return em.createNamedQuery(Player.findAll, Player.class).getResultList();
     }
 
-    public Player getPlayerByUsername(String username) {
-        TypedQuery<Player> query = em.createNamedQuery(Player.findAllByUsername, Player.class).setParameter(Player.paramUsername, username);
-        System.out.println(query);
+    public Player getPlayerByUsername(String username) throws NotFoundException {
+        TypedQuery<Player> query = em.createNamedQuery(
+                Player.findAllByUsername, Player.class)
+                .setParameter(Player.paramUsername, username);
+        List<Player> results = query.getResultList();
         
-        Player player = query.getSingleResult();
-        
-        return player;
+        if (results == null || results.isEmpty()) {
+           throw new NotFoundException("Player " + username + " not found"); 
+        }
+
+        return results.get(0);
     }
 
     public Player getPlayerById(long id) throws NotFoundException {

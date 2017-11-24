@@ -4,6 +4,7 @@ import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.web.auth.UserValidationException;
+import de.pho.descent.web.exception.NotFoundException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class PlayerBoundary {
     @POST
     public Response register(
             @HeaderParam(ParamValue.USERNAME) String username,
-            @HeaderParam(ParamValue.ENCRYPTED_PWD) String password,
+            @HeaderParam(ParamValue.PASSWORD) String password,
             @Context UriInfo uriInfo)
             throws PlayerAlreadyExistsException {
 
@@ -56,7 +57,7 @@ public class PlayerBoundary {
     public Response getPlayer(
             @PathParam(ParamValue.USERNAME) String username,
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken)
-            throws UserValidationException {
+            throws UserValidationException, NotFoundException {
 
         LOG.log(Level.INFO, "Login in: User {0}", username);
         Player player = playerController.getPlayerByToken(authToken);

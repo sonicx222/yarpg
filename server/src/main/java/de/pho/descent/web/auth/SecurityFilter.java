@@ -4,6 +4,7 @@ import de.pho.descent.web.player.PlayerController;
 import static de.pho.descent.shared.auth.ParamValue.*;
 import de.pho.descent.shared.exception.ErrorMessage;
 import de.pho.descent.shared.model.Player;
+import de.pho.descent.web.exception.NotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -40,9 +41,9 @@ public class SecurityFilter implements ContainerRequestFilter {
             ErrorMessage errorMsg = null;
 
             try {
-                if (authHeader == null) {
+                if (authHeader == null || authHeader.isEmpty()) {
                     throw new UserValidationException("Access not allowed");
-                } else if (authHeader != null && !authHeader.isEmpty()) {
+                } else {
                     String uriPath = requestContext.getUriInfo().getRequestUri().getPath();
                     Player p = playerController.doAuthenticate(requestContext.getMethod(), uriPath, authHeader.get(0));
 
@@ -50,7 +51,7 @@ public class SecurityFilter implements ContainerRequestFilter {
                         return;
                     }
                 }
-            } catch (UserValidationException ex) {
+            } catch (UserValidationException | NotFoundException ex) {
                 errorMsg = new ErrorMessage(ex.getMessage(), Response.Status.UNAUTHORIZED.getStatusCode());
                 LOG.log(Level.SEVERE, ex.getMessage(), ex);
             }

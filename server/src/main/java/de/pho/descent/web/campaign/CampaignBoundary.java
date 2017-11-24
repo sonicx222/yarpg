@@ -48,7 +48,7 @@ public class CampaignBoundary {
     @GET
     public Response getActiveCampaigns(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken)
-            throws UserValidationException {
+            throws UserValidationException, NotFoundException {
 
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling getActiveCampaigns for Player {0}", player.getUsername());
@@ -65,7 +65,7 @@ public class CampaignBoundary {
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @Context UriInfo uriInfo,
             WsCampaign wsCampaign)
-            throws URISyntaxException, UserValidationException {
+            throws URISyntaxException, UserValidationException, NotFoundException {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 
@@ -80,7 +80,7 @@ public class CampaignBoundary {
     public Response newCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @Context UriInfo uriInfo)
-            throws URISyntaxException, UserValidationException {
+            throws URISyntaxException, UserValidationException, NotFoundException {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 

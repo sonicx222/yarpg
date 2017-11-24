@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.ws.rs.Path;
 
 /**
@@ -51,20 +50,15 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-    public Player getPlayerByName(String username) {
+    public Player getPlayerByName(String username) throws NotFoundException {
         return playerService.getPlayerByUsername(username);
     }
 
-    public Player getPlayerByToken(String authToken) throws UserValidationException {
+    public Player getPlayerByToken(String authToken) throws UserValidationException, NotFoundException {
         String[] authData = SecurityTools.extractDataFromAuthenticationToken(authToken);
         String decodedUser = authData[0];
-        Player player = null;
 
-        try {
-            player = playerService.getPlayerByUsername(decodedUser);
-        } catch (NoResultException ex) {
-            throw new UserValidationException("User not found");
-        }
+        Player player = playerService.getPlayerByUsername(decodedUser);
 
         // if deactive
         if (player.isDeactive()) {
@@ -74,7 +68,7 @@ public class PlayerController {
         return player;
     }
 
-    public Player doAuthenticate(String restMethod, String restURI, String authToken) throws UserValidationException {
+    public Player doAuthenticate(String restMethod, String restURI, String authToken) throws UserValidationException, NotFoundException {
         if (authToken == null) {
             throw new UserValidationException("No auth token");
         }

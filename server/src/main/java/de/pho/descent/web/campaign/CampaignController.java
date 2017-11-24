@@ -18,6 +18,7 @@ import de.pho.descent.web.service.PersistenceService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -84,9 +85,7 @@ public class CampaignController {
     }
 
     public void checkCampaignPhase(Campaign campaign, CampaignPhase phaseToBeChecked) throws NotFoundException, CampaignValidationException {
-        if (campaign == null) {
-            throw new NotFoundException("Campaign not found");
-        }
+        requireNonNull(campaign);
 
         if (campaign.getPhase() != phaseToBeChecked) {
             throw new CampaignValidationException("Campaign not in phase: " + phaseToBeChecked.name());
@@ -111,6 +110,7 @@ public class CampaignController {
      *
      * @param player
      * @param campaignId
+     * @return the started Campaign
      * @throws UserValidationException
      * @throws HeroSelectionException
      * @throws NotFoundException
@@ -129,11 +129,11 @@ public class CampaignController {
         if (!campaignService.allSelectionsReady(Long.parseLong(campaignId))) {
             throw new HeroSelectionException("Can not start campaign: some selections are not ready");
         }
-        
+
         return campaign;
     }
 
-    public Campaign createCampaign(WsCampaign wsCampaign) {
+    public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException {
         Campaign c = new Campaign();
 
         Player overlord = playerController.getPlayerByName(wsCampaign.getOverlord());
@@ -200,7 +200,7 @@ public class CampaignController {
             throw new HeroSelectionException("Hero selection not possible. Group is full");
         }
 
-        HeroSelection selection = null;
+        HeroSelection selection;
         if (wsSelection.getId() > 0) {
             selection = persistenceService.find(HeroSelection.class, wsSelection.getId());
         } else {
