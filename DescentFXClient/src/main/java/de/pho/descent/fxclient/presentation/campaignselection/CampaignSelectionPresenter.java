@@ -10,6 +10,8 @@ import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
+import de.pho.descent.shared.model.quest.Quest;
+import de.pho.descent.shared.model.quest.QuestPart;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -53,10 +55,13 @@ public class CampaignSelectionPresenter implements Initializable {
     private TableColumn<WsCampaign, CampaignPhase> campaignPhaseColumn;
 
     @FXML
-    private TableColumn<WsCampaign, Date> campaignCreatedColumn;
+    private TableColumn<WsCampaign, Quest> campaignQuestColumn;
 
     @FXML
-    private TableColumn<WsCampaign, Date> campaignStartedColumn;
+    private TableColumn<WsCampaign, QuestPart> campaignQuestPartColumn;
+
+    @FXML
+    private TableColumn<WsCampaign, Date> campaignCreatedColumn;
 
     @Inject
     private GameDataModel gameDataModel;
@@ -92,8 +97,9 @@ public class CampaignSelectionPresenter implements Initializable {
         campaignIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         campaignOverlordColumn.setCellValueFactory(new PropertyValueFactory<>("overlord"));
         campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));
+        campaignQuestColumn.setCellValueFactory(new PropertyValueFactory<>("activeQuest"));
+        campaignQuestPartColumn.setCellValueFactory(new PropertyValueFactory<>("part"));
         campaignCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("createdOn"));
-        campaignStartedColumn.setCellValueFactory(new PropertyValueFactory<>("startedOn"));
 
         // selection action
         campaignsTableView.getSelectionModel().selectedItemProperty()

@@ -3,10 +3,13 @@ package de.pho.descent.fxclient.presentation.heroselection;
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.game.GameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
+import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.hero.HeroTemplate;
 import java.io.InputStream;
@@ -14,8 +17,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,8 +42,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import javax.inject.Inject;
-import jersey.repackaged.com.google.common.base.Objects;
 
 /**
  *
@@ -58,13 +63,25 @@ public class HeroSelectionPresenter implements Initializable {
     private ImageView heroImageView;
 
     @FXML
-    private ImageView heroSheetView;
+    private ImageView startSkillView;
+
+    @FXML
+    private ImageView startItem1View;
+
+    @FXML
+    private ImageView startItem2View;
 
     @FXML
     private Text textAction;
 
     @FXML
     private TableColumn<WsHeroSelection, HeroTemplate> selectionHeroColumn;
+
+    @FXML
+    private TableColumn<WsHeroSelection, String> selectionArchetypeColumn;
+
+    @FXML
+    private TableColumn<WsHeroSelection, String> selectionClassColumn;
 
     @FXML
     private TableColumn<WsHeroSelection, String> selectionPlayerColumn;
@@ -115,7 +132,8 @@ public class HeroSelectionPresenter implements Initializable {
 
     private LinearGradient gradientMenuItem;
 
-    private final Map<HeroTemplate, Image> heroImages = new HashMap<>();
+    private final Map<HeroTemplate, Image[]> heroImages = new HashMap<>();
+    private final String IMAGE_SUFFIX = ".png";
 
     private String buttonReadyText;
     private String buttonCancelText;
@@ -130,7 +148,7 @@ public class HeroSelectionPresenter implements Initializable {
         });
 
         // setup buttons
-        if (Objects.equal(credentials.getPlayer().getUsername(),
+        if (Objects.equals(credentials.getPlayer().getUsername(),
                 gameDataModel.getCurrentCampaign().getOverlord())) {
             // overlord screen
             vboxAction.setVisible(false);
@@ -154,10 +172,22 @@ public class HeroSelectionPresenter implements Initializable {
 
         // columns
         selectionHeroColumn.setCellValueFactory(new PropertyValueFactory<>("selectedHero"));
+        selectionArchetypeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<WsHeroSelection, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<WsHeroSelection, String> p) {
+                return new SimpleStringProperty(p.getValue().getSelectedHero().getArchetype().getText());
+            }
+        });
+        selectionClassColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<WsHeroSelection, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<WsHeroSelection, String> p) {
+                return new SimpleStringProperty(p.getValue().getSelectedHero().getHeroClass().getText());
+            }
+        });
         selectionPlayerColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         selectionReadyColumn.setCellValueFactory(new PropertyValueFactory<>("ready"));
 
-        preloadHeroImages();
+        preloadHeroTemplateImages();
 
         // reset current user hero selection
         heroSelectionModel.setCurrentSelection(null);
@@ -171,7 +201,7 @@ public class HeroSelectionPresenter implements Initializable {
                     heroSelectionModel.setSelectedTemplate((HeroTemplate) newValue);
                     HeroTemplate template = heroSelectionModel.getSelectedTemplate();
 
-                    labelArchetype.setText(template.getHeroArchetype().name());
+                    labelArchetype.setText(template.getArchetype().name());
                     labelSpeed.setText(String.valueOf(template.getSpeed()));
                     labelHealth.setText(String.valueOf(template.getHealth()));
                     labelStamina.setText(String.valueOf(template.getStamina()));
@@ -182,7 +212,10 @@ public class HeroSelectionPresenter implements Initializable {
                     labelAnnounce.setText("\"" + template.getAnnounce() + "\"");
                     labelHeroAbility.setText(template.getHeroAbilityText());
                     labelHeroicFeat.setText(template.getHeroicFeatText());
-                    heroImageView.setImage(heroImages.get(template));
+                    heroImageView.setImage(heroImages.get(template)[0]);
+                    startSkillView.setImage(heroImages.get(template)[1]);
+                    startItem1View.setImage(heroImages.get(template)[2]);
+                    startItem2View.setImage(heroImages.get(template)[3]);
                 }
                 );
         // preselect first element
@@ -247,6 +280,33 @@ public class HeroSelectionPresenter implements Initializable {
     }
 
     @FXML
+    public void handleRefresh(MouseEvent event) {
+        LOGGER.info("HeroSelectionPresenter: handleRefresh()");
+        updateHeroSelections();
+    }
+
+    @FXML
+    public void handleStart(MouseEvent event) {
+        LOGGER.info("HeroSelectionPresenter: handleStart()");
+        WsCampaign startedCampaign = null;
+        try {
+            startedCampaign = CampaignClient.startCampaign(credentials.getUsername(),
+                    credentials.getPassword(), gameDataModel.getCurrentCampaign());
+        } catch (ServerException ex) {
+            showError(ex);
+        }
+        if (startedCampaign != null) {
+            switchFullscreenScene(event, new GameView());
+        }
+    }
+
+    @FXML
+    public void handleNavigationBack(MouseEvent event) {
+        LOGGER.info("HeroSelectionPresenter: handleNavigationBack()");
+        switchFullscreenScene(event, new StartMenuView());
+    }
+
+    @FXML
     public void handleToggleReady(MouseEvent event) {
         if (textAction.getText().equalsIgnoreCase(buttonReadyText)) {
             handleReady();
@@ -256,6 +316,7 @@ public class HeroSelectionPresenter implements Initializable {
     }
 
     private void handleReady() {
+        LOGGER.info("HeroSelectionPresenter: handleReady()");
         WsHeroSelection selection = heroSelectionModel.getCurrentSelection();
         HeroTemplate template = heroSelectionModel.getSelectedTemplate();
 
@@ -280,7 +341,8 @@ public class HeroSelectionPresenter implements Initializable {
 
         WsHeroSelection updatedSelection = null;
         try {
-            updatedSelection = HeroSelectionClient.saveSelection(credentials, selection, gameDataModel.getCurrentCampaign());
+            updatedSelection = HeroSelectionClient.saveSelection(
+                    credentials, selection, gameDataModel.getCurrentCampaign());
         } catch (ServerException ex) {
             showError(ex);
         }
@@ -292,12 +354,14 @@ public class HeroSelectionPresenter implements Initializable {
     }
 
     private void handleCancel() {
+        LOGGER.info("HeroSelectionPresenter: handleCancel()");
         WsHeroSelection selection = heroSelectionModel.getCurrentSelection();
         selection.setReady(false);
 
         WsHeroSelection updatedSelection = null;
         try {
-            updatedSelection = HeroSelectionClient.saveSelection(credentials, selection, gameDataModel.getCurrentCampaign());
+            updatedSelection = HeroSelectionClient.saveSelection(
+                    credentials, selection, gameDataModel.getCurrentCampaign());
         } catch (ServerException ex) {
             showError(ex);
         }
@@ -309,30 +373,57 @@ public class HeroSelectionPresenter implements Initializable {
         }
     }
 
-    @FXML
-    public void handleRefresh(MouseEvent event) {
-        updateHeroSelections();
-    }
-
-    @FXML
-    public void handleStart(MouseEvent event) {
-        // start campaign
-    }
-
-    @FXML
-    public void handleNavigationBack(MouseEvent event) {
-        //setCancelState();
-        switchFullscreenScene(event, new StartMenuView());
-    }
-
-    private void preloadHeroImages() {
+    private void preloadHeroTemplateImages() {
         heroImages.clear();
+
         for (HeroTemplate template : HeroTemplate.values()) {
-            InputStream is = getClass().getResourceAsStream("/img/heroes/" + template.getImageName() + ".png");
-            if (is != null) {
-                Image img = new Image(is);
-                heroImages.put(template, img);
+            Image[] images = new Image[4];
+
+            // hero preview image
+            StringBuilder ressourcePathHero = new StringBuilder("/img/heroes/");
+            ressourcePathHero.append(template.getImageName());
+            ressourcePathHero.append(IMAGE_SUFFIX);
+            InputStream isHero = getClass().getResourceAsStream(ressourcePathHero.toString());
+            if (isHero != null) {
+                images[0] = new Image(isHero);
             }
+
+            // hero class start skill
+            if (template.getStartSkill() != null) {
+                StringBuilder ressourcePathStartSkill = new StringBuilder("/img/skills/0_");
+                ressourcePathStartSkill.append(template.getStartSkill().getImagePath());
+                ressourcePathStartSkill.append(IMAGE_SUFFIX);
+
+                InputStream isStartSkill = getClass().getResourceAsStream(ressourcePathStartSkill.toString());
+                if (isStartSkill != null) {
+                    images[1] = new Image(isStartSkill);
+                }
+            }
+
+            // hero class start item 1
+            if (template.getStartItem1() != null) {
+                StringBuilder ressourcePathStartItem1 = new StringBuilder("/img/items/");
+                ressourcePathStartItem1.append(template.getStartItem1().getImagePath());
+                ressourcePathStartItem1.append(IMAGE_SUFFIX);
+                InputStream isStartItem1 = getClass().getResourceAsStream(ressourcePathStartItem1.toString());
+                if (isStartItem1 != null) {
+                    images[2] = new Image(isStartItem1);
+                }
+            }
+
+            // hero class start item 2
+            if (template.getStartItem2() != null) {
+                StringBuilder ressourcePathStartItem2 = new StringBuilder("/img/items/");
+                ressourcePathStartItem2.append(template.getStartItem2().getImagePath());
+                ressourcePathStartItem2.append(IMAGE_SUFFIX);
+
+                InputStream isStartItem2 = getClass().getResourceAsStream(ressourcePathStartItem2.toString());
+                if (isStartItem2 != null) {
+                    images[3] = new Image(isStartItem2);
+                }
+            }
+
+            heroImages.put(template, images);
         }
     }
 
