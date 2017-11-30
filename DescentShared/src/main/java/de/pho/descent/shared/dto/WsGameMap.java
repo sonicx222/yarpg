@@ -1,7 +1,7 @@
 package de.pho.descent.shared.dto;
 
-import de.pho.descent.shared.model.GameMap;
-import de.pho.descent.shared.model.MapField;
+import de.pho.descent.shared.model.map.GameMap;
+import de.pho.descent.shared.model.map.MapField;
 import java.util.List;
 
 /**

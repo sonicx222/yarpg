@@ -1,6 +1,6 @@
 package de.pho.descent.shared.model.quest;
 
-import de.pho.descent.shared.model.GameMap;
+import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.hero.GameHero;
 import java.io.Serializable;

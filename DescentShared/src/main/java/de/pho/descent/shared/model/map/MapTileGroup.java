@@ -1,11 +1,13 @@
-package de.pho.descent.shared.model;
+package de.pho.descent.shared.model.map;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,7 +22,18 @@ public class MapTileGroup implements Serializable {
     private Long id;
 
     private String name;
+    
+    @OneToMany(mappedBy="tileGroup")
+    List<MapField> mapFields;
 
+    public MapTileGroup() {
+    }
+
+    public MapTileGroup(String name, List<MapField> mapFields) {
+        this.name = name;
+        this.mapFields = mapFields;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -35,6 +48,14 @@ public class MapTileGroup implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<MapField> getMapFields() {
+        return mapFields;
+    }
+
+    public void setMapFields(List<MapField> mapFields) {
+        this.mapFields = mapFields;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package de.pho.descent.shared.model.hero;
 
-
-import static de.pho.descent.shared.model.hero.Class.*;
+import static de.pho.descent.shared.model.hero.HeroClass.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,16 +10,26 @@ import java.util.List;
  * @author pho
  */
 public enum Archetype {
-    WARRIOR("Warrior", Arrays.asList(BEASTMASTER, BERSERKER, CHAMPION, KNIGHT, MARSHAL, SKIRMISHER, STEELCASTER)),
-    MAGE("Mage", Arrays.asList(BATTLEMAGE, CONJURER, GEOMANCER, HEXER, NECROMANCER, RUNEMASTER)),
-    SCOUT("Scout", Arrays.asList(BOUNTYHUNTER, MONK, SHADOWWALKER, STALKER, THIEF, TREASUREHUNTER, TREASUREHUNTER, WILDLANDER)),
-    HEALER("Healer", Arrays.asList(APOTHECARY, BARD, DISCIPLE, PROPHET, SPIRITSPEAKER, WATCHMAN));
+    WARRIOR("Warrior", BERSERKER, KNIGHT),
+    MAGE("Mage", NECROMANCER, RUNEMASTER),
+    SCOUT("Scout", THIEF, WILDLANDER),
+    HEALER("Healer", DISCIPLE, SPIRITSPEAKER);
 
     private final String text;
-    private final List<Class> classes;
+    private final List<HeroClass> classes;
 
-    private Archetype(String text, List<Class> classes) {
+    private Archetype(String text, HeroClass... classes) {
         this.text = text;
-        this.classes = classes;
+        this.classes = Collections.unmodifiableList(Arrays.asList(classes));
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public List<HeroClass> getClasses() {
+        return classes;
+    }
+    
+    
 }

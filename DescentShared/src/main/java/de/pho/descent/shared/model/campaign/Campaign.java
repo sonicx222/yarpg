@@ -2,11 +2,14 @@ package de.pho.descent.shared.model.campaign;
 
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.quest.QuestEncounter;
+import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -43,12 +46,15 @@ public class Campaign implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private final Date createdOn = new Date();
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date startedOn;
 
     @Enumerated(EnumType.STRING)
     private CampaignPhase phase;
+
+    @Enumerated(EnumType.STRING)
+    private QuestTemplate templateNextQuest;
 
     @ManyToOne
     private Player overlord;
@@ -56,9 +62,13 @@ public class Campaign implements Serializable {
     @OneToOne
     private QuestEncounter activeQuest;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "campaign_id")
     private List<GameHero> heroes = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "campaign_id")
+    private List<HeroSelection> heroSelections = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -96,6 +106,14 @@ public class Campaign implements Serializable {
         this.phase = phase;
     }
 
+    public QuestTemplate getTemplateNextQuest() {
+        return templateNextQuest;
+    }
+
+    public void setTemplateNextQuest(QuestTemplate templateNextQuest) {
+        this.templateNextQuest = templateNextQuest;
+    }
+
     public Player getOverlord() {
         return overlord;
     }
@@ -113,6 +131,17 @@ public class Campaign implements Serializable {
 
     public void setHeroes(List<GameHero> heroes) {
         this.heroes = heroes;
+    }
+
+    public List<HeroSelection> getHeroSelections() {
+        if (heroSelections == null) {
+            heroSelections = new ArrayList<>();
+        }
+        return heroSelections;
+    }
+
+    public void setHeroSelections(List<HeroSelection> heroSelections) {
+        this.heroSelections = heroSelections;
     }
 
     @Override

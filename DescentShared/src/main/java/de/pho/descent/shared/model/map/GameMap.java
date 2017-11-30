@@ -1,21 +1,25 @@
-package de.pho.descent.shared.model;
+package de.pho.descent.shared.model.map;
 
+import de.pho.descent.shared.model.quest.Quest;
+import de.pho.descent.shared.model.quest.QuestPart;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -23,13 +27,28 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author pho
  */
 @Entity
-@XmlAccessorType(XmlAccessType.FIELD)
+@NamedQueries({
+    @NamedQuery(name = GameMap.FIND_MAP_BY_QUEST_AND_PART, query = "select g from GameMap as g "
+            + "where g.quest = :" + GameMap.QUEST_PARAM
+            + " and g.part = :" + GameMap.QUESTPART_PARAM)
+})
 public class GameMap implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static final String FIND_MAP_BY_QUEST_AND_PART = "de.pho.descent.shared.model.map.findMapByQuestAndPart";
+    public static final String QUEST_PARAM = "paramQuest";
+    public static final String QUESTPART_PARAM = "paramQuestPart";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Enumerated(EnumType.STRING)
+    private Quest quest;
+
+    @Enumerated(EnumType.STRING)
+    private QuestPart part;
 
     private int gridXSize;
 
@@ -62,6 +81,34 @@ public class GameMap implements Serializable {
         }
 
         return this.mapLayout;
+    }
+
+    public List<MapField> getHeroSpawnFields() {
+        List<MapField> heroSpawnFields = new ArrayList<>();
+
+        for (MapField field : mapFields) {
+            if (field.isHeroSpawn()) {
+                heroSpawnFields.add(field);
+            }
+        }
+
+        return heroSpawnFields;
+    }
+
+    public Quest getQuest() {
+        return quest;
+    }
+
+    public void setQuest(Quest quest) {
+        this.quest = quest;
+    }
+
+    public QuestPart getPart() {
+        return part;
+    }
+
+    public void setPart(QuestPart part) {
+        this.part = part;
     }
 
     public int getGridXSize() {

@@ -4,7 +4,7 @@ package de.pho.descent.shared.model.hero;
  *
  * @author pho
  */
-public enum Class {
+public enum HeroClass {
 
     APOTHECARY("Apothecary", Archetype.HEALER),
     BARD("Bard", Archetype.HEALER),
@@ -39,8 +39,18 @@ public enum Class {
     private final String text;
     private final Archetype archetype;
 
-    private Class(String name, Archetype type) {
+    private HeroClass(String name, Archetype type) {
         this.text = name;
         this.archetype = type;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public Archetype getArchetype() {
+        return archetype;
+    }
+    
+    
 }

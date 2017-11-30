@@ -1,5 +1,6 @@
-package de.pho.descent.shared.model;
+package de.pho.descent.shared.model.monster;
 
+import de.pho.descent.shared.model.GameEntity;
 import java.io.Serializable;
 import javax.persistence.Entity;
 
@@ -8,7 +9,7 @@ import javax.persistence.Entity;
  * @author pho
  */
 @Entity
-public class Monster extends GameEntity implements Serializable {
+public class GameMonster extends GameEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,10 +23,10 @@ public class Monster extends GameEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Monster)) {
+        if (!(object instanceof GameMonster)) {
             return false;
         }
-        Monster other = (Monster) object;
+        GameMonster other = (GameMonster) object;
         if ((super.getId() == null && other.getId() != null) || (super.getId() != null && !super.getId().equals(other.getId()))) {
             return false;
         }

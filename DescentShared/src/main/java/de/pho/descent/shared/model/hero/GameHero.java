@@ -60,7 +60,7 @@ public class GameHero extends GameEntity implements Serializable {
 
     public GameHero(HeroTemplate template) {
         super.setName(template.getName());
-        this.archetype = template.getHeroArchetype();
+        this.archetype = template.getArchetype();
         this.movementPoints = template.getSpeed();
         this.totalLife = template.getHealth();
         this.stamina = template.getStamina();

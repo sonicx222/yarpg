@@ -1,4 +1,4 @@
-package de.pho.descent.shared.heroability;
+package de.pho.descent.shared.model.hero.ability;
 
 import de.pho.descent.shared.model.hero.GameHero;
 

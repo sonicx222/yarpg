@@ -1,5 +1,6 @@
 package de.pho.descent.shared.model;
 
+import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

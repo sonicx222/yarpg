@@ -37,14 +37,6 @@ public class WsHeroSelection {
         this.id = id;
     }
 
-    public long getCampaignId() {
-        return campaignId;
-    }
-
-    public void setCampaignId(long campaignId) {
-        this.campaignId = campaignId;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -87,7 +79,6 @@ public class WsHeroSelection {
         WsHeroSelection wsHeroSelection = new WsHeroSelection();
 
         wsHeroSelection.setId(heroSelection.getId());
-        wsHeroSelection.setCampaignId(heroSelection.getCampaign().getId());
         wsHeroSelection.setUsername(heroSelection.getPlayer().getUsername());
         wsHeroSelection.setUserId(heroSelection.getPlayer().getId());
         wsHeroSelection.setSelectedHero(heroSelection.getSelectedHero());
