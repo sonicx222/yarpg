@@ -44,40 +44,11 @@ public class CampaignService implements Serializable {
     }
 
     public List<HeroSelection> getCurrentSelectionsByCampaignId(long campaignId) {
-        return em.createNamedQuery(HeroSelection.findByCampaign, HeroSelection.class)
-                .setParameter(HeroSelection.paramCampaignId, campaignId)
-                .getResultList();
+        Campaign c = em.find(Campaign.class, campaignId);
+        return c.getHeroSelections();
     }
 
     public HeroSelection saveSelection(HeroSelection selection) throws HeroSelectionException {
-        checkIfHeroIsAlreadySelected(selection);
-
         return em.merge(selection);
-    }
-
-    public boolean allSelectionsReady(long campaignId) {
-        List<HeroSelection> selections = getCurrentSelectionsByCampaignId(campaignId);
-        boolean allReady = true;
-
-        for (HeroSelection hs : selections) {
-            if (!hs.isReady()) {
-                allReady = false;
-                break;
-            }
-        }
-
-        return allReady;
-    }
-
-    private void checkIfHeroIsAlreadySelected(HeroSelection selection) throws HeroSelectionException {
-        List<HeroSelection> savedSelections = getCurrentSelectionsByCampaignId(selection.getCampaign().getId());
-
-        for (HeroSelection tmpSelection : savedSelections) {
-            if (selection.getCampaign().equals(tmpSelection.getCampaign())
-                    && selection.getSelectedHero().equals(tmpSelection.getSelectedHero())
-                    && !selection.getPlayer().equals(tmpSelection.getPlayer())) {
-                throw new HeroSelectionException("Hero " + selection.getSelectedHero().getName() + " already selected");
-            }
-        }
     }
 }

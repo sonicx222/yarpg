@@ -1,9 +1,13 @@
 package de.pho.descent.web.map;
 
-import de.pho.descent.shared.model.GameMap;
+import de.pho.descent.shared.model.map.GameMap;
+import de.pho.descent.shared.model.map.MapField;
+import de.pho.descent.shared.model.quest.Quest;
+import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.shared.model.quest.QuestTemplate;
+import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 
 /**
  *
@@ -12,11 +16,22 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class MapController {
 
-    @PersistenceContext
-    private EntityManager em;
+    @Inject
+    private transient MapService mapService;
 
-    public GameMap getMapByID(long mapID) {
-        return em.find(GameMap.class, mapID);
+    public List<MapField> getSpawnFieldsByMap(long mapId) {
+        return mapService.getPlayerSpawnFieldsByMapId(mapId);
     }
 
+    public GameMap getMapByQuestTemplate(QuestTemplate template) {
+        return getMapByQuestAndPart(template.getQuest(), template.getQuestPart());
+    }
+
+    public GameMap getMapByQuestAndPart(Quest quest, QuestPart part) {
+        return mapService.getMapByQuestAndPart(quest, part);
+    }
+
+    public GameMap getMapById(long id) {
+        return mapService.getMapByID(id);
+    }
 }

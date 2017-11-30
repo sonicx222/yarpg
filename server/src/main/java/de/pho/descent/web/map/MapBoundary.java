@@ -2,8 +2,7 @@ package de.pho.descent.web.map;
 
 import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.web.exception.NotFoundException;
-import de.pho.descent.shared.model.GameMap;
-import de.pho.descent.shared.model.MapField;
+import de.pho.descent.shared.model.map.GameMap;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,9 +18,9 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("/maps")
-public class GameMapBoundary {
+public class MapBoundary {
 
-    private static final Logger LOGGER = Logger.getLogger(GameMapBoundary.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MapBoundary.class.getName());
 
     @EJB
     private MapController mapController;
@@ -30,7 +29,7 @@ public class GameMapBoundary {
     @Path("{mapID}")
     @Produces({MediaType.APPLICATION_JSON})
     public WsGameMap getMap(@PathParam("mapID") long mapID) throws NotFoundException {
-        GameMap map = mapController.getMapByID(mapID);
+        GameMap map = mapController.getMapById(mapID);
 
         if (map == null) {
             throw new NotFoundException();
@@ -42,10 +41,24 @@ public class GameMapBoundary {
     }
 
     @GET
-    @Path("/getfield")
-    @Produces({MediaType.APPLICATION_JSON})
-    public MapField getMapField() {
-        return new MapField(47, 11, 99, true);
+    @Path("{mapID}/text")
+    @Produces({MediaType.TEXT_PLAIN})
+    public String getMapAsText(@PathParam("mapID") long mapID) throws NotFoundException {
+        GameMap map = mapController.getMapById(mapID);
+
+        if (map == null) {
+            throw new NotFoundException();
+        }
+
+        LOGGER.info(map.toString());
+
+        return map.toString();
     }
 
+//    @GET
+//    @Path("/getfield")
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public MapField getMapField() {
+//        return new MapField(47, 11, 99, true, false, false);
+//    }
 }

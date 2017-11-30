@@ -3,5 +3,7 @@ truncate descent.campaign cascade;
 truncate descent.questencounter cascade;
 truncate descent.player cascade;
 truncate descent.heroselection cascade;
+truncate descent.maptilegroup cascade;
 truncate descent.mapfield cascade;
 truncate descent.gamemap cascade;
+truncate descent.token cascade;

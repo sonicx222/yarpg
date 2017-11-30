@@ -7,15 +7,16 @@ import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
-import static de.pho.descent.shared.model.quest.Quest.FIRST_BLOOD;
 import de.pho.descent.shared.model.quest.QuestEncounter;
-import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.player.PlayerController;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
+import de.pho.descent.web.map.MapController;
 import de.pho.descent.web.quest.QuestController;
 import de.pho.descent.web.service.PersistenceService;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
@@ -36,6 +37,9 @@ public class CampaignController {
     private QuestController questController;
 
     @Inject
+    private MapController mapController;
+
+    @Inject
     private transient CampaignService campaignService;
 
     @Inject
@@ -52,7 +56,7 @@ public class CampaignController {
                 continue;
             }
 
-            // check if player is part of campaign heroes
+            // check if player is part of campaignToBeStarted heroes
             boolean partOfCampaignHeroes = false;
             for (GameHero hero : c.getHeroes()) {
                 if (player.equals(hero.getPlayedBy())) {
@@ -62,17 +66,16 @@ public class CampaignController {
                 }
             }
 
-            // check if player is part of hero selections
-            List<HeroSelection> selections = campaignService.getCurrentSelectionsByCampaignId(c.getId());
-
+            // check if player is instead part of hero selections
             if (!partOfCampaignHeroes && (c.getPhase() == CampaignPhase.HERO_SELECTION)) {
+                List<HeroSelection> selections = c.getHeroSelections();
                 if (selections.size() < 4) {
-                    // not part but hero selection still going with enough room
+                    // hero selection still going with enough room
                     playableCampaigns.add(WsCampaign.createInstance(c));
+                    continue;
                 } else {
-                    // check if player is part of full hero selection
-                    for (HeroSelection selection : selections) {
-                        if (selection.getPlayer().equals(player)) {
+                    for (HeroSelection hs : selections) {
+                        if (hs.getPlayer().equals(player)) {
                             playableCampaigns.add(WsCampaign.createInstance(c));
                             break;
                         }
@@ -103,10 +106,11 @@ public class CampaignController {
     }
 
     /**
-     * 1. check if calling user is overlord of campaign 2. check if all hero
-     * selections within campaign are in status 'ready' 3. create game heroes
-     * based on hero selection 4. move campaign into 'encounter' phase 5.
-     * determine first hero turn based on initiation attribute
+     * 1. check if calling user is overlord of campaignToBeStarted 2. check if
+     * there are enough hero selections to start 3. check if all hero selections
+     * within campaignToBeStarted are in status 'ready' 4. create game heroes
+     * based on hero selection 5. move campaignToBeStarted into 'encounter'
+     * phase 6. determine first hero turn based on initiation attribute
      *
      * @param player
      * @param campaignId
@@ -117,20 +121,44 @@ public class CampaignController {
      */
     public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException {
 
-        Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
+        Campaign campaignToBeStarted = campaignService.getCampaignById(Long.parseLong(campaignId));
 
-        if (!player.equals(campaign.getOverlord())) {
+        // check if starting player is overlord
+        if (!player.equals(campaignToBeStarted.getOverlord())) {
             StringBuilder sb = new StringBuilder("Only overlord '");
-            sb.append(campaign.getOverlord().getUsername());
+            sb.append(campaignToBeStarted.getOverlord().getUsername());
             sb.append("' can start campaign id ").append(campaignId);
+
             throw new UserValidationException(sb.toString());
         }
 
-        if (!campaignService.allSelectionsReady(Long.parseLong(campaignId))) {
-            throw new HeroSelectionException("Can not start campaign: some selections are not ready");
+        // check if there are at least 2 hero selections
+        List<HeroSelection> heroSelections = campaignToBeStarted.getHeroSelections();
+        if (heroSelections.size() < 2) {
+            throw new HeroSelectionException("Can not start campaign: there need to be at least two hero selections");
         }
 
-        return campaign;
+        // check if all selections are ready
+        for (HeroSelection hs : heroSelections) {
+            if (!hs.isReady()) {
+                throw new HeroSelectionException("Can not start campaign: some selections are not ready");
+            }
+        }
+
+        // create game heroes
+        List<GameHero> heroes = new ArrayList<>();
+        for (HeroSelection hs : heroSelections) {
+            heroes.add(new GameHero(hs.getSelectedHero()));
+        }
+        campaignToBeStarted.getHeroes().clear();
+        campaignToBeStarted.getHeroes().addAll(heroes);
+
+        QuestEncounter encounter = questController.startNextQuestEncounter(campaignToBeStarted);
+        campaignToBeStarted.setActiveQuest(encounter);
+        campaignToBeStarted.setPhase(CampaignPhase.ENCOUNTER);
+        campaignToBeStarted.setStartedOn(new Date());
+
+        return campaignService.saveCampaign(campaignToBeStarted);
     }
 
     public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException {
@@ -139,7 +167,9 @@ public class CampaignController {
         Player overlord = playerController.getPlayerByName(wsCampaign.getOverlord());
         c.setOverlord(overlord);
         c.setPhase(wsCampaign.getPhase());
-        c.setActiveQuest(questController.loadQuestEncounter(wsCampaign.getActiveQuest(), wsCampaign.getPart()));
+        c.setActiveQuest(questController.createQuestEncounter(
+                QuestTemplate.getTemplate(wsCampaign.getActiveQuest(), wsCampaign.getPart()),
+                c));
 
         return campaignService.saveCampaign(c);
     }
@@ -149,7 +179,7 @@ public class CampaignController {
         Campaign c = new Campaign();
         c.setOverlord(overlord);
         c.setPhase(CampaignPhase.HERO_SELECTION);
-        c.setActiveQuest(questController.loadQuestEncounter(FIRST_BLOOD, QuestPart.FIRST));
+        c.setTemplateNextQuest(QuestTemplate.FIRST_BLOOD_INTRO);
 
         return campaignService.saveCampaign(c);
     }
@@ -184,31 +214,32 @@ public class CampaignController {
             throw new HeroSelectionException("Overlord can not take part in hero selection");
         }
 
-        // check if calling user is not part of already full group
-        String username = wsSelection.getUsername();
-        List<HeroSelection> campaignSelections = getCurrentSelection(campaignId);
-        boolean partOfSelection = false;
-        for (HeroSelection hSelection : campaignSelections) {
-            // check if calling user is already part of group
-            if (hSelection.getPlayer().getUsername().equalsIgnoreCase(username)) {
-                partOfSelection = true;
-                break;
+        // check if hero is already selected
+        List<HeroSelection> heroSelections = campaign.getHeroSelections();
+        for (HeroSelection hSelection : heroSelections) {
+            if (hSelection.getSelectedHero().equals(wsSelection.getSelectedHero())
+                    && !hSelection.getPlayer().getUsername().equals(wsSelection.getUsername())
+                    && hSelection.isReady()) {
+                throw new HeroSelectionException("Hero " + wsSelection.getSelectedHero().getName() + " already selected");
             }
         }
-        if (!partOfSelection && (campaignSelections.size() == 4)) {
-            // hero group already full
-            throw new HeroSelectionException("Hero selection not possible. Group is full");
-        }
 
-        HeroSelection selection;
-        if (wsSelection.getId() > 0) {
-            selection = persistenceService.find(HeroSelection.class, wsSelection.getId());
+        // check if calling user is not part of already full group
+        HeroSelection selection = null;
+        if (wsSelection.getId() == 0) {
+            // new campaign selection
+            if (heroSelections.size() == 4) {
+                throw new HeroSelectionException("Hero selection not possible. Group is full");
+            } else {
+                selection = new HeroSelection();
+                selection.setPlayer(player);
+                heroSelections.add(selection);
+            }
         } else {
-            selection = new HeroSelection();
+            selection = persistenceService.find(HeroSelection.class, wsSelection.getId());
         }
 
-        selection.setCampaign(campaign);
-        selection.setPlayer(player);
+        // set selection attributes
         selection.setSelectedHero(wsSelection.getSelectedHero());
         selection.setReady(wsSelection.isReady());
 

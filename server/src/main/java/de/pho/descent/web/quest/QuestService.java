@@ -21,6 +21,14 @@ public class QuestService {
 
     @PersistenceContext
     private transient EntityManager em;
+    
+    public QuestEncounter saveEncounter(QuestEncounter unsavedEncounter) {
+        return em.merge(unsavedEncounter);
+    }
+    
+    public QuestEncounter loadEncounterById(long encounterId) {
+        return em.find(QuestEncounter.class, encounterId);
+    }
 
     public QuestEncounter getIntroQuestEncounter() {
         TypedQuery<QuestEncounter> query;
@@ -37,6 +45,8 @@ public class QuestService {
 
         return intro;
     }
+    
+    
 
     public QuestEncounter getEncounterByQuestAndPart(Quest quest, QuestPart part) {
         TypedQuery<QuestEncounter> query;
