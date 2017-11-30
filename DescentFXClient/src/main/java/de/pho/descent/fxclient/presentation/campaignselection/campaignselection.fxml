@@ -71,12 +71,13 @@
             </VBox>
             <TableView fx:id="campaignsTableView" layoutX="200.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="332.0" prefWidth="1000.0">
               <columns>
-                <TableColumn fx:id="campaignIDColumn" prefWidth="63.0" text="ID" />
-                <TableColumn fx:id="campaignOverlordColumn" prefWidth="161.0" text="Overlord" />
-                  <TableColumn fx:id="campaignPhaseColumn" prefWidth="196.0" text="Phase" />
-                  <TableColumn fx:id="campaignQuestColumn" prefWidth="252.0" text="Active Quest" />
-                  <TableColumn fx:id="campaignQuestPartColumn" prefWidth="123.0" text="Quest Part" />
-                  <TableColumn fx:id="campaignCreatedColumn" prefWidth="201.0" text="Created On" />
+                <TableColumn fx:id="campaignIDColumn" prefWidth="40.0" text="ID" />
+                <TableColumn fx:id="campaignOverlordColumn" prefWidth="144.0" text="Overlord" />
+                  <TableColumn fx:id="campaignPlayersColumn" prefWidth="54.0" text="Players" />
+                  <TableColumn fx:id="campaignPhaseColumn" prefWidth="180.0" text="Phase" />
+                  <TableColumn fx:id="campaignQuestColumn" prefWidth="240.0" text="Active Quest" />
+                  <TableColumn fx:id="campaignQuestPartColumn" prefWidth="95.0" text="Quest Part" />
+                  <TableColumn fx:id="campaignCreatedColumn" prefWidth="242.0" text="Created On" />
               </columns>
             </TableView>
          </children>

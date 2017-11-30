@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,6 +32,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import javax.inject.Inject;
 
 /**
@@ -53,7 +55,10 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     private TableColumn<WsCampaign, CampaignPhase> campaignPhaseColumn;
-
+    
+    @FXML
+    private TableColumn<WsCampaign, String> campaignPlayersColumn;
+    
     @FXML
     private TableColumn<WsCampaign, Quest> campaignQuestColumn;
 
@@ -96,6 +101,18 @@ public class CampaignSelectionPresenter implements Initializable {
         // columns
         campaignIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         campaignOverlordColumn.setCellValueFactory(new PropertyValueFactory<>("overlord"));
+        campaignPlayersColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<WsCampaign, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<WsCampaign, String> p) {
+                String strPlayers;
+                if (p.getValue().getPhase() == CampaignPhase.HERO_SELECTION) {
+                    strPlayers = String.valueOf(p.getValue().getCountHeroSelections());
+                } else {
+                    strPlayers = String.valueOf(p.getValue().getGameHeroes().size());
+                }
+                return new SimpleStringProperty(strPlayers);
+            }
+        });
         campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));
         campaignQuestColumn.setCellValueFactory(new PropertyValueFactory<>("activeQuest"));
         campaignQuestPartColumn.setCellValueFactory(new PropertyValueFactory<>("part"));
