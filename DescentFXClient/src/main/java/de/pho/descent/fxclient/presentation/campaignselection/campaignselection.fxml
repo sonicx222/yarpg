@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -37,7 +39,7 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <VBox layoutX="608.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+            <VBox layoutX="488.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
                <children>
                   <Line fx:id="lineContinue1" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
@@ -53,7 +55,7 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <VBox layoutX="999.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+            <VBox layoutX="849.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line fx:id="lineContinue" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneContinue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleContinue" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
@@ -69,7 +71,7 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <TableView fx:id="campaignsTableView" layoutX="200.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="332.0" prefWidth="1000.0">
+            <TableView fx:id="campaignsTableView" layoutX="50.0" layoutY="300.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="332.0" prefWidth="1000.0">
               <columns>
                 <TableColumn fx:id="campaignIDColumn" prefWidth="40.0" text="ID" />
                 <TableColumn fx:id="campaignOverlordColumn" prefWidth="144.0" text="Overlord" />
@@ -80,6 +82,24 @@
                   <TableColumn fx:id="campaignCreatedColumn" prefWidth="242.0" text="Created On" />
               </columns>
             </TableView>
+            <ListView fx:id="chatListView" layoutX="1078.0" layoutY="110.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="522.0" prefWidth="297.0" style="-fx-background-color: grey;" />
+            <TextArea fx:id="messageTextArea" layoutX="1078.0" layoutY="642.0" prefHeight="95.0" prefWidth="297.0" />
+            <VBox layoutX="1151.0" layoutY="765.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
+                     <children>
+                        <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
+                        <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
          </children>
       </Pane>
    </children>

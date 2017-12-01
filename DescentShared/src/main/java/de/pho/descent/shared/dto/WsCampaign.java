@@ -29,6 +29,8 @@ public class WsCampaign {
     private Date createdOn;
 
     private Date startedOn;
+    
+    private int countHeroSelections;
 
     private List<String> gameHeroes = new ArrayList<>();
 
@@ -106,6 +108,14 @@ public class WsCampaign {
         this.gameHeroes = gameHeroes;
     }
 
+    public int getCountHeroSelections() {
+        return countHeroSelections;
+    }
+
+    public void setCountHeroSelections(int countHeroSelections) {
+        this.countHeroSelections = countHeroSelections;
+    }
+
     /**
      * Factory-Method to create new WsCampaign DTOs
      *
@@ -126,6 +136,7 @@ public class WsCampaign {
         wsCampaign.setPhase(campaign.getPhase());
         wsCampaign.setCreatedOn(campaign.getCreatedOn());
         wsCampaign.setStartedOn(campaign.getStartedOn());
+        wsCampaign.setCountHeroSelections(campaign.getHeroSelections().size());
 
         List<String> heroNames = new ArrayList<>();
         for (GameHero hero : campaign.getHeroes()) {

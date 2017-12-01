@@ -14,4 +14,5 @@ public class ParamValue {
     public static final String URI = "uri";
     public static final String SECURED_URL = "secured";
     public static final String CAMPAIGN_ID = "campaignId";
+    public static final String PLAYER_ID = "playerId";
 }

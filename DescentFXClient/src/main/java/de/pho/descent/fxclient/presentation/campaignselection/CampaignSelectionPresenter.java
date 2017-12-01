@@ -4,11 +4,13 @@ import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
+import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
+import de.pho.descent.shared.dto.WsMessage;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
@@ -21,8 +23,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -55,10 +60,10 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     private TableColumn<WsCampaign, CampaignPhase> campaignPhaseColumn;
-    
+
     @FXML
     private TableColumn<WsCampaign, String> campaignPlayersColumn;
-    
+
     @FXML
     private TableColumn<WsCampaign, Quest> campaignQuestColumn;
 
@@ -67,6 +72,12 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     private TableColumn<WsCampaign, Date> campaignCreatedColumn;
+
+    @FXML
+    private ListView<WsMessage> chatListView;
+
+    @FXML
+    private TextArea messageTextArea;
 
     @Inject
     private GameDataModel gameDataModel;
@@ -95,6 +106,7 @@ public class CampaignSelectionPresenter implements Initializable {
         paneContinue.setDisable(true);
 
         // populate table view
+        updatePlayableCampaigns();
         campaignsTableView.setItems(gameDataModel.getPlayableCampaigns());
         campaignsTableView.setEditable(false);
 
@@ -130,6 +142,26 @@ public class CampaignSelectionPresenter implements Initializable {
                     }
                 }
                 );
+
+        // messages part
+        chatListView.setItems(gameDataModel.getGeneralMessages());
+        chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
+            private Text text;
+
+            @Override
+            protected void updateItem(WsMessage item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null || item.getMessageText() == null) {
+                    setText(null);
+                } else {
+                    text = new Text(item.getUsername() + ": " + item.getMessageText());
+                    text.setWrappingWidth(chatListView.getPrefWidth());
+                    setGraphic(text);
+                }
+            }
+        });
+        updateGeneralMessages();
     }
 
     @FXML
@@ -196,6 +228,7 @@ public class CampaignSelectionPresenter implements Initializable {
     @FXML
     public void handleRefresh(MouseEvent event) {
         updatePlayableCampaigns();
+        updateGeneralMessages();
     }
 
     @FXML
@@ -203,6 +236,37 @@ public class CampaignSelectionPresenter implements Initializable {
         requireNonNull(selectedCampaign);
         gameDataModel.setCurrentCampaign(selectedCampaign);
         switchFullscreenScene(event, new HeroSelectionView());
+    }
+
+    @FXML
+    public void handleSendMessage(MouseEvent event) {
+        if ((messageTextArea.getText() != null) && (!messageTextArea.getText().isEmpty())) {
+            WsMessage message = null;
+            try {
+                message = MessageClient.postMessage(credentials.getPlayer(), null, messageTextArea.getText());
+            } catch (ServerException ex) {
+                showError(ex);
+            }
+            if (message != null) {
+                gameDataModel.getGeneralMessages().add(message);
+                messageTextArea.clear();
+            }
+        }
+    }
+
+    private void updateGeneralMessages() {
+        gameDataModel.getGeneralMessages().clear();
+
+        List<WsMessage> generalMessages = null;
+        try {
+            generalMessages = MessageClient.getGeneralMessages(credentials.getUsername(), credentials.getPassword());
+        } catch (ServerException ex) {
+            showError(ex);
+        }
+
+        if (generalMessages != null && !generalMessages.isEmpty()) {
+            gameDataModel.getGeneralMessages().addAll(generalMessages);
+        }
     }
 
     private void updatePlayableCampaigns() {

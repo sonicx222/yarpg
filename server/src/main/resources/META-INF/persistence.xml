@@ -9,6 +9,7 @@
         <class>de.pho.descent.shared.model.map.GameMap</class>
         <class>de.pho.descent.shared.model.map.MapField</class>
         <class>de.pho.descent.shared.model.map.MapTileGroup</class>
+        <class>de.pho.descent.shared.model.message.Message</class>
         <class>de.pho.descent.shared.model.monster.GameMonster</class>
         <class>de.pho.descent.shared.model.quest.QuestEncounter</class>
         <class>de.pho.descent.shared.model.token.Token</class>

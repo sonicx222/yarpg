@@ -36,6 +36,7 @@ public class ApplicationConfig extends Application {
         resources.add(de.pho.descent.web.exception.GenericExceptionMapper.class);
         resources.add(de.pho.descent.web.hero.HeroBoundary.class);
         resources.add(de.pho.descent.web.map.MapBoundary.class);
+        resources.add(de.pho.descent.web.message.MessageBoundary.class);
         resources.add(de.pho.descent.web.player.PlayerAlreadyExistsExceptionMapper.class);
         resources.add(de.pho.descent.web.player.PlayerBoundary.class);
         resources.add(de.pho.descent.web.player.PlayerController.class);
