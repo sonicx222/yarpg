@@ -202,9 +202,14 @@ public class CampaignController {
         return campaignService.getCurrentSelectionsByCampaignId(Long.parseLong(campaignId));
     }
 
-    public HeroSelection saveSelection(String campaignId, Player player, WsHeroSelection wsSelection) throws HeroSelectionException, NotFoundException, CampaignValidationException {
+    public HeroSelection saveSelection(long campaignId, Player player, WsHeroSelection wsSelection) throws HeroSelectionException, NotFoundException, CampaignValidationException {
 
-        Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
+        // check if used campaign Ids are inconsistent
+        if (campaignId != wsSelection.getCampaignId()) {
+            throw new HeroSelectionException("Campaign Id within selection posted against campaign Id do not match");
+        }
+
+        Campaign campaign = campaignService.getCampaignById(campaignId);
 
         // check for hero selection phase
         checkCampaignPhase(campaign, CampaignPhase.HERO_SELECTION);
@@ -224,7 +229,7 @@ public class CampaignController {
             }
         }
 
-        // check if calling user is not part of already full group
+        // check if calling user is not part of already full group  
         HeroSelection selection = null;
         if (wsSelection.getId() == 0) {
             // new campaign selection
@@ -233,17 +238,24 @@ public class CampaignController {
             } else {
                 selection = new HeroSelection();
                 selection.setPlayer(player);
+                selection.setCampaign(campaign);
                 heroSelections.add(selection);
             }
         } else {
-            selection = persistenceService.find(HeroSelection.class, wsSelection.getId());
+            for (HeroSelection hSelection : heroSelections) {
+                if (Objects.equals(hSelection.getPlayer().getUsername(), wsSelection.getUsername())) {
+                    selection = hSelection;
+                    break;
+                }
+            }
         }
 
         // set selection attributes
         selection.setSelectedHero(wsSelection.getSelectedHero());
         selection.setReady(wsSelection.isReady());
 
-        return campaignService.saveSelection(selection);
+        campaignService.saveSelection(selection);
+        return selection;
     }
 
     public QuestEncounter getCurrentEncounter() {

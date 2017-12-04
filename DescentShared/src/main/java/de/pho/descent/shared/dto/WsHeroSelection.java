@@ -24,9 +24,10 @@ public class WsHeroSelection {
     public WsHeroSelection() {
     }
 
-    public WsHeroSelection(String username, HeroTemplate selectedHero) {
+    public WsHeroSelection(String username, HeroTemplate selectedHero, boolean ready) {
         this.username = username;
         this.selectedHero = selectedHero;
+        this.ready = ready;
     }
 
     public long getId() {
@@ -35,6 +36,14 @@ public class WsHeroSelection {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(long campaignId) {
+        this.campaignId = campaignId;
     }
 
     public String getUsername() {
@@ -79,6 +88,7 @@ public class WsHeroSelection {
         WsHeroSelection wsHeroSelection = new WsHeroSelection();
 
         wsHeroSelection.setId(heroSelection.getId());
+        wsHeroSelection.setCampaignId(heroSelection.getCampaign().getId());
         wsHeroSelection.setUsername(heroSelection.getPlayer().getUsername());
         wsHeroSelection.setUserId(heroSelection.getPlayer().getId());
         wsHeroSelection.setSelectedHero(heroSelection.getSelectedHero());

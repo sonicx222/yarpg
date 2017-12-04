@@ -48,7 +48,7 @@ public class CampaignService implements Serializable {
         return c.getHeroSelections();
     }
 
-    public HeroSelection saveSelection(HeroSelection selection) throws HeroSelectionException {
-        return em.merge(selection);
+    public void saveSelection(HeroSelection selection) throws HeroSelectionException {
+        em.persist(selection);
     }
 }

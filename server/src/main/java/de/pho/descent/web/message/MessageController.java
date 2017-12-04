@@ -31,14 +31,14 @@ public class MessageController {
 
     public List<WsMessage> getGeneralMessages() {
         List<Message> generalMessages = messageService.getGeneralMessages();
-//        Collections.reverse(generalMessages);
+        Collections.reverse(generalMessages);
 
         return beansToDTOs(generalMessages);
     }
 
     public List<WsMessage> getMessagesByCampaignId(long campaignId) {
         List<Message> campaignMessages = messageService.getCampaignMessages(campaignId);
-//        Collections.reverse(campaignMessages);
+        Collections.reverse(campaignMessages);
 
         return beansToDTOs(campaignMessages);
     }

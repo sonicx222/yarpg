@@ -50,6 +50,8 @@ public class HeroSelectionClient extends BaseRESTClient {
                     pwdHash,
                     HttpMethod.POST, uriPath);
 
+            // set campaign Id
+            wsHeroSelection.setCampaignId(wsCampaign.getId());
             Response postResponse = heroSelectionTarget
                     .resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId())
                     .request(MediaType.APPLICATION_JSON)

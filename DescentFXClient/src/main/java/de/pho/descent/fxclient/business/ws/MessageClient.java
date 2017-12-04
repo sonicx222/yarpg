@@ -28,7 +28,7 @@ public class MessageClient extends BaseRESTClient {
 
     private static final Logger LOG = Logger.getLogger(MessageClient.class.getName());
 
-    public static WsMessage postMessage(Player player, Campaign campaign, String text) throws ServerException {
+    public static WsMessage postMessage(Player player, WsCampaign campaign, String text) throws ServerException {
         LOG.log(Level.INFO, "User {0} posted message", player.getUsername());
 
         Client client = null;
@@ -111,7 +111,7 @@ public class MessageClient extends BaseRESTClient {
             String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.GET, uriPath);
 
             List<WsMessage> generalMessages = null;
-            Response getResponse = messagesTarget
+            Response getResponse = messagesByCampaignTarget
                     .resolveTemplate(ParamValue.CAMPAIGN_ID, wsCampaign.getId())
                     .request(MediaType.APPLICATION_JSON)
                     .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)

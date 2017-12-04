@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -14,7 +15,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.heroselection.HeroSelectionPresenter">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0">
@@ -24,18 +24,18 @@
                   <Image url="@table_bg.jpg" />
                </image>
             </ImageView>
-            <ListView fx:id="heroesListView" layoutX="146.0" layoutY="260.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="201.0" />
-            <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="347.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true">
+            <ListView fx:id="heroesListView" layoutX="69.0" layoutY="260.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="201.0" />
+            <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="270.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../resources/img/heroes/Grisban.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="347.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="270.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Hero_Sheet_Template.png" />
                </image>
             </ImageView>
-            <VBox layoutX="146.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
+            <VBox layoutX="69.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
@@ -51,7 +51,7 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <TableView fx:id="activeSelectionsTableView" layoutX="366.0" layoutY="49.0" prefHeight="140.0" prefWidth="697.0">
+            <TableView fx:id="activeSelectionsTableView" layoutX="69.0" layoutY="49.0" prefHeight="140.0" prefWidth="697.0">
                <columns>
                   <TableColumn fx:id="selectionHeroColumn" prefWidth="191.0" text="Hero" />
                   <TableColumn fx:id="selectionArchetypeColumn" prefWidth="115.0" text="Archetype" />
@@ -60,7 +60,7 @@
                   <TableColumn fx:id="selectionReadyColumn" minWidth="0.0" prefWidth="79.0" text="Ready?" />
                </columns>
             </TableView>
-            <VBox fx:id="vboxAction" layoutX="1083.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
+            <VBox fx:id="vboxAction" layoutX="1006.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line fx:id="lineContinue1" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneAction" onMouseClicked="#handleToggleReady" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
@@ -76,58 +76,58 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <Label layoutX="539.0" layoutY="14.0" text="Current Hero Selections" textFill="WHITE">
+            <Label layoutX="69.0" layoutY="14.0" text="Current Hero Selections" textFill="WHITE">
                <font>
                   <Font size="29.0" />
                </font>
             </Label>
-            <Label layoutX="146.0" layoutY="229.0" text="Select Your Hero">
+            <Label layoutX="69.0" layoutY="229.0" text="Select Your Hero">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label fx:id="labelAnnounce" alignment="TOP_LEFT" layoutX="347.0" layoutY="766.0" prefHeight="35.0" prefWidth="600.0" text="Label: Announce" textFill="WHITE" wrapText="true" />
-            <Label fx:id="labelArchetype" alignment="CENTER" contentDisplay="CENTER" layoutX="363.0" layoutY="279.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
+            <Label fx:id="labelAnnounce" alignment="TOP_LEFT" layoutX="270.0" layoutY="766.0" prefHeight="35.0" prefWidth="600.0" text="Label: Announce" textFill="WHITE" wrapText="true" />
+            <Label fx:id="labelArchetype" alignment="CENTER" contentDisplay="CENTER" layoutX="286.0" layoutY="279.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="labelSpeed" alignment="CENTER" layoutX="630.0" layoutY="353.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+            <Label fx:id="labelSpeed" alignment="CENTER" layoutX="553.0" layoutY="353.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelHealth" alignment="CENTER" layoutX="649.0" layoutY="441.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
+            <Label fx:id="labelHealth" alignment="CENTER" layoutX="572.0" layoutY="441.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelStamina" alignment="CENTER" layoutX="653.0" layoutY="531.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
+            <Label fx:id="labelStamina" alignment="CENTER" layoutX="576.0" layoutY="531.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelMight" alignment="CENTER" layoutX="419.0" layoutY="653.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
+            <Label fx:id="labelMight" alignment="CENTER" layoutX="342.0" layoutY="653.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="508.0" layoutY="654.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
+            <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="431.0" layoutY="654.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelWillpower" alignment="CENTER" layoutX="400.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+            <Label fx:id="labelWillpower" alignment="CENTER" layoutX="323.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelAwareness" alignment="CENTER" layoutX="530.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
+            <Label fx:id="labelAwareness" alignment="CENTER" layoutX="453.0" layoutY="699.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <VBox layoutX="592.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+            <VBox layoutX="515.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
                <children>
                   <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
@@ -143,9 +143,9 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="714.0" layoutY="323.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
-            <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="714.0" layoutY="560.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
-            <VBox fx:id="vboxStart" layoutX="1083.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
+            <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="637.0" layoutY="323.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="637.0" layoutY="560.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+            <VBox fx:id="vboxStart" layoutX="1006.0" layoutY="823.0" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line fx:id="lineStart" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneStart" onMouseClicked="#handleStart" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
@@ -161,21 +161,39 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <ImageView fx:id="startSkillView" fitHeight="238.0" fitWidth="184.0" layoutX="965.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="startSkillView" fitHeight="238.0" fitWidth="184.0" layoutX="888.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../resources/img/skills/0_warrior_berserker_rage.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="startItem1View" fitHeight="238.0" fitWidth="184.0" layoutX="965.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="startItem1View" fitHeight="238.0" fitWidth="184.0" layoutX="888.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../resources/img/items/warrior_berserker_axe.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="startItem2View" fitHeight="238.0" fitWidth="184.0" layoutX="1129.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="startItem2View" fitHeight="238.0" fitWidth="184.0" layoutX="1052.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../../../resources/img/items/warrior_berserker_axe.png" />
                </image>
             </ImageView>
+            <ListView fx:id="chatListView" layoutX="870.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="166.0" prefWidth="498.0" />
+            <VBox layoutX="1215.0" layoutY="199.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
+                     <children>
+                        <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
+                        <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <TextField fx:id="messageTextField" layoutX="870.0" layoutY="201.0" prefHeight="27.0" prefWidth="329.0" />
          </children>
       </Pane>
    </children>

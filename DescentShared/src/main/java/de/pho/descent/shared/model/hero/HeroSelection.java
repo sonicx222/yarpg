@@ -1,6 +1,7 @@
 package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.Player;
+import de.pho.descent.shared.model.campaign.Campaign;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,9 +26,10 @@ public class HeroSelection implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @ManyToOne()
+    @ManyToOne()
 ////    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private Campaign campaign;
+    private Campaign campaign;
+
     @ManyToOne
     private Player player;
 
@@ -44,13 +46,14 @@ public class HeroSelection implements Serializable {
         this.id = id;
     }
 
-//    public Campaign getCampaign() {
-//        return campaign;
-//    }
-//
-//    public void setCampaign(Campaign campaign) {
-//        this.campaign = campaign;
-//    }
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+    }
+
     public Player getPlayer() {
         return player;
     }

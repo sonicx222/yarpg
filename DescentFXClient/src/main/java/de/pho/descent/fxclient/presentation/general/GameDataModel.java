@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 public class GameDataModel {
 
     private final ObservableList<WsMessage> generalMessages = FXCollections.observableArrayList();
+    private final ObservableList<WsMessage> campaignMessages = FXCollections.observableArrayList();
     private final ObservableList<WsCampaign> playableCampaigns = FXCollections.observableArrayList();
     private final ObservableList<WsHeroSelection> heroSelections = FXCollections.observableArrayList();
 
@@ -25,6 +26,10 @@ public class GameDataModel {
 
     public ObservableList<WsMessage> getGeneralMessages() {
         return generalMessages;
+    }
+
+    public ObservableList<WsMessage> getCampaignMessages() {
+        return campaignMessages;
     }
     
     public ObservableList<WsCampaign> getPlayableCampaigns() {

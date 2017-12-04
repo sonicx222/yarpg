@@ -9,6 +9,8 @@ import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import static de.pho.descent.shared.model.hero.HeroTemplate.*;
+import de.pho.descent.shared.model.quest.Quest;
+import de.pho.descent.shared.model.quest.QuestPart;
 import java.util.List;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -69,11 +71,11 @@ public class HeroSelectionTest {
         campaign1 = CampaignClient.newCampaign(player1);
 
         // campaign 1, full group on selection stage
-        WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN);
-        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
-        WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN);
-        WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK);
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, WIDOWTARHA);
+        WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN, true);
+        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD, true);
+        WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN, true);
+        WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK, true);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, WIDOWTARHA, true);
         heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, SecurityTools.createHash(credentialsP2, false), heroSelectionP2, campaign1);
         heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign1);
         heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, SecurityTools.createHash(credentialsP4, false), heroSelectionP4, campaign1);
@@ -103,10 +105,10 @@ public class HeroSelectionTest {
         campaign2 = CampaignClient.newCampaign(player2);
 
         // campaign 2, full group on selection stage WITH user 'P1'
-        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, GRISBAN);
-        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
-        WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN);
-        WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK);
+        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, GRISBAN, true);
+        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD, true);
+        WsHeroSelection heroSelectionP4 = new WsHeroSelection(credentialsP4, ASHRIAN, true);
+        WsHeroSelection heroSelectionP5 = new WsHeroSelection(credentialsP5, LEORICOFTHEBOOK, true);
         heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign2);
         heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign2);
         heroSelectionP4 = HeroSelectionClient.saveSelection(credentialsP4, SecurityTools.createHash(credentialsP4, false), heroSelectionP4, campaign2);
@@ -128,9 +130,9 @@ public class HeroSelectionTest {
         campaign3 = CampaignClient.newCampaign(player1);
 
         // campaign 3, 2-man group on selection stage
-        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, TOMBLEBURROWELL);
-        WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN);
-        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, TOMBLEBURROWELL, true);
+        WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN, true);
+        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD, true);
 
         heroSelectionP2 = HeroSelectionClient.saveSelection(credentialsP2, SecurityTools.createHash(credentialsP2, false), heroSelectionP2, campaign3);
         heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign3);
@@ -152,8 +154,8 @@ public class HeroSelectionTest {
         campaign4 = CampaignClient.newCampaign(player2);
 
         // campaign 4, 2-man group on selection stage WITH user 'P1'
-        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, GRISBAN);
-        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, GRISBAN, true);
+        WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD, true);
         heroSelectionP1 = HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign4);
         heroSelectionP3 = HeroSelectionClient.saveSelection(credentialsP3, SecurityTools.createHash(credentialsP3, false), heroSelectionP3, campaign4);
 
@@ -165,7 +167,7 @@ public class HeroSelectionTest {
         // check: hero already selected exception
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Hero " + JAINFAIRWOOD.getName() + " already selected");
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
         HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign4);
     }
 
@@ -173,12 +175,12 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign5() throws ServerException {
         // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
         campaign5 = CampaignClient.createCampaign(player1,
-                new WsCampaign(player1.getUsername(), CampaignPhase.ENCOUNTER, null, null));
+                new WsCampaign(player1.getUsername(), CampaignPhase.ENCOUNTER, Quest.FIRST_BLOOD, QuestPart.FIRST));
 
         // check: game already started error
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
         HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign5);
     }
 
@@ -186,11 +188,11 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign6() throws ServerException {
         // player2 creates campaign6 as overlord, campaign in stage TRAVEL
         campaign6 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.TRAVEL, null, null));
+                new WsCampaign(player1.getUsername(), CampaignPhase.TRAVEL, Quest.FIRST_BLOOD, QuestPart.FIRST));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
         HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign6);
     }
 
@@ -198,12 +200,12 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign7() throws ServerException {
         // player2 creates campaign7 as overlord, campaign in stage FINISHED
         campaign7 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.FINISHED, null, null));
+                new WsCampaign(player1.getUsername(), CampaignPhase.FINISHED, Quest.FIRST_BLOOD, QuestPart.FIRST));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
-        HeroSelectionClient.saveSelection(credentialsP6, credentialsP6, heroSelectionP6, campaign7);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
+        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign7);
     }
 
     @Test
@@ -211,7 +213,7 @@ public class HeroSelectionTest {
         // wrong campaign id
         WsCampaign falseCampaign = new WsCampaign(player6.getUsername(), CampaignPhase.ENCOUNTER, null, null);
         falseCampaign.setId(666L);
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD);
+        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign with Id: " + falseCampaign.getId() + " not found");

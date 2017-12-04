@@ -3,7 +3,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -23,7 +23,7 @@
                   <Image url="@descent_bg.jpg" />
                </image>
             </ImageView>
-            <VBox layoutX="200.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+            <VBox layoutX="50.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
@@ -39,7 +39,7 @@
                   <Line endX="200.0" stroke="DARKGRAY" />
                </children>
             </VBox>
-            <VBox layoutX="488.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+            <VBox layoutX="458.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
                <children>
                   <Line fx:id="lineContinue1" endX="200.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
@@ -82,9 +82,8 @@
                   <TableColumn fx:id="campaignCreatedColumn" prefWidth="242.0" text="Created On" />
               </columns>
             </TableView>
-            <ListView fx:id="chatListView" layoutX="1078.0" layoutY="110.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="522.0" prefWidth="297.0" style="-fx-background-color: grey;" />
-            <TextArea fx:id="messageTextArea" layoutX="1078.0" layoutY="642.0" prefHeight="95.0" prefWidth="297.0" />
-            <VBox layoutX="1151.0" layoutY="765.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+            <ListView fx:id="chatListView" layoutX="1078.0" layoutY="110.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="522.0" prefWidth="297.0" />
+            <VBox layoutX="1151.0" layoutY="700.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
                <children>
                   <Line endX="150.0" stroke="DARKGRAY" />
                   <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
@@ -100,6 +99,7 @@
                   <Line endX="150.0" stroke="DARKGRAY" />
                </children>
             </VBox>
+            <TextField fx:id="messageTextField" layoutX="1078.0" layoutY="650.0" prefHeight="27.0" prefWidth="297.0" />
          </children>
       </Pane>
    </children>

@@ -74,7 +74,8 @@ public class HeroSelectionBoundary {
         Player player = playerController.getPlayerByName(wsSelection.getUsername());
         LOG.log(Level.INFO, "Calling saveSelection for Player {0}", player.getUsername());
 
-        WsHeroSelection dtoSelection = WsHeroSelection.createInstance(campaignController.saveSelection(campaignId, player, wsSelection));
+        WsHeroSelection dtoSelection = WsHeroSelection.createInstance(
+                campaignController.saveSelection(Long.parseLong(campaignId), player, wsSelection));
 
         return Response.created(uriInfo.getRequestUri()).entity(dtoSelection).build();
     }

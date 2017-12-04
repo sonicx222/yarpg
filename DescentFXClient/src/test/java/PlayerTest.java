@@ -48,7 +48,7 @@ public class PlayerTest {
         // wrong user
         String wrongUser = "WrongUser";
         expectedException.expect(ServerException.class);
-        expectedException.expectMessage("No entity found for query");
+        expectedException.expectMessage("Player " + wrongUser + " not found");
         PlayerClient.loginPlayer(wrongUser, credentials);
         
         // wrong pwd

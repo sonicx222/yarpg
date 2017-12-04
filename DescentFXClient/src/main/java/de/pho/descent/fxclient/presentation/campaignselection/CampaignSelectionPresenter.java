@@ -21,14 +21,16 @@ import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -37,7 +39,6 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 import javax.inject.Inject;
 
 /**
@@ -77,7 +78,7 @@ public class CampaignSelectionPresenter implements Initializable {
     private ListView<WsMessage> chatListView;
 
     @FXML
-    private TextArea messageTextArea;
+    private TextField messageTextField;
 
     @Inject
     private GameDataModel gameDataModel;
@@ -113,17 +114,14 @@ public class CampaignSelectionPresenter implements Initializable {
         // columns
         campaignIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         campaignOverlordColumn.setCellValueFactory(new PropertyValueFactory<>("overlord"));
-        campaignPlayersColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<WsCampaign, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<WsCampaign, String> p) {
-                String strPlayers;
-                if (p.getValue().getPhase() == CampaignPhase.HERO_SELECTION) {
-                    strPlayers = String.valueOf(p.getValue().getCountHeroSelections());
-                } else {
-                    strPlayers = String.valueOf(p.getValue().getGameHeroes().size());
-                }
-                return new SimpleStringProperty(strPlayers);
+        campaignPlayersColumn.setCellValueFactory((TableColumn.CellDataFeatures<WsCampaign, String> cell) -> {
+            String strPlayers;
+            if (cell.getValue().getPhase() == CampaignPhase.HERO_SELECTION) {
+                strPlayers = String.valueOf(cell.getValue().getCountHeroSelections());
+            } else {
+                strPlayers = String.valueOf(cell.getValue().getGameHeroes().size());
             }
+            return new SimpleStringProperty(strPlayers);
         });
         campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));
         campaignQuestColumn.setCellValueFactory(new PropertyValueFactory<>("activeQuest"));
@@ -159,6 +157,12 @@ public class CampaignSelectionPresenter implements Initializable {
                     text.setWrappingWidth(chatListView.getPrefWidth());
                     setGraphic(text);
                 }
+            }
+        });
+        // ENTER key on message text area
+        messageTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleSendMessage(event);
             }
         });
         updateGeneralMessages();
@@ -240,16 +244,21 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     public void handleSendMessage(MouseEvent event) {
-        if ((messageTextArea.getText() != null) && (!messageTextArea.getText().isEmpty())) {
+        // cast Event to prevent recursive stack overflow
+        handleSendMessage((Event) event);
+    }
+
+    private void handleSendMessage(Event event) {
+        if ((messageTextField.getText() != null) && (!messageTextField.getText().isEmpty())) {
             WsMessage message = null;
             try {
-                message = MessageClient.postMessage(credentials.getPlayer(), null, messageTextArea.getText());
+                message = MessageClient.postMessage(credentials.getPlayer(), null, messageTextField.getText());
             } catch (ServerException ex) {
                 showError(ex);
             }
             if (message != null) {
-                gameDataModel.getGeneralMessages().add(message);
-                messageTextArea.clear();
+                updateGeneralMessages();
+                messageTextField.clear();
             }
         }
     }
@@ -266,6 +275,7 @@ public class CampaignSelectionPresenter implements Initializable {
 
         if (generalMessages != null && !generalMessages.isEmpty()) {
             gameDataModel.getGeneralMessages().addAll(generalMessages);
+            chatListView.scrollTo(gameDataModel.getGeneralMessages().size() - 1);
         }
     }
 
