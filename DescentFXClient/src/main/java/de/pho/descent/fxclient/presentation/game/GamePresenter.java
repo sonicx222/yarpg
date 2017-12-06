@@ -45,4 +45,8 @@ public class GamePresenter implements Initializable {
     public void handleBackNavigation(MouseEvent event) {
         switchFullscreenScene(event, new StartMenuView());
     }
+    
+    private void resizeGridPane() {
+        
+    }
 }

@@ -40,6 +40,7 @@ public class ApplicationConfig extends Application {
         resources.add(de.pho.descent.web.player.PlayerAlreadyExistsExceptionMapper.class);
         resources.add(de.pho.descent.web.player.PlayerBoundary.class);
         resources.add(de.pho.descent.web.player.PlayerController.class);
+        resources.add(de.pho.descent.web.quest.QuestBoundary.class);
     }
     
 }

@@ -9,8 +9,7 @@ import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import static de.pho.descent.shared.model.hero.HeroTemplate.*;
-import de.pho.descent.shared.model.quest.Quest;
-import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.List;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -175,7 +174,7 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign5() throws ServerException {
         // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
         campaign5 = CampaignClient.createCampaign(player1,
-                new WsCampaign(player1.getUsername(), CampaignPhase.ENCOUNTER, Quest.FIRST_BLOOD, QuestPart.FIRST));
+                new WsCampaign(player1.getUsername(), CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         // check: game already started error
         expectedException.expect(ServerException.class);
@@ -188,7 +187,7 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign6() throws ServerException {
         // player2 creates campaign6 as overlord, campaign in stage TRAVEL
         campaign6 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.TRAVEL, Quest.FIRST_BLOOD, QuestPart.FIRST));
+                new WsCampaign(player1.getUsername(), CampaignPhase.TRAVEL, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
@@ -200,7 +199,7 @@ public class HeroSelectionTest {
     public void testHeroSelectionCampaign7() throws ServerException {
         // player2 creates campaign7 as overlord, campaign in stage FINISHED
         campaign7 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.FINISHED, Quest.FIRST_BLOOD, QuestPart.FIRST));
+                new WsCampaign(player1.getUsername(), CampaignPhase.FINISHED, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
@@ -211,7 +210,7 @@ public class HeroSelectionTest {
     @Test
     public void testHeroSelectionCampaign8() throws ServerException {
         // wrong campaign id
-        WsCampaign falseCampaign = new WsCampaign(player6.getUsername(), CampaignPhase.ENCOUNTER, null, null);
+        WsCampaign falseCampaign = new WsCampaign(player6.getUsername(), CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l);
         falseCampaign.setId(666L);
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
 

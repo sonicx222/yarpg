@@ -10,6 +10,7 @@ import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import static de.pho.descent.shared.model.hero.HeroTemplate.GRISBAN;
 import static de.pho.descent.shared.model.hero.HeroTemplate.JAINFAIRWOOD;
+import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.List;
 import java.util.Objects;
 import org.junit.FixMethodOrder;
@@ -41,8 +42,7 @@ public class CampaignTest {
 
         assert (campaign1.getId() > 0);
         assert (campaign1.getPhase() == CampaignPhase.HERO_SELECTION);
-        assert (campaign1.getActiveQuest() == null);
-        assert (campaign1.getPart() == null);
+        assert (campaign1.getNextQuest() == QuestTemplate.FIRST_BLOOD_INTRO);
         assert (Objects.equals(campaign1.getOverlord(), campTest.getUsername()));
 
         // campTest creates campaign2 as overlord
@@ -75,8 +75,8 @@ public class CampaignTest {
 
         WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentials2, GRISBAN, true);
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentials3, JAINFAIRWOOD, true);
-        heroSelectionP2 = HeroSelectionClient.saveSelection(credentials2, SecurityTools.createHash(credentials2, false), heroSelectionP2, campaign1);
-        heroSelectionP3 = HeroSelectionClient.saveSelection(credentials3, SecurityTools.createHash(credentials3, false), heroSelectionP3, campaign1);
+        HeroSelectionClient.saveSelection(credentials2, SecurityTools.createHash(credentials2, false), heroSelectionP2, campaign1);
+        HeroSelectionClient.saveSelection(credentials3, SecurityTools.createHash(credentials3, false), heroSelectionP3, campaign1);
 
         List<WsHeroSelection> selections = HeroSelectionClient.getCurrentSelections(credentials3,
                 SecurityTools.createHash(credentials3, false), campaign1);

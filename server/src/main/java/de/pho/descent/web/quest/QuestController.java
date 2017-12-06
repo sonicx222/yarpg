@@ -30,6 +30,10 @@ public class QuestController {
     @Inject
     private MapController mapController;
 
+    public QuestEncounter getQuestEncounterById(long id) {
+        return questService.loadEncounterById(id);
+    }
+    
     public QuestEncounter startNextQuestEncounter(Campaign campaign) {
         return createQuestEncounter(campaign.getTemplateNextQuest(), campaign);
     }

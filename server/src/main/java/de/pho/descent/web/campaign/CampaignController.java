@@ -167,9 +167,7 @@ public class CampaignController {
         Player overlord = playerController.getPlayerByName(wsCampaign.getOverlord());
         c.setOverlord(overlord);
         c.setPhase(wsCampaign.getPhase());
-        c.setActiveQuest(questController.createQuestEncounter(
-                QuestTemplate.getTemplate(wsCampaign.getActiveQuest(), wsCampaign.getPart()),
-                c));
+        c.setActiveQuest(questController.createQuestEncounter(wsCampaign.getNextQuest(), c));
 
         return campaignService.saveCampaign(c);
     }
