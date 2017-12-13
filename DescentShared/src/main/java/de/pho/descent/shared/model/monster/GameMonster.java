@@ -1,17 +1,41 @@
 package de.pho.descent.shared.model.monster;
 
-import de.pho.descent.shared.model.GameEntity;
+import de.pho.descent.shared.model.GameUnit;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 /**
  *
  * @author pho
  */
 @Entity
-public class GameMonster extends GameEntity implements Serializable {
+public class GameMonster extends GameUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Enumerated(EnumType.STRING)
+    private MonsterTemplate monsterTemplate;
+
+    public GameMonster() {
+    }
+
+    public GameMonster(MonsterTemplate template) {
+        super.setName(template.getText());
+        super.setMovementPoints(template.getSpeed());
+        super.setTotalLife(template.getHealth());
+        super.setCurrentLife(template.getHealth());
+        this.monsterTemplate = template;
+    }
+
+    public MonsterTemplate getMonsterTemplate() {
+        return monsterTemplate;
+    }
+
+    public void setMonsterTemplate(MonsterTemplate monsterTemplate) {
+        this.monsterTemplate = monsterTemplate;
+    }
 
     @Override
     public int hashCode() {

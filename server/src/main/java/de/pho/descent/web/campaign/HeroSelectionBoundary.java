@@ -10,6 +10,7 @@ import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -54,7 +55,7 @@ public class HeroSelectionBoundary {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling getCurrentSelections for Player {0}", player.getUsername());
 
-        List<HeroSelection> selectionList = campaignController.getCurrentSelection(campaignId);
+        List<HeroSelection> selectionList = campaignController.getCurrentSelections(campaignId);
         List<WsHeroSelection> dtoList = new ArrayList<>();
 
         for (HeroSelection selection : selectionList) {

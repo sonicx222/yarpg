@@ -31,7 +31,7 @@ public class WsCampaign {
 
     private int countHeroSelections;
 
-    private List<String> gameHeroes = new ArrayList<>();
+    private List<GameHero> gameHeroes = new ArrayList<>();
 
     public WsCampaign() {
     }
@@ -107,11 +107,11 @@ public class WsCampaign {
         this.countHeroSelections = countHeroSelections;
     }
 
-    public List<String> getGameHeroes() {
+    public List<GameHero> getGameHeroes() {
         return gameHeroes;
     }
 
-    public void setGameHeroes(List<String> gameHeroes) {
+    public void setGameHeroes(List<GameHero> gameHeroes) {
         this.gameHeroes = gameHeroes;
     }
 
@@ -135,12 +135,7 @@ public class WsCampaign {
         wsCampaign.setCreatedOn(campaign.getCreatedOn());
         wsCampaign.setStartedOn(campaign.getStartedOn());
         wsCampaign.setCountHeroSelections(campaign.getHeroSelections().size());
-
-        List<String> heroNames = new ArrayList<>();
-        for (GameHero hero : campaign.getHeroes()) {
-            heroNames.add(hero.getName());
-        }
-        wsCampaign.setGameHeroes(heroNames);
+        wsCampaign.setGameHeroes(new ArrayList<>(campaign.getHeroes()));
 
         return wsCampaign;
     }

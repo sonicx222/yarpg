@@ -5,16 +5,7 @@ import com.airhacks.afterburner.views.FXMLView;
 import static de.pho.descent.fxclient.business.config.Configuration.loadProperties;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
-import de.pho.descent.shared.auth.ParamValue;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -24,12 +15,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 public class MainApp extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(MainApp.class.getName());
+    public static Font gameFont;
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
@@ -46,6 +39,9 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         loadProperties();
+
+        // load Font
+        gameFont = Font.loadFont(getClass().getResourceAsStream("Windlass.ttf"), 12);
         
         LoginscreenView loginscreenView = new LoginscreenView();
         Scene scene = new Scene(loginscreenView.getView());
@@ -91,8 +87,6 @@ public class MainApp extends Application {
 
         stage.show();
     }
-
-    
 
     public static void showError(ServerException exception) {
         LOGGER.log(Level.SEVERE, exception.getMessage());

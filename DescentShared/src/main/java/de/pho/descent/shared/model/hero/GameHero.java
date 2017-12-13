@@ -1,47 +1,26 @@
 package de.pho.descent.shared.model.hero;
 
-import de.pho.descent.shared.model.GameEntity;
-import de.pho.descent.shared.model.Player;
+import de.pho.descent.shared.model.GameUnit;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author pho
  */
 @Entity
-public class GameHero extends GameEntity implements Serializable {
+public class GameHero extends GameUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    private Player playedBy;
-
-    @Temporal(TemporalType.DATE)
-    private final Date createdOn = new Date();
-
     @Enumerated(EnumType.STRING)
-    private Archetype archetype;
-
-    private int turnsLeft;
-
-    private int totalLife;
-
-    private int currentLife;
+    private HeroTemplate heroTemplate;
 
     private int stamina;
 
     private int exhaustion;
-
-    private int movementPoints;
-
-    private int movementSpent;
 
     private int might;
 
@@ -53,16 +32,15 @@ public class GameHero extends GameEntity implements Serializable {
 
     private int initiative;
 
-    private boolean isActive;
-
     public GameHero() {
     }
 
     public GameHero(HeroTemplate template) {
         super.setName(template.getName());
-        this.archetype = template.getArchetype();
-        this.movementPoints = template.getSpeed();
-        this.totalLife = template.getHealth();
+        super.setMovementPoints(template.getSpeed());
+        super.setTotalLife(template.getHealth());
+        super.setCurrentLife(template.getHealth());
+        this.heroTemplate = template;
         this.stamina = template.getStamina();
         this.might = template.getMight();
         this.knowledge = template.getKnowledge();
@@ -70,20 +48,12 @@ public class GameHero extends GameEntity implements Serializable {
         this.awareness = template.getAwareness();
     }
 
-    public Player getPlayedBy() {
-        return playedBy;
+    public HeroTemplate getHeroTemplate() {
+        return heroTemplate;
     }
 
-    public void setPlayedBy(Player playedBy) {
-        this.playedBy = playedBy;
-    }
-
-    public Archetype getArchetype() {
-        return archetype;
-    }
-
-    public void setArchetype(Archetype archetype) {
-        this.archetype = archetype;
+    public void setHeroTemplate(HeroTemplate heroTemplate) {
+        this.heroTemplate = heroTemplate;
     }
 
     public void setMight(int might) {
@@ -102,30 +72,6 @@ public class GameHero extends GameEntity implements Serializable {
         this.awareness = awareness;
     }
 
-    public int getTurnsLeft() {
-        return turnsLeft;
-    }
-
-    public void setTurnsLeft(int turnsLeft) {
-        this.turnsLeft = turnsLeft;
-    }
-
-    public int getTotalLife() {
-        return totalLife;
-    }
-
-    public void setTotalLife(int totalLife) {
-        this.totalLife = totalLife;
-    }
-
-    public int getCurrentLife() {
-        return currentLife;
-    }
-
-    public void setCurrentLife(int currentLife) {
-        this.currentLife = currentLife;
-    }
-
     public int getStamina() {
         return stamina;
     }
@@ -142,36 +88,12 @@ public class GameHero extends GameEntity implements Serializable {
         this.exhaustion = exhaustion;
     }
 
-    public int getMovementPoints() {
-        return movementPoints;
-    }
-
-    public void setMovementPoints(int movementPoints) {
-        this.movementPoints = movementPoints;
-    }
-
-    public int getMovementSpent() {
-        return movementSpent;
-    }
-
-    public void setMovementSpent(int movementSpent) {
-        this.movementSpent = movementSpent;
-    }
-
     public int getInitiative() {
         return initiative;
     }
 
     public void setInitiative(int initiative) {
         this.initiative = initiative;
-    }
-
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
     }
 
     public int getMight() {

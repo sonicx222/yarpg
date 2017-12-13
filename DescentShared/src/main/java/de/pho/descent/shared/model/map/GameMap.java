@@ -3,13 +3,14 @@ package de.pho.descent.shared.model.map;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,7 +55,7 @@ public class GameMap implements Serializable {
 
     private int gridYSize;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "map_id")
     @OrderBy("xPos, yPos")
     private List<MapField> mapFields;
@@ -64,6 +65,13 @@ public class GameMap implements Serializable {
 
     @Transient
     private Map<Integer, Map<Integer, MapField>> mapLayout;
+
+    public MapField getField(int x, int y) {
+        return mapFields.stream()
+                .filter(field -> (field.getxPos() == x && field.getyPos() == y))
+                .findAny()
+                .orElse(null);
+    }
 
     public Map<Integer, Map<Integer, MapField>> getMapLayout() {
         if (this.mapLayout == null) {
@@ -84,15 +92,15 @@ public class GameMap implements Serializable {
     }
 
     public List<MapField> getHeroSpawnFields() {
-        List<MapField> heroSpawnFields = new ArrayList<>();
+        return mapFields.stream()
+                .filter(field -> field.isHeroSpawn())
+                .collect(Collectors.toList());
+    }
 
-        for (MapField field : mapFields) {
-            if (field.isHeroSpawn()) {
-                heroSpawnFields.add(field);
-            }
-        }
-
-        return heroSpawnFields;
+    public List<MapField> getMonsterSpawnFields() {
+        return mapFields.stream()
+                .filter(field -> field.isMonsterSpawn())
+                .collect(Collectors.toList());
     }
 
     public Quest getQuest() {

@@ -7,6 +7,7 @@ import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
+import de.pho.descent.shared.model.hero.HeroTemplate;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.player.PlayerController;
@@ -148,7 +149,9 @@ public class CampaignController {
         // create game heroes
         List<GameHero> heroes = new ArrayList<>();
         for (HeroSelection hs : heroSelections) {
-            heroes.add(new GameHero(hs.getSelectedHero()));
+            GameHero hero = new GameHero(hs.getSelectedHero());
+            hero.setPlayedBy(hs.getPlayer());
+            heroes.add(hero);
         }
         campaignToBeStarted.getHeroes().clear();
         campaignToBeStarted.getHeroes().addAll(heroes);
@@ -193,7 +196,7 @@ public class CampaignController {
         campaignService.deleteCampaign(id);
     }
 
-    public List<HeroSelection> getCurrentSelection(String campaignId) throws CampaignValidationException, NotFoundException {
+    public List<HeroSelection> getCurrentSelections(String campaignId) throws CampaignValidationException, NotFoundException {
         // check for hero selection phase
         checkCampaignPhase(campaignId, CampaignPhase.HERO_SELECTION);
 

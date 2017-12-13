@@ -1,13 +1,12 @@
 package de.pho.descent.shared.model.map;
 
-import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -24,7 +23,7 @@ import javax.persistence.OneToOne;
 public class MapField implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final String FIND_SPAWNS_BY_MAPID = "de.pho.descent.shared.model.MapField.findSpawnsByMapId";
     public static final String FIND_SPAWNS_BY_GROUPID = "de.pho.descent.shared.model.MapField.findSpawnsByGroupId";
     public static final String MAPID_PARAM = "paramMapId";
@@ -51,20 +50,11 @@ public class MapField implements Serializable {
 
     private boolean monsterSpawn;
 
-    @OneToOne(optional = true)
-    private Token objectiveToken;
-
-    @OneToOne(optional = true)
-    private Token searchToken;
-
-    @OneToOne(optional = true)
-    private Token villagerToken;
-
     public MapField() {
 
     }
 
-    public MapField(MapTileGroup tileGroup, GameMap map, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn, Token objectiveToken, Token searchToken, Token villagerToken) {
+    public MapField(MapTileGroup tileGroup, GameMap map, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn) {
         this.tileGroup = tileGroup;
         this.map = map;
         this.xPos = xPos;
@@ -73,9 +63,6 @@ public class MapField implements Serializable {
         this.passable = passable;
         this.heroSpawn = heroSpawn;
         this.monsterSpawn = monsterSpawn;
-        this.objectiveToken = objectiveToken;
-        this.searchToken = searchToken;
-        this.villagerToken = villagerToken;
     }
 
     public Long getId() {
@@ -148,6 +135,60 @@ public class MapField implements Serializable {
 
     public void setMonsterSpawn(boolean monsterSpawn) {
         this.monsterSpawn = monsterSpawn;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.tileGroup);
+        hash = 17 * hash + Objects.hashCode(this.map);
+        hash = 17 * hash + this.xPos;
+        hash = 17 * hash + this.yPos;
+        hash = 17 * hash + this.moveCost;
+        hash = 17 * hash + (this.passable ? 1 : 0);
+        hash = 17 * hash + (this.heroSpawn ? 1 : 0);
+        hash = 17 * hash + (this.monsterSpawn ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MapField other = (MapField) obj;
+        if (this.xPos != other.xPos) {
+            return false;
+        }
+        if (this.yPos != other.yPos) {
+            return false;
+        }
+        if (this.moveCost != other.moveCost) {
+            return false;
+        }
+        if (this.passable != other.passable) {
+            return false;
+        }
+        if (this.heroSpawn != other.heroSpawn) {
+            return false;
+        }
+        if (this.monsterSpawn != other.monsterSpawn) {
+            return false;
+        }
+        if (!Objects.equals(this.tileGroup, other.tileGroup)) {
+            return false;
+        }
+        if (!Objects.equals(this.map, other.map)) {
+            return false;
+        }
+
+        return true;
     }
 
 }

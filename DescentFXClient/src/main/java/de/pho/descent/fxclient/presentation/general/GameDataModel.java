@@ -1,6 +1,7 @@
 package de.pho.descent.fxclient.presentation.general;
 
 import de.pho.descent.shared.dto.WsCampaign;
+import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.dto.WsMessage;
 import de.pho.descent.shared.dto.WsQuestEncounter;
@@ -22,6 +23,8 @@ public class GameDataModel {
     private WsCampaign currentCampaign;
     
     private WsQuestEncounter currentQuestEncounter;
+    
+    private WsGameMap currentQuestMap;
 
     @PostConstruct
     public void init() {
@@ -57,5 +60,14 @@ public class GameDataModel {
 
     public void setCurrentQuestEncounter(WsQuestEncounter currentQuestEncounter) {
         this.currentQuestEncounter = currentQuestEncounter;
-    } 
+    }
+
+    public WsGameMap getCurrentQuestMap() {
+        return currentQuestMap;
+    }
+
+    public void setCurrentQuestMap(WsGameMap currentQuestMap) {
+        this.currentQuestMap = currentQuestMap;
+    }
+    
 }

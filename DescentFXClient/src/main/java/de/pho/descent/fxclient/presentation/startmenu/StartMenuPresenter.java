@@ -3,9 +3,11 @@ package de.pho.descent.fxclient.presentation.startmenu;
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.debug.Automate;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
+import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
@@ -13,9 +15,12 @@ import de.pho.descent.shared.dto.WsCampaign;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -45,9 +50,6 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     private Text textJoinCampaign;
-
-    @FXML
-    private Line lineJoinCampaign;
 
     @Inject
     private Credentials credentials;
@@ -80,6 +82,13 @@ public class StartMenuPresenter implements Initializable {
             new Stop(0.9, Color.BLACK),
             new Stop(1, Color.DARKVIOLET)
         });
+    }
+
+    @FXML
+    public void handleOnKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            handleExit((Event) event);
+        }
     }
 
     @FXML
@@ -157,7 +166,7 @@ public class StartMenuPresenter implements Initializable {
             }
             if (campaign != null) {
                 gameDataModel.setCurrentCampaign(campaign);
-//                switchFullscreenScene(event, new GameView());
+//                switchFullscreenScene(event, new HeroGameView());
                 switchFullscreenScene(event, new HeroSelectionView());
             }
         }
@@ -170,7 +179,8 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleSettings(MouseEvent event) {
-
+        gameDataModel.setCurrentCampaign(Automate.startCampaignWithTwoHeroes());
+        switchFullscreenScene(event, new OverlordGameView());
     }
 
     @FXML
@@ -181,6 +191,10 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleExit(MouseEvent event) {
+        handleExit((Event) event);
+    }
+
+    private void handleExit(Event event) {
         System.exit(0);
     }
 

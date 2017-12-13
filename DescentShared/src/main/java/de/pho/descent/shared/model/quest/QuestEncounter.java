@@ -3,15 +3,22 @@ package de.pho.descent.shared.model.quest;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.monster.GameMonster;
+import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -57,6 +64,14 @@ public class QuestEncounter implements Serializable {
 
     @OneToOne
     private GameMap map;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "encounter_id")
+    private List<GameMonster> monsters = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "encounter_id")
+    private List<Token> token = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -112,6 +127,22 @@ public class QuestEncounter implements Serializable {
 
     public void setMap(GameMap map) {
         this.map = map;
+    }
+
+    public List<GameMonster> getMonsters() {
+        return monsters;
+    }
+
+    public void setMonsters(List<GameMonster> monsters) {
+        this.monsters = monsters;
+    }
+
+    public List<Token> getToken() {
+        return token;
+    }
+
+    public void setToken(List<Token> token) {
+        this.token = token;
     }
 
     @Override

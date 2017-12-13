@@ -7,7 +7,7 @@ import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
 import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
-import de.pho.descent.fxclient.presentation.game.GameView;
+import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
@@ -335,7 +335,8 @@ public class HeroSelectionPresenter implements Initializable {
             showError(ex);
         }
         if (startedCampaign != null) {
-            switchFullscreenScene(event, new GameView());
+            gameDataModel.setCurrentCampaign(startedCampaign);
+            switchFullscreenScene(event, new HeroGameView());
         }
     }
 

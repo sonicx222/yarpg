@@ -223,6 +223,17 @@ public class PersistenceService {
     }
 
     /**
+     * Remove all given entities.
+     *
+     * @param set set of entities to remove
+     */
+    public <T> void deleteSet(Set<T> set) {
+        for (T t : set) {
+            em.remove(t);
+        }
+    }
+
+    /**
      * Remove reference of the given type with the given id.
      *
      * @param type type of the entity to remove

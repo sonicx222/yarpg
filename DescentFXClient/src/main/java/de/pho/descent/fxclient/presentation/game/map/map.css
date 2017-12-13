@@ -1,0 +1,7 @@
+/* 
+    Created on : 08.12.2017, 13:19:51
+    Author     : pho
+*/
+.paneField > *:hover {
+    -fx-background-color: #FFFF00;
+}

@@ -12,9 +12,8 @@ import java.util.List;
  */
 public class WsGameMap {
 
-    /**
-     * Base64 encoded
-     */
+    private long id;
+
     private String imagePath;
 
     private int gridXSize;
@@ -26,12 +25,25 @@ public class WsGameMap {
     public static WsGameMap createInstance(GameMap map) {
         WsGameMap wsMap = new WsGameMap();
 
+        wsMap.setId(map.getId());
         wsMap.setGridXSize(map.getGridXSize());
         wsMap.setGridYSize(map.getGridYSize());
         wsMap.setMapFields(map.getMapFields());
         wsMap.setImagePath(map.getImagePath());
 
         return wsMap;
+    }
+
+    public MapField[] getMapLayout() {
+        return null;
+    }
+    
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getImagePath() {
@@ -65,5 +77,4 @@ public class WsGameMap {
     public void setMapFields(List<MapField> mapFields) {
         this.mapFields = mapFields;
     }
-
 }

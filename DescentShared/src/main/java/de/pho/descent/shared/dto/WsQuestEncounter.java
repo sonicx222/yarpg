@@ -1,9 +1,13 @@
 package de.pho.descent.shared.dto;
 
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.shared.model.token.Token;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +29,10 @@ public class WsQuestEncounter {
     private PlaySide winner;
 
     private long mapId;
+
+    private List<GameMonster> gameMonsters = new ArrayList<>();
+
+    private List<Token> tokens = new ArrayList<>();
 
     public WsQuestEncounter() {
     }
@@ -85,6 +93,22 @@ public class WsQuestEncounter {
         this.mapId = mapId;
     }
 
+    public List<GameMonster> getGameMonsters() {
+        return gameMonsters;
+    }
+
+    public void setGameMonsters(List<GameMonster> gameMonsters) {
+        this.gameMonsters = gameMonsters;
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<Token> tokens) {
+        this.tokens = tokens;
+    }
+
     /**
      * Factory-Method to create new WsQuestEncounter DTOs
      *
@@ -102,6 +126,8 @@ public class WsQuestEncounter {
         wsEncounter.setPart(qe.getPart());
         wsEncounter.setQuest(qe.getQuest());
         wsEncounter.setWinner(qe.getWinner());
+        wsEncounter.setGameMonsters(new ArrayList<>(qe.getMonsters()));
+        wsEncounter.setTokens(new ArrayList<>(qe.getToken()));
 
         return wsEncounter;
     }

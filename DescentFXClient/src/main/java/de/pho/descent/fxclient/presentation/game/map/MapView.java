@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.pho.descent.fxclient.presentation.game;
+package de.pho.descent.fxclient.presentation.game.map;
 
 import com.airhacks.afterburner.views.FXMLView;
 
@@ -11,10 +11,10 @@ import com.airhacks.afterburner.views.FXMLView;
  *
  * @author pho
  */
-public class GameView extends FXMLView {
+public class MapView extends FXMLView {
     
-    public GamePresenter getRealPresenter() {
-        return (GamePresenter) super.getPresenter();
+    public MapPresenter getRealPresenter() {
+        return (MapPresenter) super.getPresenter();
     }
     
 }

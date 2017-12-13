@@ -6,6 +6,8 @@ import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
+import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
@@ -17,6 +19,7 @@ import de.pho.descent.shared.model.quest.QuestPart;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -239,7 +242,15 @@ public class CampaignSelectionPresenter implements Initializable {
     public void handleContinue(MouseEvent event) {
         requireNonNull(selectedCampaign);
         gameDataModel.setCurrentCampaign(selectedCampaign);
-        switchFullscreenScene(event, new HeroSelectionView());
+        if (selectedCampaign.getPhase() == CampaignPhase.HERO_SELECTION) {
+            switchFullscreenScene(event, new HeroSelectionView());
+        } else {
+            if (Objects.equals(credentials.getUsername(), selectedCampaign.getOverlord())) {
+                switchFullscreenScene(event, new OverlordGameView());
+            } else {
+                switchFullscreenScene(event, new HeroGameView());
+            }
+        }
     }
 
     @FXML

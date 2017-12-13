@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -100,6 +101,11 @@
                </children>
             </VBox>
             <TextField fx:id="messageTextField" layoutX="1078.0" layoutY="650.0" prefHeight="27.0" prefWidth="297.0" />
+            <Label layoutX="401.0" layoutY="14.0" text="Campaign Selection" textFill="WHITE">
+               <font>
+                  <Font name="Verdana" size="30.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

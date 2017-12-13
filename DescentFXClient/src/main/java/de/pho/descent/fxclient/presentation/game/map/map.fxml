@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<ScrollPane fx:id="mapScrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.map.MapPresenter">
+   <content>
+      <StackPane fx:id="mapStackPane" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2560.0" prefWidth="2560.0" style="-fx-background-color: BLACK;">
+         <children>
+            <ImageView fx:id="mapImageView" fitHeight="768.0" fitWidth="832.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../resources/img/encounter/First_Blood2.png" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="mapGridPane" prefHeight="2560.0" prefWidth="2560.0" style="-fx-background-color: transparent;">
+            </GridPane>
+         </children>
+      </StackPane>
+   </content>
+</ScrollPane>

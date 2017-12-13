@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.hero.HeroGamePresenter">
+   <children>
+      <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleBackNavigation" prefHeight="900.0" prefWidth="1600.0">
+         <children>
+            <ImageView fitHeight="900.0" fitWidth="1600.0">
+               <image>
+                  <Image url="@../table_bg.jpg" />
+               </image>
+            </ImageView>
+            <fx:include fx:id="mapScrollPane" layoutX="80.0" layoutY="75.0" source="../map/map.fxml" />
+            <ImageView fitHeight="50.0" fitWidth="800.0" layoutX="80.0" layoutY="25.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../section-header-gray.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="12.0" fitWidth="800.0" layoutX="80.0" layoutY="675.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../footer.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Map" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Verdana" size="20.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="880.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../resources/img/heroes/Grisban.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="880.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../heroselection/Hero_Sheet_Template.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="50.0" fitWidth="600.0" layoutX="880.0" layoutY="25.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../section-header-gray.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" layoutX="880.0" layoutY="25.0" prefHeight="31.0" prefWidth="600.0" text="Hero" textAlignment="JUSTIFY" textFill="WHITE">
+               <font>
+                  <Font name="Verdana" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelName" alignment="CENTER" contentDisplay="CENTER" layoutX="893.0" layoutY="92.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelSpeed" alignment="CENTER" layoutX="1163.0" layoutY="168.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelHealth" alignment="CENTER" layoutX="1183.0" layoutY="254.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelStamina" alignment="CENTER" layoutX="1187.0" layoutY="346.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelMight" alignment="CENTER" layoutX="953.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="1043.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelWillpower" alignment="CENTER" layoutX="934.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelAwareness" alignment="CENTER" layoutX="1062.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="1249.0" layoutY="138.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="1249.0" layoutY="361.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

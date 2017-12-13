@@ -28,14 +28,15 @@ public class QuestClient extends BaseRESTClient {
         try {
             client = ClientBuilder.newClient();
             WebTarget securedTarget = client.target(getSecuredBaseUri());
-            WebTarget questsTarget = securedTarget.path("quests");
+            WebTarget questsTarget = securedTarget.path("quests").path("{" + ParamValue.QUEST_ID + "}");
 
-            String uriPath = questsTarget.getUri().getPath();
+            String uriPath = questsTarget.resolveTemplate(ParamValue.QUEST_ID, questId).getUri().getPath();
             String authToken = SecurityTools.createAuthenticationToken(username,
                     pwdHash,
                     HttpMethod.GET, uriPath);
 
             Response getResponse = questsTarget
+                    .resolveTemplate(ParamValue.QUEST_ID, questId)
                     .request(MediaType.APPLICATION_JSON)
                     .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
                     .get();

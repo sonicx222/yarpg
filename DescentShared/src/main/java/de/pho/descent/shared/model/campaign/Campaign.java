@@ -62,11 +62,11 @@ public class Campaign implements Serializable {
     @OneToOne
     private QuestEncounter activeQuest;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "campaign_id")
     private List<GameHero> heroes = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "campaign_id")
     private List<HeroSelection> heroSelections = new ArrayList<>();
 

@@ -60,7 +60,7 @@ public enum HeroTemplate {
 
     private final Item startItem2;
 
-    private HeroTemplate(String name, Archetype archetype, HeroClass heroClass, int health, int speed, int stamina, DefenseDice defense, int might, int knowledge, int willpower, int awareness, String imageName, String announce, String heroAbilityText, String heroicFeatText, HeroSkill startSkill, Item startItem1, Item startItem2) {
+    private HeroTemplate(String name, Archetype archetype, HeroClass heroClass, int speed, int health, int stamina, DefenseDice defense, int might, int knowledge, int willpower, int awareness, String imageName, String announce, String heroAbilityText, String heroicFeatText, HeroSkill startSkill, Item startItem1, Item startItem2) {
         this.name = name;
         this.health = health;
         this.speed = speed;

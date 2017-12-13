@@ -31,6 +31,28 @@ public enum MonsterGroup {
         this.eliteCountFourHero = eliteCountFourHero;
     }
 
+    public int getNormalCount(int heroCount) {
+        switch (heroCount) {
+            case 2:
+                return normalCountTwoHero;
+            case 3:
+                return normalCountThreeHero;
+            default:
+                return normalCountFourHero;
+        }
+    }
+
+    public boolean hasElite(int heroCount) {
+        switch (heroCount) {
+            case 2:
+                return eliteCountTwoHero > 0;
+            case 3:
+                return eliteCountThreeHero > 0;
+            default:
+                return eliteCountFourHero > 0;
+        }
+    }
+
     public int getNormalCountTwoHero() {
         return normalCountTwoHero;
     }

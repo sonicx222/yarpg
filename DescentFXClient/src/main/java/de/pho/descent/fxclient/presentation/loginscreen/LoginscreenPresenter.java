@@ -139,6 +139,10 @@ public class LoginscreenPresenter implements Initializable {
         paneExit.setOnMouseReleased(event -> {
             itemExit.setFill(gradient);
         });
+        
+        // set font
+//        textLogin.setFont(gameFont);
+//        textRegister.setFont(gameFont);
     }
 
     @FXML

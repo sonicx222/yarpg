@@ -7,8 +7,10 @@ package de.pho.descent.shared.model;
 public enum SurgeAction {
     ONE_DAMAGE,
     TWO_DAMAGE,
+    THREE_DAMAGE,
     ONE_RANGE,
     TWO_RANGE,
+    THREE_RANGE,
     ONE_PIERCE,
     TWO_PIERCE,
     STUN,
