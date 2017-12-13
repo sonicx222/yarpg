@@ -14,5 +14,9 @@ public class ParamValue {
     public static final String URI = "uri";
     public static final String SECURED_URL = "secured";
     public static final String CAMPAIGN_ID = "campaignId";
+    public static final String QUEST_ID = "questId";
+    public static final String MAP_ID = "mapId";
     public static final String PLAYER_ID = "playerId";
+    public static final String CONFIG_FILE = "config.properties";
+    public static final String HOST = "host";
 }
