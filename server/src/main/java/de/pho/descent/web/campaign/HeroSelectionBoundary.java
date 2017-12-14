@@ -10,11 +10,10 @@ import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -40,10 +39,10 @@ public class HeroSelectionBoundary {
 
     private static final Logger LOG = Logger.getLogger(HeroSelectionBoundary.class.getName());
 
-    @EJB
+    @Inject
     private CampaignController campaignController;
 
-    @EJB
+    @Inject
     private PlayerController playerController;
 
     @GET
