@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.overlord.OverlordGamePresenter">
    <children>
-      <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleBackNavigation" prefHeight="900.0" prefWidth="1400.0">
+      <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1400.0">
          <children>
             <ImageView fitHeight="900.0" fitWidth="1400.0">
                <image>
@@ -32,6 +38,56 @@
                   <Font name="Verdana" size="20.0" />
                </font>
             </Label>
+            <VBox layoutX="30.0" layoutY="834.0" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <VBox layoutX="629.0" layoutY="834.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+               <children>
+                  <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                     <children>
+                        <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                        <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
+                           <font>
+                              <Font name="Tw Cen MT Condensed" size="22.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="200.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <ListView fx:id="chatListView" layoutX="871.0" layoutY="658.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="166.0" prefWidth="498.0" />
+            <VBox layoutX="1218.0" layoutY="832.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
+                     <children>
+                        <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
+                        <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="150.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <TextField fx:id="messageTextField" layoutX="875.0" layoutY="835.0" prefHeight="27.0" prefWidth="329.0" />
          </children>
       </AnchorPane>
    </children>
