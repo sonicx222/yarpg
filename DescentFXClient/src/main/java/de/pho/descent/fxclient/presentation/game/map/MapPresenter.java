@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,8 +42,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javax.inject.Inject;
 
 /**
@@ -63,11 +66,20 @@ public class MapPresenter implements Initializable {
     @FXML
     private GridPane mapGridPane;
 
+    @FXML
+    private Button moveButton;
+
     @Inject
     private Credentials credentials;
 
     @Inject
     private GameDataModel gameDataModel;
+
+    @Inject
+    private MapDataModel mapDataModel;
+
+    @Inject
+    private MapService mapService;
 
     private LinearGradient gradientMenuItem;
 
@@ -98,9 +110,11 @@ public class MapPresenter implements Initializable {
         addMonstersToMap();
         addTokensToMap();
 
-        LOGGER.info("mapStackPane: " + mapStackPane.getWidth() + ", " + mapStackPane.getHeight());
-        LOGGER.info("mapGridPane: " + mapGridPane.getWidth() + ", " + mapGridPane.getHeight());
-        LOGGER.info("mapImageView: " + mapImageView.getFitWidth() + ", " + mapImageView.getFitHeight());
+//        MapField testField = gameDataModel.getCurrentCampaign().getGameHeroes().stream()
+//                    .filter(h -> h.isActive())
+//                    .findAny().get().getCurrentLocation();
+//        Set<MapField> fields = mapService.getFieldsInRange(testField, 3, gameDataModel.getCurrentQuestMap());
+//        fields.stream().forEach(f -> LOGGER.info("Field ID: " + f.getId()));
     }
 
     private void loadQuestEncounter() {
@@ -137,6 +151,7 @@ public class MapPresenter implements Initializable {
         WsGameMap map = gameDataModel.getCurrentQuestMap();
         mapGridPane.setPrefHeight(mapImageView.getFitHeight());
         mapGridPane.setPrefWidth(mapImageView.getFitWidth());
+
         // column size
         mapGridPane.getColumnConstraints().clear();
         for (int x = 0; x < map.getGridXSize(); x++) {
@@ -158,31 +173,46 @@ public class MapPresenter implements Initializable {
 //        mapGridPane.getStyleClass().add("paneField");
         // fill cells
 //        GameHero hero;
-//        for (MapField field : map.getMapFields()) {
-//            Rectangle fieldArea = new Rectangle(FIELD_SIZE, FIELD_SIZE);
-//            fieldArea.setFill(Color.TRANSPARENT);
-//            fieldArea.setUserData(field);
-//            StackPane fieldPane = new StackPane(fieldArea);
-//            fieldPane.setStyle("border: solid 4px red");
-//
-//            hero = getHeroByMapField(field);
-//            if (hero != null) {
-//                fieldPane.getChildren().add(createHeroFieldButton(hero));
-//            }
-//
-//            mapGridPane.add(fieldPane, field.getxPos(), field.getyPos());
-//            mapGridPane.setHalignment(fieldPane, HPos.CENTER);
-//        }
+        for (MapField field : map.getMapFields()) {
+            Rectangle fieldArea = new Rectangle(FIELD_SIZE, FIELD_SIZE);
+            fieldArea.setUserData(field);
+            fieldArea.setFill(Color.TRANSPARENT);
+            fieldArea.setOnMouseEntered(e -> {
+                Rectangle r = (Rectangle) e.getSource();
+                r.setStroke(gradientMenuItem);
+            });
+            fieldArea.setOnMouseExited(e -> {
+                Rectangle r = (Rectangle) e.getSource();
+                r.setStroke(null);
+            });
+            // tooltip
+            StringBuilder sb = new StringBuilder();
+            sb.append(field.getId()).append(System.lineSeparator())
+                    .append("Move cost: ").append(field.getMoveCost());
+            Tooltip t = new Tooltip(sb.toString());
+            Tooltip.install(fieldArea, t);
+
+            StackPane fieldPane = new StackPane(fieldArea);
+            fieldPane.getChildren().add(new Text(String.valueOf(field.getId())));
+            fieldPane.setAlignment(Pos.CENTER);
+
+            mapGridPane.add(fieldPane, field.getxPos(), field.getyPos());
+            mapGridPane.setHalignment(fieldPane, HPos.CENTER);
+            mapDataModel.getGridElements().put(field, fieldArea);
+        }
     }
 
     private void addHeroesToMap() {
         gameDataModel.getCurrentCampaign().getGameHeroes().forEach((hero) -> {
             Button heroButton = createHeroFieldButton(hero);
             heroButton.setUserData(hero);
-            heroButton.setOnMouseClicked(e -> {
-                Button b = (Button) e.getSource();
-                handleHeroSelected(b);
-            });
+            if (hero.isActive()) {
+                applyHighlightEffect(heroButton);
+//            heroButton.setOnMouseClicked(e -> {
+//                Button b = (Button) e.getSource();
+//                handleHeroSelected(b);
+//            });
+            }
             heroButton.setTranslateX(hero.getCurrentLocation().getxPos() * FIELD_SIZE);
             heroButton.setTranslateY(hero.getCurrentLocation().getyPos() * FIELD_SIZE);
 
@@ -264,6 +294,7 @@ public class MapPresenter implements Initializable {
 
         // tooltip
         StringBuilder sb = new StringBuilder(monster.getName());
+        sb.append(System.lineSeparator()).append(monster.getMovementPoints()).append(" speed");
         sb.append(System.lineSeparator()).append(monster.getCurrentLife())
                 .append("/").append(monster.getTotalLife()).append(" hp");
         monsterButton.setTooltip(new Tooltip(sb.toString()));
@@ -275,7 +306,7 @@ public class MapPresenter implements Initializable {
         StringBuilder ressourcePathToken = new StringBuilder("/img/token/");
         ressourcePathToken.append(token.getType().getImageName());
         if (token.getType() == TokenType.SEARCH) {
-            ressourcePathToken.append("_").append(number+1);
+            ressourcePathToken.append("_").append(number + 1);
         }
         ressourcePathToken.append(IMAGE_SUFFIX);
         InputStream isToken = getClass().getResourceAsStream(ressourcePathToken.toString());
@@ -285,6 +316,19 @@ public class MapPresenter implements Initializable {
         view.setFitWidth(FIELD_SIZE);
 
         return view;
+    }
+
+    private void applyHighlightEffect(Node node) {
+        // apply highlight effect
+        int depth = 70;
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.RED);
+        borderGlow.setWidth(depth);
+        borderGlow.setHeight(depth);
+
+        node.setEffect(borderGlow);
     }
 
     private void handleHeroSelected(Button button) {
@@ -298,15 +342,7 @@ public class MapPresenter implements Initializable {
         selectedNode = button;
 
         // apply highlight effect
-        int depth = 70;
-        DropShadow borderGlow = new DropShadow();
-        borderGlow.setOffsetY(0f);
-        borderGlow.setOffsetX(0f);
-        borderGlow.setColor(Color.RED);
-        borderGlow.setWidth(depth);
-        borderGlow.setHeight(depth);
-
-        selectedNode.setEffect(borderGlow);
+        applyHighlightEffect(selectedNode);
         LOGGER.info("Selected Hero: " + ((GameHero) button.getUserData()).getName());
     }
 

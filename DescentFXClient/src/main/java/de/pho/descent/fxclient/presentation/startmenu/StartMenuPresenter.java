@@ -3,18 +3,18 @@ package de.pho.descent.fxclient.presentation.startmenu;
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.debug.Automate;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
-import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
+import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
 import de.pho.descent.shared.dto.WsCampaign;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,11 +24,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.controlsfx.control.Notifications;
@@ -38,6 +34,8 @@ import org.controlsfx.control.Notifications;
  * @author pho
  */
 public class StartMenuPresenter implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(StartMenuPresenter.class.getName());
 
     @FXML
     private StackPane paneContinue;
@@ -57,7 +55,8 @@ public class StartMenuPresenter implements Initializable {
     @Inject
     private GameDataModel gameDataModel;
 
-    private LinearGradient gradientMenuItem;
+    @Inject
+    private GameService gameService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,13 +74,6 @@ public class StartMenuPresenter implements Initializable {
             paneJoinCampaign.setDisable(false);
             textJoinCampaign.setFill(Color.DARKGRAY);
         }
-
-        gradientMenuItem = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
-            new Stop(0, Color.DARKVIOLET),
-            new Stop(0.1, Color.BLACK),
-            new Stop(0.9, Color.BLACK),
-            new Stop(1, Color.DARKVIOLET)
-        });
     }
 
     @FXML
@@ -93,58 +85,22 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleOnMouseEntered(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.WHITE);
-                }
-            });
-        }
+        gameService.handleOnMouseEntered(event);
     }
 
     @FXML
     public void handleOnMouseExited(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.BLACK);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.DARKGRAY);
-                }
-            });
-        }
+        gameService.handleOnMouseExited(event);
     }
 
     @FXML
     public void handleOnMousePressed(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.DARKVIOLET);
-                }
-            });
-        }
+        gameService.handleOnMousePressed(event);
     }
 
     @FXML
     public void handleOnMouseReleased(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                }
-            });
-        }
+        gameService.handleOnMouseReleased(event);
     }
 
     @FXML
@@ -179,8 +135,6 @@ public class StartMenuPresenter implements Initializable {
 
     @FXML
     public void handleSettings(MouseEvent event) {
-        gameDataModel.setCurrentCampaign(Automate.startCampaignWithTwoHeroes());
-        switchFullscreenScene(event, new OverlordGameView());
     }
 
     @FXML

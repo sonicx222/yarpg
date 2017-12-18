@@ -9,7 +9,9 @@ import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
 import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
+import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
+import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsMessage;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -36,11 +39,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 
@@ -49,6 +47,8 @@ import javax.inject.Inject;
  * @author pho
  */
 public class CampaignSelectionPresenter implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(CampaignSelectionPresenter.class.getName());
 
     @FXML
     private StackPane paneContinue;
@@ -87,24 +87,18 @@ public class CampaignSelectionPresenter implements Initializable {
     private GameDataModel gameDataModel;
 
     @Inject
+    private GameService gameService;
+
+    @Inject
     private Credentials credentials;
 
-    private LinearGradient gradientMenuItem;
-
-    private ResourceBundle resources = null;
+    @Inject
+    private MessageService messageService;
 
     private WsCampaign selectedCampaign;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.resources = resources;
-
-        gradientMenuItem = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
-            new Stop(0, Color.DARKVIOLET),
-            new Stop(0.1, Color.BLACK),
-            new Stop(0.9, Color.BLACK),
-            new Stop(1, Color.DARKVIOLET)
-        });
 
         // disable continue button, until selection made
         paneContinue.setDisable(true);
@@ -133,7 +127,7 @@ public class CampaignSelectionPresenter implements Initializable {
 
         // selection action
         campaignsTableView.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue observale, Object oldValue, Object newValue) -> {
+                .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
                     selectedCampaign = (WsCampaign) campaignsTableView.getSelectionModel().getSelectedItem();
 
                     if (selectedCampaign != null) {
@@ -145,6 +139,10 @@ public class CampaignSelectionPresenter implements Initializable {
                 );
 
         // messages part
+        setupGeneralMessages();
+    }
+
+    private void setupGeneralMessages() {
         chatListView.setItems(gameDataModel.getGeneralMessages());
         chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
             private Text text;
@@ -155,6 +153,7 @@ public class CampaignSelectionPresenter implements Initializable {
 
                 if (empty || item == null || item.getMessageText() == null) {
                     setText(null);
+                    setGraphic(null);
                 } else {
                     text = new Text(item.getUsername() + ": " + item.getMessageText());
                     text.setWrappingWidth(chatListView.getPrefWidth());
@@ -168,63 +167,27 @@ public class CampaignSelectionPresenter implements Initializable {
                 handleSendMessage(event);
             }
         });
-        updateGeneralMessages();
+        messageService.updateGeneralMessages();
     }
 
     @FXML
     public void handleOnMouseEntered(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.WHITE);
-                }
-            });
-        }
+        gameService.handleOnMouseEntered(event);
     }
 
     @FXML
     public void handleOnMouseExited(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.BLACK);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.DARKGRAY);
-                }
-            });
-        }
+        gameService.handleOnMouseExited(event);
     }
 
     @FXML
     public void handleOnMousePressed(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.DARKVIOLET);
-                }
-            });
-        }
+        gameService.handleOnMousePressed(event);
     }
 
     @FXML
     public void handleOnMouseReleased(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                }
-            });
-        }
+        gameService.handleOnMouseReleased(event);
     }
 
     @FXML
@@ -235,7 +198,7 @@ public class CampaignSelectionPresenter implements Initializable {
     @FXML
     public void handleRefresh(MouseEvent event) {
         updatePlayableCampaigns();
-        updateGeneralMessages();
+        messageService.updateGeneralMessages();
     }
 
     @FXML
@@ -268,25 +231,9 @@ public class CampaignSelectionPresenter implements Initializable {
                 showError(ex);
             }
             if (message != null) {
-                updateGeneralMessages();
+                messageService.updateGeneralMessages();
                 messageTextField.clear();
             }
-        }
-    }
-
-    private void updateGeneralMessages() {
-        gameDataModel.getGeneralMessages().clear();
-
-        List<WsMessage> generalMessages = null;
-        try {
-            generalMessages = MessageClient.getGeneralMessages(credentials.getUsername(), credentials.getPassword());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-
-        if (generalMessages != null && !generalMessages.isEmpty()) {
-            gameDataModel.getGeneralMessages().addAll(generalMessages);
-            chatListView.scrollTo(gameDataModel.getGeneralMessages().size() - 1);
         }
     }
 

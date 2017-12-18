@@ -2,9 +2,13 @@ package de.pho.descent.fxclient.presentation.loginscreen;
 
 import static de.pho.descent.fxclient.MainApp.*;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.debug.Automate;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
+import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
+import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.Player;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,9 +21,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
@@ -70,16 +71,13 @@ public class LoginscreenPresenter implements Initializable {
     @Inject
     private Credentials credentials;
 
+    @Inject
+    private GameDataModel gameDataModel;
+
     private final ValidationSupport validationSupport = new ValidationSupport();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
-            new Stop(0, Color.DARKVIOLET),
-            new Stop(0.1, Color.BLACK),
-            new Stop(0.9, Color.BLACK),
-            new Stop(1, Color.DARKVIOLET)
-        });
 
         validationSupport.setValidationDecorator(new StyleClassValidationDecoration());
 
@@ -92,15 +90,15 @@ public class LoginscreenPresenter implements Initializable {
 
         // on Mouse entered
         paneRegister.setOnMouseEntered(event -> {
-            itemRegister.setFill(gradient);
+            itemRegister.setFill(gameDataModel.getButtonGradient());
             textRegister.setFill(Color.WHITE);
         });
         paneLogin.setOnMouseEntered(event -> {
-            itemLogin.setFill(gradient);
+            itemLogin.setFill(gameDataModel.getButtonGradient());
             textLogin.setFill(Color.WHITE);
         });
         paneExit.setOnMouseEntered(event -> {
-            itemExit.setFill(gradient);
+            itemExit.setFill(gameDataModel.getButtonGradient());
             textExit.setFill(Color.WHITE);
         });
 
@@ -131,15 +129,15 @@ public class LoginscreenPresenter implements Initializable {
 
         // on Mouse released
         paneRegister.setOnMouseReleased(event -> {
-            itemRegister.setFill(gradient);
+            itemRegister.setFill(gameDataModel.getButtonGradient());
         });
         paneLogin.setOnMouseReleased(event -> {
-            itemLogin.setFill(gradient);
+            itemLogin.setFill(gameDataModel.getButtonGradient());
         });
         paneExit.setOnMouseReleased(event -> {
-            itemExit.setFill(gradient);
+            itemExit.setFill(gameDataModel.getButtonGradient());
         });
-        
+
         // set font
 //        textLogin.setFont(gameFont);
 //        textRegister.setFont(gameFont);
@@ -176,6 +174,12 @@ public class LoginscreenPresenter implements Initializable {
     }
 
     private void handleLogin(Event event) {
+        if (loginUserText.getText().equals("debug")) {
+            Object[] result = Automate.startCampaignWithTwoHeroes();
+            gameDataModel.setCurrentCampaign((WsCampaign) result[1]);
+            credentials.setPlayer((Player) result[0]);
+            switchFullscreenScene(event, new OverlordGameView());
+        }
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {
 

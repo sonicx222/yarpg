@@ -1,41 +1,31 @@
 package de.pho.descent.fxclient.presentation.game.hero;
 
-import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.ws.MessageClient;
-import de.pho.descent.fxclient.business.ws.QuestClient;
-import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
+import de.pho.descent.fxclient.presentation.game.map.MapDataModel;
+import de.pho.descent.fxclient.presentation.game.map.MapService;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
-import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
-import de.pho.descent.shared.dto.WsMessage;
-import de.pho.descent.shared.dto.WsQuestEncounter;
+import de.pho.descent.fxclient.presentation.general.GameService;
+import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.map.MapField;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Logger;
-import javafx.event.Event;
+import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javax.inject.Inject;
 
 /**
@@ -46,15 +36,13 @@ public class HeroGamePresenter implements Initializable {
 
     private static final Logger LOGGER = Logger.getLogger(HeroGamePresenter.class.getName());
 
-    @FXML
-    private ScrollPane mapScrollPane;
-
+    /**
+     * Hero Data & Sheet
+     */
     @FXML
     private ImageView heroSheetView;
-
     @FXML
     private ImageView heroImageView;
-
     @FXML
     private Label labelName;
     @FXML
@@ -76,82 +64,63 @@ public class HeroGamePresenter implements Initializable {
     @FXML
     private Label labelHeroicFeat;
 
+    /**
+     * Hero Action Controls
+     */
     @FXML
-    private ListView<WsMessage> chatListView;
+    private Button moveButton;
 
     @FXML
-    private TextField messageTextField;
+    private Button attackButton;
 
+    /**
+     * Game Data
+     */
     @Inject
     private Credentials credentials;
-
     @Inject
     private GameDataModel gameDataModel;
+    @Inject
+    private GameService gameService;
+    @Inject
+    private MapDataModel mapDataModel;
+    @Inject
+    private MapService mapService;
+    @Inject
+    private MessageService messageService;
+
+    private String buttonMoveText;
+    private String buttonAttackText;
+    private String buttonCancelText;
 
     private final String IMAGE_SUFFIX = ".png";
-
-    private LinearGradient gradientMenuItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        gradientMenuItem = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
-            new Stop(0, Color.DARKVIOLET),
-            new Stop(0.1, Color.BLACK),
-            new Stop(0.9, Color.BLACK),
-            new Stop(1, Color.DARKVIOLET)
-        });
+        buttonMoveText = resources.getString("button.hero.game.move.toggle");
+        buttonAttackText = resources.getString("button.hero.game.attack.toggle");
+        buttonCancelText = resources.getString("button.hero.game.cancel.toggle");
 
         // load active quest encounter of current campaign
         if (gameDataModel.getCurrentQuestEncounter() == null) {
-            loadQuestEncounter();
+            gameService.loadQuestEncounter();
         }
 
         setupHeroSheet();
-        setupMessages();
+        checkPlayersTurn();
+
     }
 
-    private void loadQuestEncounter() {
-        Objects.requireNonNull(gameDataModel.getCurrentCampaign());
-        WsQuestEncounter wsQuestEncounter = null;
-        try {
-            wsQuestEncounter = QuestClient.getQuestEncounter(
-                    credentials.getUsername(), credentials.getPassword(),
-                    gameDataModel.getCurrentCampaign().getQuestEncounterId());
-        } catch (ServerException ex) {
-            showError(ex);
+    private void checkPlayersTurn() {
+        // disable controls when it's not players turn
+        if (gameDataModel.getCurrentQuestEncounter().getActiveHero().getPlayedBy().getUsername().equals(credentials.getUsername())) {
+            moveButton.setDisable(false);
+            attackButton.setDisable(false);
+        } else {
+            moveButton.setDisable(true);
+            attackButton.setDisable(true);
         }
-        if (wsQuestEncounter != null) {
-            gameDataModel.setCurrentQuestEncounter(wsQuestEncounter);
-        }
-    }
-
-    private void setupMessages() {
-        // messages
-        chatListView.setItems(gameDataModel.getCampaignMessages());
-        chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
-            private Text text;
-
-            @Override
-            protected void updateItem(WsMessage item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null || item.getMessageText() == null) {
-                    setText(null);
-                } else {
-                    text = new Text(item.getUsername() + ": " + item.getMessageText());
-                    text.setWrappingWidth(chatListView.getPrefWidth());
-                    setGraphic(text);
-                }
-            }
-        });
-        // ENTER key on message text area
-        messageTextField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                handleSendMessage(event);
-            }
-        });
-        updateCampaignMessages();
     }
 
     private void setupHeroSheet() {
@@ -192,107 +161,108 @@ public class HeroGamePresenter implements Initializable {
     }
 
     @FXML
-    public void handleOnMouseEntered(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.WHITE);
-                }
-            });
-        }
-    }
-
-    @FXML
-    public void handleOnMouseExited(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.BLACK);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.DARKGREY);
-                }
-            });
-        }
-    }
-
-    @FXML
-    public void handleOnMousePressed(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.DARKVIOLET);
-                }
-            });
-        }
-    }
-
-    @FXML
-    public void handleOnMouseReleased(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                }
-            });
-        }
-    }
-
-    @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("HeroGamePresenter: handleRefresh()");
-        updateCampaignMessages();
+        // TODO: load updated campaign
+        // TODO: load updated quest
+        checkPlayersTurn();
+        messageService.updateCampaignMessages();
     }
 
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("HeroGamePresenter: handleNavigationBack()");
-        switchFullscreenScene(event, new StartMenuView());
+        switchFullscreenScene(event, new CampaignSelectionView());
     }
 
     @FXML
-    public void handleSendMessage(MouseEvent event) {
-        // cast Event to prevent recursive stack overflow
-        handleSendMessage((Event) event);
-    }
-
-    private void handleSendMessage(Event event) {
-        if ((messageTextField.getText() != null) && (!messageTextField.getText().isEmpty())) {
-            WsMessage message = null;
-            try {
-                message = MessageClient.postMessage(credentials.getPlayer(), gameDataModel.getCurrentCampaign(), messageTextField.getText());
-            } catch (ServerException ex) {
-                showError(ex);
-            }
-            if (message != null) {
-                updateCampaignMessages();
-                messageTextField.clear();
-            }
+    public void handleToggleMove(MouseEvent event) {
+        if (moveButton.getText().equalsIgnoreCase(buttonMoveText)) {
+            handleMove(event);
+        } else {
+            handleCancel(event);
         }
     }
 
-    private void updateCampaignMessages() {
-        gameDataModel.getCampaignMessages().clear();
+    private void handleMove(MouseEvent event) {
+        LOGGER.info("HeroGamePresenter: handleMove()");
+        disableOtherButtons(event);
+        moveButton.setText(buttonCancelText);
+        calcAndDisplayAllowedPositions();
+    }
 
-        List<WsMessage> campaignMessages = null;
-        try {
-            campaignMessages = MessageClient.getCampaignMessages(credentials.getUsername(), credentials.getPassword(), gameDataModel.getCurrentCampaign());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
+    private void handleCancel(MouseEvent event) {
+        LOGGER.info("HeroGamePresenter: handleCancel()");
+        enableOtherButtons(event);
+        resetFields();
+        moveButton.setText(buttonMoveText);
+    }
 
-        if (campaignMessages != null && !campaignMessages.isEmpty()) {
-            gameDataModel.getCampaignMessages().addAll(campaignMessages);
-            chatListView.scrollTo(gameDataModel.getCampaignMessages().size() - 1);
+    private void resetFields() {
+        mapDataModel.getMarkedGridPaneElements().stream().forEach(item -> {
+            item.setFill(Color.TRANSPARENT);
+        });
+        mapDataModel.getMarkedGridPaneElements().clear();
+    }
+
+    private void enableOtherButtons(MouseEvent event) {
+        Button b = (Button) event.getSource();
+
+        if (this.moveButton.equals(b)) {
+            attackButton.setDisable(false);
+        } else if (this.attackButton.equals(b)) {
+            moveButton.setDisable(false);
         }
+    }
+
+    private void disableOtherButtons(MouseEvent event) {
+        Button b = (Button) event.getSource();
+
+        if (this.moveButton.equals(b)) {
+            attackButton.setDisable(true);
+        } else if (this.attackButton.equals(b)) {
+            moveButton.setDisable(true);
+        }
+    }
+
+    private void calcAndDisplayAllowedPositions() {
+        GameHero activeHero = gameDataModel.getCurrentQuestEncounter().getActiveHero();
+        List<MapField> heroFields = gameDataModel.getCurrentCampaign().getGameHeroes().stream()
+                .map(GameHero::getCurrentLocation).collect(Collectors.toList());
+        Set<MapField> fieldsInRange = mapService.getFieldsInRange(
+                activeHero.getCurrentLocation(),
+                activeHero.getMovementPoints(), gameDataModel.getCurrentQuestMap(), heroFields);
+
+        // highlight grid fields
+        mapDataModel.getMarkedGridPaneElements().clear();
+        mapDataModel.getGridElements().keySet().stream().forEach(mapField -> {
+            if (fieldsInRange.contains(mapField)) {
+                Rectangle fieldArea = mapDataModel.getGridElements().get(mapField);
+                fieldArea.setFill(Color.AQUA);
+                fieldArea.setOpacity(0.4d);
+                mapDataModel.getMarkedGridPaneElements().add(fieldArea);
+            }
+        });
+
+    }
+
+    @FXML
+    public void handleOnMouseEntered(MouseEvent event) {
+        gameService.handleOnMouseEntered(event);
+    }
+
+    @FXML
+    public void handleOnMouseExited(MouseEvent event) {
+        gameService.handleOnMouseExited(event);
+    }
+
+    @FXML
+    public void handleOnMousePressed(MouseEvent event) {
+        gameService.handleOnMousePressed(event);
+    }
+
+    @FXML
+    public void handleOnMouseReleased(MouseEvent event) {
+        gameService.handleOnMouseReleased(event);
     }
 }

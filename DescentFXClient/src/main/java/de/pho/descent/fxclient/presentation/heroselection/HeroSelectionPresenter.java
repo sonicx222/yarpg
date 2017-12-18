@@ -5,14 +5,14 @@ import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
-import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
+import de.pho.descent.fxclient.presentation.general.GameService;
+import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
-import de.pho.descent.shared.dto.WsMessage;
 import de.pho.descent.shared.model.hero.HeroTemplate;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,27 +24,17 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -127,12 +117,6 @@ public class HeroSelectionPresenter implements Initializable {
     @FXML
     private VBox vboxStart;
 
-    @FXML
-    private ListView<WsMessage> chatListView;
-
-    @FXML
-    private TextField messageTextField;
-
     @Inject
     private Credentials credentials;
 
@@ -140,9 +124,13 @@ public class HeroSelectionPresenter implements Initializable {
     private GameDataModel gameDataModel;
 
     @Inject
-    private HeroSelectionModel heroSelectionModel;
+    private GameService gameService;
 
-    private LinearGradient gradientMenuItem;
+    @Inject
+    private MessageService messageService;
+
+    @Inject
+    private HeroSelectionModel heroSelectionModel;
 
     private final Map<HeroTemplate, Image[]> heroImages = new HashMap<>();
     private final String IMAGE_SUFFIX = ".png";
@@ -152,12 +140,6 @@ public class HeroSelectionPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        gradientMenuItem = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop[]{
-            new Stop(0, Color.DARKVIOLET),
-            new Stop(0.1, Color.BLACK),
-            new Stop(0.9, Color.BLACK),
-            new Stop(1, Color.DARKVIOLET)
-        });
 
         // setup buttons
         if (Objects.equals(credentials.getPlayer().getUsername(),
@@ -230,98 +212,36 @@ public class HeroSelectionPresenter implements Initializable {
                     startItem2View.setImage(heroImages.get(template)[3]);
                 }
                 );
+
         // preselect first element
         heroesListView.getSelectionModel().select(0);
-
-        // messages
-        chatListView.setItems(gameDataModel.getCampaignMessages());
-        chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
-            private Text text;
-
-            @Override
-            protected void updateItem(WsMessage item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null || item.getMessageText() == null) {
-                    setText(null);
-                } else {
-                    text = new Text(item.getUsername() + ": " + item.getMessageText());
-                    text.setWrappingWidth(chatListView.getPrefWidth());
-                    setGraphic(text);
-                }
-            }
-        });
-        // ENTER key on message text area
-        messageTextField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                handleSendMessage(event);
-            }
-        });
-        updateCampaignMessages();
-
     }
 
     @FXML
     public void handleOnMouseEntered(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.WHITE);
-                }
-            });
-        }
+        gameService.handleOnMouseEntered(event);
     }
 
     @FXML
     public void handleOnMouseExited(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.BLACK);
-                } else if (node instanceof Text) {
-                    ((Text) node).setFill(Color.DARKGREY);
-                }
-            });
-        }
+        gameService.handleOnMouseExited(event);
     }
 
     @FXML
     public void handleOnMousePressed(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(Color.DARKVIOLET);
-                }
-            });
-        }
+        gameService.handleOnMousePressed(event);
     }
 
     @FXML
     public void handleOnMouseReleased(MouseEvent event) {
-        if (event.getSource() instanceof StackPane) {
-            StackPane menuItem = (StackPane) event.getSource();
-
-            menuItem.getChildren().forEach((node) -> {
-                if (node instanceof Rectangle) {
-                    ((Rectangle) node).setFill(gradientMenuItem);
-                }
-            });
-        }
+        gameService.handleOnMouseReleased(event);
     }
 
     @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("HeroSelectionPresenter: handleRefresh()");
         updateHeroSelections();
-        updateCampaignMessages();
+        messageService.updateCampaignMessages();
     }
 
     @FXML
@@ -344,43 +264,6 @@ public class HeroSelectionPresenter implements Initializable {
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("HeroSelectionPresenter: handleNavigationBack()");
         switchFullscreenScene(event, new StartMenuView());
-    }
-
-    @FXML
-    public void handleSendMessage(MouseEvent event) {
-        // cast Event to prevent recursive stack overflow
-        handleSendMessage((Event) event);
-    }
-
-    private void handleSendMessage(Event event) {
-        if ((messageTextField.getText() != null) && (!messageTextField.getText().isEmpty())) {
-            WsMessage message = null;
-            try {
-                message = MessageClient.postMessage(credentials.getPlayer(), gameDataModel.getCurrentCampaign(), messageTextField.getText());
-            } catch (ServerException ex) {
-                showError(ex);
-            }
-            if (message != null) {
-                updateCampaignMessages();
-                messageTextField.clear();
-            }
-        }
-    }
-
-    private void updateCampaignMessages() {
-        gameDataModel.getCampaignMessages().clear();
-
-        List<WsMessage> campaignMessages = null;
-        try {
-            campaignMessages = MessageClient.getCampaignMessages(credentials.getUsername(), credentials.getPassword(), gameDataModel.getCurrentCampaign());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-
-        if (campaignMessages != null && !campaignMessages.isEmpty()) {
-            gameDataModel.getCampaignMessages().addAll(campaignMessages);
-            chatListView.scrollTo(gameDataModel.getCampaignMessages().size() - 1);
-        }
     }
 
     @FXML
@@ -408,13 +291,7 @@ public class HeroSelectionPresenter implements Initializable {
         }
 
         // update selections and check if other user already selected same hero
-        updateHeroSelections();
-//        for (WsHeroSelection hs : heroSelectionModel.getHeroSelections()) {
-//            if (hs.getSelectedHero() == selection.getSelectedHero()
-//                    && !hs.getUsername().equals(selection.getUsername())) {
-//                showError("");
-//            }
-//        }
+//        updateHeroSelections();
 
         WsHeroSelection updatedSelection = null;
         try {
