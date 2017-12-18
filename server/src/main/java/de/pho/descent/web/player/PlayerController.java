@@ -7,8 +7,8 @@ import de.pho.descent.web.exception.NotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.Path;
 
 /**
@@ -21,7 +21,7 @@ public class PlayerController {
 
     private static final Logger LOG = Logger.getLogger(PlayerController.class.getName());
 
-    @Inject
+    @EJB
     private transient PlayerService playerService;
 
     public Player createPlayer(String username, String password) throws PlayerAlreadyExistsException {

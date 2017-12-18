@@ -18,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
@@ -57,12 +56,12 @@ public class GameMap implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "map_id")
-    @OrderBy("xPos, yPos")
     private List<MapField> mapFields;
 
     @NotNull
     private String imagePath;
 
+    @XmlTransient
     @Transient
     private Map<Integer, Map<Integer, MapField>> mapLayout;
 
@@ -73,6 +72,7 @@ public class GameMap implements Serializable {
                 .orElse(null);
     }
 
+    @XmlTransient
     public Map<Integer, Map<Integer, MapField>> getMapLayout() {
         if (this.mapLayout == null) {
             this.mapLayout = new HashMap<>();

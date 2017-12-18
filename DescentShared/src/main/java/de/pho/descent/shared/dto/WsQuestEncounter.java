@@ -1,6 +1,7 @@
 package de.pho.descent.shared.dto;
 
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -24,9 +25,11 @@ public class WsQuestEncounter {
 
     private boolean isActive;
 
-    private long activeHeroId;
+    private GameHero activeHero;
 
     private PlaySide winner;
+
+    private int round;
 
     private long mapId;
 
@@ -69,12 +72,12 @@ public class WsQuestEncounter {
         this.isActive = isActive;
     }
 
-    public long getActiveHeroId() {
-        return activeHeroId;
+    public GameHero getActiveHero() {
+        return activeHero;
     }
 
-    public void setActiveHeroId(long activeHeroId) {
-        this.activeHeroId = activeHeroId;
+    public void setActiveHero(GameHero activeHero) {
+        this.activeHero = activeHero;
     }
 
     public PlaySide getWinner() {
@@ -83,6 +86,14 @@ public class WsQuestEncounter {
 
     public void setWinner(PlaySide winner) {
         this.winner = winner;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 
     public long getMapId() {
@@ -120,12 +131,13 @@ public class WsQuestEncounter {
         WsQuestEncounter wsEncounter = new WsQuestEncounter();
 
         wsEncounter.setId(qe.getId());
-        wsEncounter.setActiveHeroId(qe.getActiveHero().getId());
+        wsEncounter.setActiveHero(qe.getActiveHero());
         wsEncounter.setIsActive(qe.isIsActive());
         wsEncounter.setMapId(qe.getMap().getId());
         wsEncounter.setPart(qe.getPart());
         wsEncounter.setQuest(qe.getQuest());
         wsEncounter.setWinner(qe.getWinner());
+        wsEncounter.setRound(qe.getRound());
         wsEncounter.setGameMonsters(new ArrayList<>(qe.getMonsters()));
         wsEncounter.setTokens(new ArrayList<>(qe.getToken()));
 

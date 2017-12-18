@@ -7,6 +7,7 @@ import de.pho.descent.shared.model.quest.QuestPart;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.exception.NotFoundException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -17,7 +18,7 @@ import javax.inject.Inject;
 @Stateless
 public class MapController {
 
-    @Inject
+    @EJB
     private transient MapService mapService;
 
     public List<MapField> getSpawnFieldsByMap(long mapId) {

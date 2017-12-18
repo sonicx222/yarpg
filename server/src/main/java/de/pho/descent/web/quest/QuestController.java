@@ -1,14 +1,17 @@
 package de.pho.descent.web.quest;
 
 import de.pho.descent.shared.model.campaign.Campaign;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
+import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.map.MapController;
 import de.pho.descent.web.quest.encounter.FirstBloodQuestSetup;
-import de.pho.descent.web.service.PersistenceService;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 /**
  *
@@ -17,34 +20,41 @@ import javax.inject.Inject;
 @Stateless
 public class QuestController {
 
-    @Inject
+    @EJB
     private QuestService questService;
 
-    @Inject
-    private PersistenceService persistenceService;
-
-    @Inject
+    @EJB
     private MapController mapController;
 
     public QuestEncounter getQuestEncounterById(long id) {
         return questService.loadEncounterById(id);
     }
 
-    public QuestEncounter startNextQuestEncounter(Campaign campaign) {
+    public QuestEncounter startNextQuestEncounter(Campaign campaign) throws NotFoundException {
         return createQuestEncounter(campaign.getTemplateNextQuest(), campaign);
     }
 
-    public QuestEncounter createQuestEncounter(QuestTemplate questTemplate, Campaign campaign) {
+    public QuestEncounter createQuestEncounter(QuestTemplate questTemplate, Campaign campaign) throws NotFoundException {
         QuestEncounter encounter = new QuestEncounter();
 
         GameMap gameMap = mapController.getMapByQuestTemplate(questTemplate);
         encounter.setIsActive(true);
+        encounter.setRound(1);
         encounter.setMap(gameMap);
         encounter.setQuest(questTemplate.getQuest());
         encounter.setPart(questTemplate.getQuestPart());
 
-        // TODO
-        encounter.setActiveHero(campaign.getHeroes().stream().findFirst().orElse(null));
+        // set first active hero based on highest initiative roll
+        if (!campaign.getHeroes().isEmpty()) {
+            SortedMap<Integer, GameHero> initiativeOrder = new TreeMap<>();
+            campaign.getHeroes().stream().forEach(hero -> {
+                initiativeOrder.put(hero.rollInitiative(), hero);
+            });
+            GameHero activeHero = initiativeOrder.get(initiativeOrder.lastKey());
+            activeHero.setActive(true);
+            encounter.setActiveHero(activeHero);
+        }
+
         switch (questTemplate) {
             case FIRST_BLOOD_INTRO:
                 FirstBloodQuestSetup.setup(encounter, campaign);
@@ -56,8 +66,4 @@ public class QuestController {
         return questService.saveEncounter(encounter);
     }
 
-//    public QuestEncounter loadQuestEncounter(Quest quest, QuestPart part) {
-//        QuestEncounter encounter = questService.getEncounterByQuestAndPart(quest, part);
-//        return encounter;
-//    }
 }

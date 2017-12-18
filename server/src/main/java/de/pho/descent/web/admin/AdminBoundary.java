@@ -3,6 +3,7 @@ package de.pho.descent.web.admin;
 import de.pho.descent.shared.auth.ParamValue;
 import de.pho.descent.shared.dto.WsEntityRequest;
 import de.pho.descent.web.service.PersistenceService;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -23,7 +24,7 @@ import javax.ws.rs.core.Response;
 @Produces({MediaType.APPLICATION_JSON})
 public class AdminBoundary {
 
-    @Inject
+    @EJB
     private PersistenceService persistenceService;
 
     @POST

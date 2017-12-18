@@ -10,8 +10,8 @@ import de.pho.descent.web.player.PlayerService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 /**
  *
@@ -20,13 +20,13 @@ import javax.inject.Inject;
 @Stateless
 public class MessageController {
 
-    @Inject
+    @EJB
     private MessageService messageService;
 
-    @Inject
+    @EJB
     private PlayerService playerService;
 
-    @Inject
+    @EJB
     private CampaignService campaignService;
 
     public List<WsMessage> getGeneralMessages() {

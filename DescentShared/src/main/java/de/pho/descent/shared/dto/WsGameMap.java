@@ -3,6 +3,7 @@ package de.pho.descent.shared.dto;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.map.MapField;
 import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Data Transfer Object between Rest-WS and Persistence Layer, mainly for Base64
@@ -34,10 +35,14 @@ public class WsGameMap {
         return wsMap;
     }
 
-    public MapField[] getMapLayout() {
-        return null;
+    @XmlTransient
+    public MapField getField(int x, int y) {
+        return mapFields.stream()
+                .filter(field -> (field.getxPos() == x && field.getyPos() == y))
+                .findAny()
+                .orElse(null);
     }
-    
+
     public long getId() {
         return id;
     }

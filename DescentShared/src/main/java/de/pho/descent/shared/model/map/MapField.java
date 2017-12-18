@@ -14,9 +14,6 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = MapField.FIND_SPAWNS_BY_MAPID, query = "select mf from MapField as mf "
-            + "where mf.heroSpawn = true and mf.map.id = :" + MapField.MAPID_PARAM)
-    ,
     @NamedQuery(name = MapField.FIND_SPAWNS_BY_GROUPID, query = "select mf from MapField as mf "
             + "where mf.heroSpawn = true and mf.tileGroup.id = :" + MapField.GROUPID_PARAM)
 })
@@ -35,9 +32,6 @@ public class MapField implements Serializable {
     @ManyToOne
     private MapTileGroup tileGroup;
 
-    @ManyToOne
-    private GameMap map;
-
     private int xPos;
 
     private int yPos;
@@ -51,12 +45,10 @@ public class MapField implements Serializable {
     private boolean monsterSpawn;
 
     public MapField() {
-
     }
 
-    public MapField(MapTileGroup tileGroup, GameMap map, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn) {
+    public MapField(MapTileGroup tileGroup, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn) {
         this.tileGroup = tileGroup;
-        this.map = map;
         this.xPos = xPos;
         this.yPos = yPos;
         this.moveCost = moveCost;
@@ -79,14 +71,6 @@ public class MapField implements Serializable {
 
     public void setTileGroup(MapTileGroup tileGroup) {
         this.tileGroup = tileGroup;
-    }
-
-    public GameMap getMap() {
-        return map;
-    }
-
-    public void setMap(GameMap map) {
-        this.map = map;
     }
 
     public int getxPos() {
@@ -139,15 +123,15 @@ public class MapField implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.tileGroup);
-        hash = 17 * hash + Objects.hashCode(this.map);
-        hash = 17 * hash + this.xPos;
-        hash = 17 * hash + this.yPos;
-        hash = 17 * hash + this.moveCost;
-        hash = 17 * hash + (this.passable ? 1 : 0);
-        hash = 17 * hash + (this.heroSpawn ? 1 : 0);
-        hash = 17 * hash + (this.monsterSpawn ? 1 : 0);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.tileGroup);
+        hash = 79 * hash + this.xPos;
+        hash = 79 * hash + this.yPos;
+        hash = 79 * hash + this.moveCost;
+        hash = 79 * hash + (this.passable ? 1 : 0);
+        hash = 79 * hash + (this.heroSpawn ? 1 : 0);
+        hash = 79 * hash + (this.monsterSpawn ? 1 : 0);
         return hash;
     }
 
@@ -181,13 +165,12 @@ public class MapField implements Serializable {
         if (this.monsterSpawn != other.monsterSpawn) {
             return false;
         }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (!Objects.equals(this.tileGroup, other.tileGroup)) {
             return false;
         }
-        if (!Objects.equals(this.map, other.map)) {
-            return false;
-        }
-
         return true;
     }
 

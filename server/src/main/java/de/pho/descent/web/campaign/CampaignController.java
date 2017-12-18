@@ -7,13 +7,11 @@ import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
-import de.pho.descent.shared.model.hero.HeroTemplate;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.player.PlayerController;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
-import de.pho.descent.web.map.MapController;
 import de.pho.descent.web.quest.QuestController;
 import de.pho.descent.web.service.PersistenceService;
 import java.util.ArrayList;
@@ -21,8 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 /**
  *
@@ -31,19 +29,16 @@ import javax.inject.Inject;
 @Stateless
 public class CampaignController {
 
-    @Inject
+    @EJB
     private PlayerController playerController;
 
-    @Inject
+    @EJB
     private QuestController questController;
 
-    @Inject
-    private MapController mapController;
-
-    @Inject
+    @EJB
     private transient CampaignService campaignService;
 
-    @Inject
+    @EJB
     private transient PersistenceService persistenceService;
 
     public List<WsCampaign> getPlayableCampaigns(Player player) throws UserValidationException {
@@ -151,6 +146,7 @@ public class CampaignController {
         for (HeroSelection hs : heroSelections) {
             GameHero hero = new GameHero(hs.getSelectedHero());
             hero.setPlayedBy(hs.getPlayer());
+            hero.setTurnsLeft(2);
             heroes.add(hero);
         }
         campaignToBeStarted.getHeroes().clear();

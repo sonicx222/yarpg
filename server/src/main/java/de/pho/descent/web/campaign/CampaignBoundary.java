@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -39,10 +39,10 @@ public class CampaignBoundary {
 
     private static final Logger LOG = Logger.getLogger(CampaignBoundary.class.getName());
 
-    @Inject
+    @EJB
     private CampaignController campaignController;
 
-    @Inject
+    @EJB
     private PlayerController playerController;
 
     @GET

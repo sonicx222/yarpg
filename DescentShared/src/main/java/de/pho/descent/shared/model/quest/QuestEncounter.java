@@ -58,6 +58,8 @@ public class QuestEncounter implements Serializable {
 
     @OneToOne
     private GameHero activeHero;
+    
+    private int round;
 
     @Enumerated(EnumType.STRING)
     private PlaySide winner;
@@ -111,6 +113,14 @@ public class QuestEncounter implements Serializable {
 
     public void setActiveHero(GameHero activeHero) {
         this.activeHero = activeHero;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 
     public PlaySide getWinner() {

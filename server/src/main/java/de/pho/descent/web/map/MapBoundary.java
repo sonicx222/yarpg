@@ -6,6 +6,7 @@ import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.shared.model.map.GameMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -24,7 +25,7 @@ public class MapBoundary {
 
     private static final Logger LOGGER = Logger.getLogger(MapBoundary.class.getName());
 
-    @Inject
+    @EJB
     private MapController mapController;
 
     @GET

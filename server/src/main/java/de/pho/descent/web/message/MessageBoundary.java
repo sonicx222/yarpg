@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -34,7 +35,7 @@ public class MessageBoundary {
 
     private static final Logger LOG = Logger.getLogger(MessageBoundary.class.getName());
 
-    @Inject
+    @EJB
     private MessageController messageController;
 
     @GET

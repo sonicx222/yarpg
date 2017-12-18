@@ -32,7 +32,7 @@ public class GameUnit extends GameEntity implements Serializable {
 
     private int movementSpent;
 
-    private boolean isActive;
+    private boolean active;
 
     public Player getPlayedBy() {
         return playedBy;
@@ -82,12 +82,12 @@ public class GameUnit extends GameEntity implements Serializable {
         this.movementSpent = movementSpent;
     }
 
-    public boolean isIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
     
     

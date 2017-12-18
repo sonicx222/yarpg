@@ -2,6 +2,7 @@ package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.GameUnit;
 import java.io.Serializable;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,6 +47,11 @@ public class GameHero extends GameUnit implements Serializable {
         this.knowledge = template.getKnowledge();
         this.willpower = template.getWillpower();
         this.awareness = template.getAwareness();
+        this.initiative = template.getInitiative();
+    }
+
+    public int rollInitiative() {
+        return ThreadLocalRandom.current().nextInt(0, 20) + initiative;
     }
 
     public HeroTemplate getHeroTemplate() {
