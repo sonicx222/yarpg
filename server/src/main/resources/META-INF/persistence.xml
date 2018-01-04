@@ -35,9 +35,9 @@
               <property name="javax.persistence.jdbc.password" value="descent"/>
       </properties>
     </persistence-unit>-->
-    <persistence-unit name="DescendDS" transaction-type="JTA">
+    <persistence-unit name="PostgreSQLDS" transaction-type="JTA">
         <description>Postgresql</description>
-        <jta-data-source>java:jboss/datasources/DescendDS</jta-data-source>
+        <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>de.pho.descent.shared.model.campaign.Campaign</class>
         <class>de.pho.descent.shared.model.hero.GameHero</class>
