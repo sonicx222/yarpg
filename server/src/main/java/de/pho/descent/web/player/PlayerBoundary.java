@@ -6,10 +6,11 @@ import de.pho.descent.shared.model.Player;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import java.net.URI;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -35,7 +36,7 @@ public class PlayerBoundary {
 
     private static final Logger LOG = Logger.getLogger(PlayerBoundary.class.getName());
 
-    @EJB
+    @Inject
     private PlayerController playerController;
 
     @POST

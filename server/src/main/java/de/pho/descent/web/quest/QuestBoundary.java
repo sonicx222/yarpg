@@ -5,8 +5,8 @@ import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -28,7 +28,7 @@ public class QuestBoundary {
 
     private static final Logger LOG = Logger.getLogger(QuestBoundary.class.getName());
 
-    @EJB
+    @Inject
     private QuestController questController;
 
     @GET

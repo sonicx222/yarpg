@@ -49,9 +49,9 @@ public class PlayerService implements Serializable {
                 Player.findAllByUsername, Player.class)
                 .setParameter(Player.paramUsername, username);
         List<Player> results = query.getResultList();
-        
+
         if (results == null || results.isEmpty()) {
-           throw new NotFoundException("Player " + username + " not found"); 
+            throw new NotFoundException("Player " + username + " not found");
         }
 
         return results.get(0);

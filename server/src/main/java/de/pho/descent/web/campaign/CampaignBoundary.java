@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -39,10 +39,10 @@ public class CampaignBoundary {
 
     private static final Logger LOG = Logger.getLogger(CampaignBoundary.class.getName());
 
-    @EJB
+    @Inject
     private CampaignController campaignController;
 
-    @EJB
+    @Inject
     private PlayerController playerController;
 
     @GET
@@ -58,6 +58,18 @@ public class CampaignBoundary {
         };
 
         return Response.ok().entity(list).build();
+    }
+
+    @GET
+    @Path("/{" + ParamValue.CAMPAIGN_ID + "}")
+    public Response getCampaignById(
+            @PathParam(ParamValue.CAMPAIGN_ID) String campaignId)
+            throws NotFoundException {
+        LOG.log(Level.INFO, "Calling getCampaignById for Id {0}", campaignId);
+
+        Campaign campaign = campaignController.getCampaignById(Long.valueOf(campaignId));
+
+        return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
     }
 
     @POST

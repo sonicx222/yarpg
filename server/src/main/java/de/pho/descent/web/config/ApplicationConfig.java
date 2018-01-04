@@ -1,4 +1,3 @@
-
 package de.pho.descent.web.config;
 
 import java.util.Set;
@@ -20,12 +19,12 @@ public class ApplicationConfig extends Application {
     }
 
     /**
-     * Do not modify addRestResourceClasses() method.
-     * It is automatically populated with
-     * all resources defined in the project.
-     * If required, comment out calling this method in getClasses().
+     * Do not modify addRestResourceClasses() method. It is automatically
+     * populated with all resources defined in the project. If required, comment
+     * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(de.pho.descent.web.action.ActionBoundary.class);
         resources.add(de.pho.descent.web.admin.AdminBoundary.class);
         resources.add(de.pho.descent.web.auth.SecurityFilter.class);
         resources.add(de.pho.descent.web.auth.TokenProviderBoundary.class);
@@ -42,5 +41,5 @@ public class ApplicationConfig extends Application {
         resources.add(de.pho.descent.web.player.PlayerController.class);
         resources.add(de.pho.descent.web.quest.QuestBoundary.class);
     }
-    
+
 }

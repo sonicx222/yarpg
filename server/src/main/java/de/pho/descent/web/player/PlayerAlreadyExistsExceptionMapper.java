@@ -20,7 +20,7 @@ public class PlayerAlreadyExistsExceptionMapper implements ExceptionMapper<Playe
     @Override
     public Response toResponse(PlayerAlreadyExistsException ex) {
         LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        
+
         return Response.status(Status.CONFLICT)
                 .entity(new ErrorMessage(ex.getMessage(), Response.Status.CONFLICT.getStatusCode()))
                 .build();

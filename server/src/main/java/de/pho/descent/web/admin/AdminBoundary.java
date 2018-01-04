@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
 @Produces({MediaType.APPLICATION_JSON})
 public class AdminBoundary {
 
-    @EJB
+    @Inject
     private PersistenceService persistenceService;
 
     @POST

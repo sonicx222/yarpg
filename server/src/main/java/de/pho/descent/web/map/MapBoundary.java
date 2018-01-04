@@ -25,7 +25,7 @@ public class MapBoundary {
 
     private static final Logger LOGGER = Logger.getLogger(MapBoundary.class.getName());
 
-    @EJB
+    @Inject
     private MapController mapController;
 
     @GET

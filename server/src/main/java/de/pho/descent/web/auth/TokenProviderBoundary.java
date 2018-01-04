@@ -10,9 +10,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Utility service to provide the required auth token
- * for further secured requests
- * 
+ * Utility service to provide the required auth token for further secured
+ * requests
+ *
  * @author pho
  */
 @Path("token")

@@ -42,6 +42,7 @@
         <class>de.pho.descent.shared.model.campaign.Campaign</class>
         <class>de.pho.descent.shared.model.hero.GameHero</class>
         <class>de.pho.descent.shared.model.hero.HeroSelection</class>
+        <class>de.pho.descent.shared.model.overlord.Overlord</class>
         <class>de.pho.descent.shared.model.map.GameMap</class>
         <class>de.pho.descent.shared.model.map.MapField</class>
         <class>de.pho.descent.shared.model.map.MapTileGroup</class>
@@ -58,6 +59,13 @@
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
             <property name="hibernate.max_fetch_depth" value="5"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
+            
+            <!-- credentials
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+	    <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-54-243-61-173.compute-1.amazonaws.com:5432/d5ngfpo0f16be0:5432/d5ngfpo0f16be0"/>
+            <property name="javax.persistence.jdbc.user" value="avihbftscihekr"/>
+            <property name="javax.persistence.jdbc.password" value="5f44dd6dc222a17f7749629c1c4d403e99ac802fbb9098d3d5a9cf44d0f8e627"/-->
+
 
             <!-- for debugging -->
             <property name="hibernate.show_sql" value="false"/>

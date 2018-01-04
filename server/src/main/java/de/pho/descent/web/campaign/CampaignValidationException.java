@@ -1,4 +1,3 @@
-
 package de.pho.descent.web.campaign;
 
 /**
@@ -16,5 +15,5 @@ public class CampaignValidationException extends Exception {
     public CampaignValidationException(String message) {
         super(message);
     }
-    
+
 }

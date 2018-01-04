@@ -2,6 +2,7 @@ package de.pho.descent.web.message;
 
 import de.pho.descent.shared.model.message.Message;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,6 +31,12 @@ public class MessageService implements Serializable {
         return em.createNamedQuery(Message.FINDBYCAMPAIGNID, Message.class)
                 .setMaxResults(MAX_RESULTS)
                 .setParameter(Message.CAMPAIGN_ID_PARAM, id).getResultList();
+    }
+
+        public List<Message> getCampaignMessagesSinceDate(long id, Date since) {
+        return em.createNamedQuery(Message.FINDBYCAMPAIGNIDANDDATE, Message.class)
+                .setParameter(Message.CAMPAIGN_ID_PARAM, id)
+                .setParameter(Message.DATE_PARAM, since).getResultList();
     }
 
     public List<Message> getPlayerMessagesByCampaign(long playerId, long campaignId) {

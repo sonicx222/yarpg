@@ -1,6 +1,7 @@
 package de.pho.descent.web.message;
 
 import de.pho.descent.shared.auth.ParamValue;
+import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsMessage;
 import de.pho.descent.shared.model.message.Message;
 import de.pho.descent.web.exception.NotFoundException;
@@ -8,11 +9,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,7 +36,7 @@ public class MessageBoundary {
 
     private static final Logger LOG = Logger.getLogger(MessageBoundary.class.getName());
 
-    @EJB
+    @Inject
     private MessageController messageController;
 
     @GET
@@ -52,9 +53,14 @@ public class MessageBoundary {
     @GET
     @Path("/campaign/{" + ParamValue.CAMPAIGN_ID + "}")
     public Response getMessagesByCampaign(
-            @PathParam(ParamValue.CAMPAIGN_ID) long campaignId) {
+            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
+            @PathParam(ParamValue.CAMPAIGN_ID) long campaignId) throws NotFoundException {
         LOG.log(Level.INFO, "Calling getMessagesByCampaign()");
 
+//        String[] authData = SecurityTools.extractDataFromAuthenticationToken(authToken);
+//        String decodedUser = authData[0];
+//
+//        List<WsMessage> dtoMessages = messageController.getCampaignMessagesSinceDate(campaignId, decodedUser);
         List<WsMessage> dtoMessages = messageController.getMessagesByCampaignId(campaignId);
         GenericEntity<List<WsMessage>> list = new GenericEntity<List<WsMessage>>(dtoMessages) {
         };

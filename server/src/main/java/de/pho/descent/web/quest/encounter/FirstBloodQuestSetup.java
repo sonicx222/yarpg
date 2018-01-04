@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +28,7 @@ public class FirstBloodQuestSetup {
     private static final QuestTemplate template = QuestTemplate.FIRST_BLOOD_INTRO;
     private static final Map<MonsterGroup, List<GameMonster>> monsterMap = new HashMap<>();
     private static final List<Token> searchTokens = new ArrayList<>();
+    private static GameMonster mauler;
 
     public static void setup(QuestEncounter encounter, Campaign campaign) {
         spawnHeroes(encounter, campaign);
@@ -43,12 +45,12 @@ public class FirstBloodQuestSetup {
         monsterMap.put(GOBLIN_ARCHER, new ArrayList<GameMonster>());
         for (int i = 0; i < GOBLIN_ARCHER.getNormalCount(heroCount); i++) {
             GameMonster gameMonster = new GameMonster(GOBLIN_ARCHER_NORMAL_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord());
+            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(GOBLIN_ARCHER).add(gameMonster);
         }
         if (GOBLIN_ARCHER.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(GOBLIN_ARCHER_ELITE_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord());
+            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(GOBLIN_ARCHER).add(gameMonster);
         }
 
@@ -56,14 +58,24 @@ public class FirstBloodQuestSetup {
         monsterMap.put(ETTIN, new ArrayList<GameMonster>());
         for (int i = 0; i < ETTIN.getNormalCount(heroCount); i++) {
             GameMonster gameMonster = new GameMonster(ETTIN_NORMAL_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord());
+            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(ETTIN).add(gameMonster);
         }
         if (ETTIN.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(ETTIN_ELITE_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord());
+            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(ETTIN).add(gameMonster);
         }
+        
+        // create Mauler
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, monsterMap.get(ETTIN).size());
+        GameMonster ettin = monsterMap.get(ETTIN).get(randomIndex);
+        
+        // Mauler has 2hp more for each hero
+        ettin.setTotalLife(ettin.getTotalLife() + (2 * heroCount));
+        ettin.setCurrentLife(ettin.getTotalLife());
+        ettin.setName("Mauler");
+        mauler = ettin;
     }
 
     private static void spawnHeroes(QuestEncounter encounter, Campaign campaign) {
@@ -141,4 +153,9 @@ public class FirstBloodQuestSetup {
             encounter.getToken().add(searchToken);
         }
     }
+
+    public static GameMonster getMauler() {
+        return mauler;
+    }
+
 }

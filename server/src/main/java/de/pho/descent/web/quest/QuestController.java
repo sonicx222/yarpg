@@ -1,5 +1,6 @@
 package de.pho.descent.web.quest;
 
+import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.GameMap;
@@ -8,10 +9,11 @@ import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.map.MapController;
 import de.pho.descent.web.quest.encounter.FirstBloodQuestSetup;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 /**
  *
@@ -20,10 +22,10 @@ import javax.ejb.Stateless;
 @Stateless
 public class QuestController {
 
-    @EJB
+    @Inject
     private QuestService questService;
 
-    @EJB
+    @Inject
     private MapController mapController;
 
     public QuestEncounter getQuestEncounterById(long id) {
@@ -38,11 +40,12 @@ public class QuestController {
         QuestEncounter encounter = new QuestEncounter();
 
         GameMap gameMap = mapController.getMapByQuestTemplate(questTemplate);
-        encounter.setIsActive(true);
+        encounter.setActive(true);
         encounter.setRound(1);
         encounter.setMap(gameMap);
         encounter.setQuest(questTemplate.getQuest());
         encounter.setPart(questTemplate.getQuestPart());
+        encounter.setCurrentTurn(PlaySide.HEROES);
 
         // set first active hero based on highest initiative roll
         if (!campaign.getHeroes().isEmpty()) {
@@ -52,7 +55,6 @@ public class QuestController {
             });
             GameHero activeHero = initiativeOrder.get(initiativeOrder.lastKey());
             activeHero.setActive(true);
-            encounter.setActiveHero(activeHero);
         }
 
         switch (questTemplate) {
@@ -64,6 +66,24 @@ public class QuestController {
         }
 
         return questService.saveEncounter(encounter);
+    }
+
+    public void setNextActiveHero(Campaign campaign) {
+        Objects.requireNonNull(campaign);
+
+        if (!campaign.getHeroes().isEmpty()) {
+            campaign.getActiveHero().setActive(false);
+
+            SortedMap<Integer, GameHero> initiativeOrder = new TreeMap<>();
+            campaign.getHeroes().stream()
+                    .filter(hero -> hero.getActions() > 0)
+                    .forEach(hero -> {
+                        initiativeOrder.put(hero.rollInitiative(), hero);
+                    });
+            GameHero nextActiveHero = initiativeOrder.get(initiativeOrder.lastKey());
+            nextActiveHero.setActive(true);
+        }
+
     }
 
 }

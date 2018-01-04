@@ -17,17 +17,15 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("/campaigns/{campaignId}/heroes")
-   @Produces({MediaType.APPLICATION_JSON})
-   @Consumes({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 public class HeroBoundary {
-    
-   
-    
-   @GET
-   public List<HeroTemplate> getAvailableHeroes() {
-       List<HeroTemplate> selectionList = new ArrayList<>();     
-       selectionList.addAll(Arrays.asList(HeroTemplate.values()));
-       
-       return selectionList;
-   }
+
+    @GET
+    public List<HeroTemplate> getAvailableHeroes() {
+        List<HeroTemplate> selectionList = new ArrayList<>();
+        selectionList.addAll(Arrays.asList(HeroTemplate.values()));
+
+        return selectionList;
+    }
 }

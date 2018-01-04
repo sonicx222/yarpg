@@ -18,7 +18,7 @@ import javax.inject.Inject;
 @Stateless
 public class MapController {
 
-    @EJB
+    @Inject
     private transient MapService mapService;
 
     public List<MapField> getSpawnFieldsByMap(long mapId) {
