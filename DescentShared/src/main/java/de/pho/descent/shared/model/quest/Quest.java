@@ -60,7 +60,7 @@ public enum Quest {
     public QuestType getType() {
         return type;
     }
-    
+
     public static Quest getIntroQuest() {
         return Quest.FIRST_BLOOD;
     }

@@ -22,10 +22,11 @@ public class GameMonster extends GameUnit implements Serializable {
     }
 
     public GameMonster(MonsterTemplate template) {
-        super.setName(template.getText());
+        super.setName(template.getGroup().getText());
         super.setMovementPoints(template.getSpeed());
         super.setTotalLife(template.getHealth());
         super.setCurrentLife(template.getHealth());
+        super.setActions(2);
         this.monsterTemplate = template;
     }
 

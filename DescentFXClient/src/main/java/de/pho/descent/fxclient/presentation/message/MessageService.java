@@ -38,7 +38,7 @@ public class MessageService {
 
         if (campaignMessages != null && !campaignMessages.isEmpty()) {
             gameDataModel.getCampaignMessages().addAll(campaignMessages);
-//            chatListView.scrollTo(gameDataModel.getCampaignMessages().size() - 1);
+            gameDataModel.getChatListView().scrollTo(gameDataModel.getCampaignMessages().size() - 1);
         }
     }
 
@@ -54,7 +54,6 @@ public class MessageService {
 
         if (generalMessages != null && !generalMessages.isEmpty()) {
             gameDataModel.getGeneralMessages().addAll(generalMessages);
-//            chatListView.scrollTo(gameDataModel.getGeneralMessages().size() - 1);
         }
     }
 }

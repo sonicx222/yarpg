@@ -22,7 +22,7 @@ public class GameUnit extends GameEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private final Date createdOn = new Date();
 
-    private int turnsLeft;
+    private int actions;
 
     private int totalLife;
 
@@ -42,12 +42,12 @@ public class GameUnit extends GameEntity implements Serializable {
         this.playedBy = playedBy;
     }
 
-    public int getTurnsLeft() {
-        return turnsLeft;
+    public int getActions() {
+        return actions;
     }
 
-    public void setTurnsLeft(int turnsLeft) {
-        this.turnsLeft = turnsLeft;
+    public void setActions(int actions) {
+        this.actions = actions;
     }
 
     public int getTotalLife() {
@@ -89,6 +89,5 @@ public class GameUnit extends GameEntity implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
-    
+
 }

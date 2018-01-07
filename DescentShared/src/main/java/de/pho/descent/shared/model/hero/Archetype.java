@@ -30,6 +30,5 @@ public enum Archetype {
     public List<HeroClass> getClasses() {
         return classes;
     }
-    
-    
+
 }

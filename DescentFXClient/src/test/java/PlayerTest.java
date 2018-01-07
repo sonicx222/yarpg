@@ -50,7 +50,7 @@ public class PlayerTest {
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Player " + wrongUser + " not found");
         PlayerClient.loginPlayer(wrongUser, credentials);
-        
+
         // wrong pwd
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Login failed! Check Password");
@@ -75,12 +75,12 @@ public class PlayerTest {
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("User is deactive");
         PlayerClient.loginPlayer(credentials, credentials);
-        
+
         // try activate player with different user
         final String credentials2 = "failupdate";
         Player failupdatePlayer = PlayerClient.registerPlayer(credentials2, credentials2);
         deactivePlayer.setDeactive(false);
-        
+
         expectedException.expectMessage("Player resource mismatch with credentials or provided data");
         PlayerClient.updatePlayer(
                 credentials2, SecurityTools.createHash(credentials2, false), deactivePlayer);

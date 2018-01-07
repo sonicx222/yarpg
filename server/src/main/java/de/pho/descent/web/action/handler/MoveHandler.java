@@ -1,4 +1,4 @@
-package de.pho.descent.web.action;
+package de.pho.descent.web.action.handler;
 
 import de.pho.descent.shared.dto.WsAction;
 import de.pho.descent.shared.model.Player;
@@ -9,6 +9,7 @@ import de.pho.descent.shared.model.message.Message;
 import de.pho.descent.shared.model.message.MessageType;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.service.MapRangeService;
+import de.pho.descent.web.action.ActionException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class MoveHandler {
             if (!activeMonster.getCurrentLocation().equals(wsAction.getSourceField())) {
                 throw new ActionException("Invalid starting position for movement");
             }
-            sbLog.append("Monster '").append(activeHero.getName());
+            sbLog.append("Monster '").append(activeMonster.getName());
             range = wsAction.getSourceMonster().getMovementPoints();
         }
 

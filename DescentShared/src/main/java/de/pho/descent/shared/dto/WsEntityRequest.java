@@ -5,7 +5,7 @@ package de.pho.descent.shared.dto;
  * @author pho
  */
 public class WsEntityRequest {
- 
+
     private String type;
     private long id;
 
@@ -24,5 +24,5 @@ public class WsEntityRequest {
     public void setId(long id) {
         this.id = id;
     }
-    
+
 }

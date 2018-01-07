@@ -12,7 +12,6 @@ public enum HeroClass {
     PROPHET("Prophet", Archetype.HEALER),
     SPIRITSPEAKER("Spiritspeaker", Archetype.HEALER),
     WATCHMAN("Watchman", Archetype.HEALER),
-    
     BEASTMASTER("Beastmaster", Archetype.WARRIOR),
     BERSERKER("Berserker", Archetype.WARRIOR),
     CHAMPION("Champion", Archetype.WARRIOR),
@@ -20,7 +19,6 @@ public enum HeroClass {
     MARSHAL("Marshal", Archetype.WARRIOR),
     SKIRMISHER("Skirmisher", Archetype.WARRIOR),
     STEELCASTER("Steelcaster", Archetype.WARRIOR),
-    
     BOUNTYHUNTER("Bounty Hunter", Archetype.SCOUT),
     MONK("Monk", Archetype.SCOUT),
     SHADOWWALKER("Shadow Walker", Archetype.SCOUT),
@@ -28,7 +26,6 @@ public enum HeroClass {
     THIEF("Thief", Archetype.SCOUT),
     TREASUREHUNTER("Treasure Hunter", Archetype.SCOUT),
     WILDLANDER("Wildlander", Archetype.SCOUT),
-    
     BATTLEMAGE("Battlemage", Archetype.MAGE),
     CONJURER("Conjurer", Archetype.MAGE),
     GEOMANCER("Geomancer", Archetype.MAGE),
@@ -51,6 +48,5 @@ public enum HeroClass {
     public Archetype getArchetype() {
         return archetype;
     }
-    
-    
+
 }

@@ -1,4 +1,4 @@
- package de.pho.descent.shared.model.hero;
+package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.dice.DefenseDice;
 import static de.pho.descent.shared.model.dice.DefenseDice.*;
@@ -45,7 +45,7 @@ public enum HeroTemplate {
     private final int willpower;
 
     private final int awareness;
-    
+
     private final int initiative;
 
     private final String imageName;

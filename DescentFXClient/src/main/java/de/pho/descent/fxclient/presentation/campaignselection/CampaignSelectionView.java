@@ -12,9 +12,9 @@ import com.airhacks.afterburner.views.FXMLView;
  * @author pho
  */
 public class CampaignSelectionView extends FXMLView {
-    
+
     public CampaignSelectionPresenter getRealPresenter() {
         return (CampaignSelectionPresenter) super.getPresenter();
     }
-    
+
 }

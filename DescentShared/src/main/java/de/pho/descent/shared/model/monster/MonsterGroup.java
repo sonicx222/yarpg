@@ -5,16 +5,17 @@ package de.pho.descent.shared.model.monster;
  * @author pho
  */
 public enum MonsterGroup {
-    ZOMBIE(2, 1, 3, 1, 4, 1),
-    GOBLIN_ARCHER(2, 1, 3, 1, 4, 1),
-    CAVE_SPIDER(2, 1, 3, 1, 4, 1),
-    FLESH_MOULDER(1, 1, 2, 1, 3, 1),
-    BARGHEST(1, 1, 2, 1, 3, 1),
-    ETTIN(1, 0, 0, 1, 1, 1),
-    ELEMENTAL(1, 0, 0, 1, 1, 1),
-    MERRIOD(1, 0, 0, 1, 1, 1),
-    SHADOW_DRAGON(1, 0, 0, 1, 1, 1);
+    ZOMBIE("Zombie", 2, 1, 3, 1, 4, 1),
+    GOBLIN_ARCHER("Goblin Archer", 2, 1, 3, 1, 4, 1),
+    CAVE_SPIDER("Cave Spider",2, 1, 3, 1, 4, 1),
+    FLESH_MOULDER("Flesh Moulder", 1, 1, 2, 1, 3, 1),
+    BARGHEST("Barghest", 1, 1, 2, 1, 3, 1),
+    ETTIN("Ettin", 1, 0, 0, 1, 1, 1),
+    ELEMENTAL("Elemental", 1, 0, 0, 1, 1, 1),
+    MERRIOD("Merriod", 1, 0, 0, 1, 1, 1),
+    SHADOW_DRAGON("Shadow Dragon", 1, 0, 0, 1, 1, 1);
 
+        private final String text;
     private final int normalCountTwoHero;
     private final int eliteCountTwoHero;
     private final int normalCountThreeHero;
@@ -22,7 +23,8 @@ public enum MonsterGroup {
     private final int normalCountFourHero;
     private final int eliteCountFourHero;
 
-    private MonsterGroup(int normalCountTwoHero, int eliteCountTwoHero, int normalCountThreeHero, int eliteCountThreeHero, int normalCountFourHero, int eliteCountFourHero) {
+    private MonsterGroup(String text, int normalCountTwoHero, int eliteCountTwoHero, int normalCountThreeHero, int eliteCountThreeHero, int normalCountFourHero, int eliteCountFourHero) {
+        this.text = text;
         this.normalCountTwoHero = normalCountTwoHero;
         this.eliteCountTwoHero = eliteCountTwoHero;
         this.normalCountThreeHero = normalCountThreeHero;
@@ -51,6 +53,10 @@ public enum MonsterGroup {
             default:
                 return eliteCountFourHero > 0;
         }
+    }
+
+    public String getText() {
+        return text;
     }
 
     public int getNormalCountTwoHero() {

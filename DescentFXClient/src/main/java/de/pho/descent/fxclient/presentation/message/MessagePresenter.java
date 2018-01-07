@@ -8,6 +8,8 @@ import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.shared.dto.WsMessage;
 import java.net.URL;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javax.inject.Inject;
 
@@ -51,9 +54,11 @@ public class MessagePresenter implements Initializable {
 
     private void setupMessages() {
         // messages
+        gameDataModel.setChatListView(chatListView);
         chatListView.setItems(gameDataModel.getCampaignMessages());
         chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
             private Text text;
+            private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss");
 
             @Override
             protected void updateItem(WsMessage item, boolean empty) {
@@ -63,7 +68,21 @@ public class MessagePresenter implements Initializable {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    text = new Text(item.getUsername() + ": " + item.getMessageText());
+                    switch (item.getType()) {
+                        case SYSTEM:
+                            break;
+                        case GAME:
+                            text = new Text(item.getMessageText());
+                            text.setFill(Color.CORNFLOWERBLUE);
+                            break;
+                        default:
+                            text = new Text(dateTimeFormatter.format(item.getCreatedOn()
+                                    .toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime())
+                                    + " " + item.getUsername() + ": " + item.getMessageText());
+                            break;
+                    }
+
                     text.setWrappingWidth(chatListView.getPrefWidth());
                     setGraphic(text);
                 }
@@ -94,6 +113,7 @@ public class MessagePresenter implements Initializable {
             }
             if (message != null) {
                 messageService.updateCampaignMessages();
+                chatListView.scrollTo(gameDataModel.getGeneralMessages().size() - 1);
                 messageTextField.clear();
             }
         }

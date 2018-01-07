@@ -47,5 +47,5 @@ public class WsPlayer {
     public String toString() {
         return "WsPlayer{" + "id=" + id + ", username=" + username + '}';
     }
-    
+
 }

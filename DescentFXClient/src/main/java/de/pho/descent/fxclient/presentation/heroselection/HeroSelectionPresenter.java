@@ -133,7 +133,6 @@ public class HeroSelectionPresenter implements Initializable {
     private HeroSelectionModel heroSelectionModel;
 
     private final Map<HeroTemplate, Image[]> heroImages = new HashMap<>();
-    private final String IMAGE_SUFFIX = ".png";
 
     private String buttonReadyText;
     private String buttonCancelText;
@@ -142,8 +141,8 @@ public class HeroSelectionPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // setup buttons
-        if (Objects.equals(credentials.getPlayer().getUsername(),
-                gameDataModel.getCurrentCampaign().getOverlord())) {
+        if (Objects.equals(credentials.getPlayer(),
+                gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
             // overlord screen
             vboxAction.setVisible(false);
             vboxStart.setVisible(true);
@@ -291,8 +290,6 @@ public class HeroSelectionPresenter implements Initializable {
         }
 
         // update selections and check if other user already selected same hero
-//        updateHeroSelections();
-
         WsHeroSelection updatedSelection = null;
         try {
             updatedSelection = HeroSelectionClient.saveSelection(
@@ -336,7 +333,7 @@ public class HeroSelectionPresenter implements Initializable {
             // hero preview image
             StringBuilder ressourcePathHero = new StringBuilder("/img/heroes/");
             ressourcePathHero.append(template.getImageName());
-            ressourcePathHero.append(IMAGE_SUFFIX);
+            ressourcePathHero.append(gameDataModel.getImageSuffix());
             InputStream isHero = getClass().getResourceAsStream(ressourcePathHero.toString());
             if (isHero != null) {
                 images[0] = new Image(isHero);
@@ -346,7 +343,7 @@ public class HeroSelectionPresenter implements Initializable {
             if (template.getStartSkill() != null) {
                 StringBuilder ressourcePathStartSkill = new StringBuilder("/img/skills/0_");
                 ressourcePathStartSkill.append(template.getStartSkill().getImagePath());
-                ressourcePathStartSkill.append(IMAGE_SUFFIX);
+                ressourcePathStartSkill.append(gameDataModel.getImageSuffix());
 
                 InputStream isStartSkill = getClass().getResourceAsStream(ressourcePathStartSkill.toString());
                 if (isStartSkill != null) {
@@ -358,7 +355,7 @@ public class HeroSelectionPresenter implements Initializable {
             if (template.getStartItem1() != null) {
                 StringBuilder ressourcePathStartItem1 = new StringBuilder("/img/items/");
                 ressourcePathStartItem1.append(template.getStartItem1().getImagePath());
-                ressourcePathStartItem1.append(IMAGE_SUFFIX);
+                ressourcePathStartItem1.append(gameDataModel.getImageSuffix());
                 InputStream isStartItem1 = getClass().getResourceAsStream(ressourcePathStartItem1.toString());
                 if (isStartItem1 != null) {
                     images[2] = new Image(isStartItem1);
@@ -369,7 +366,7 @@ public class HeroSelectionPresenter implements Initializable {
             if (template.getStartItem2() != null) {
                 StringBuilder ressourcePathStartItem2 = new StringBuilder("/img/items/");
                 ressourcePathStartItem2.append(template.getStartItem2().getImagePath());
-                ressourcePathStartItem2.append(IMAGE_SUFFIX);
+                ressourcePathStartItem2.append(gameDataModel.getImageSuffix());
 
                 InputStream isStartItem2 = getClass().getResourceAsStream(ressourcePathStartItem2.toString());
                 if (isStartItem2 != null) {

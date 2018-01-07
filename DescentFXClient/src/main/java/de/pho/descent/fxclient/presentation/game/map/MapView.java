@@ -12,9 +12,9 @@ import com.airhacks.afterburner.views.FXMLView;
  * @author pho
  */
 public class MapView extends FXMLView {
-    
+
     public MapPresenter getRealPresenter() {
         return (MapPresenter) super.getPresenter();
     }
-    
+
 }

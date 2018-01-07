@@ -110,7 +110,9 @@ public class CampaignSelectionPresenter implements Initializable {
 
         // columns
         campaignIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        campaignOverlordColumn.setCellValueFactory(new PropertyValueFactory<>("overlord"));
+        campaignOverlordColumn.setCellValueFactory((TableColumn.CellDataFeatures<WsCampaign, String> cell) -> {
+            return new SimpleStringProperty(cell.getValue().getOverlord().getPlayedBy().getUsername());
+        });
         campaignPlayersColumn.setCellValueFactory((TableColumn.CellDataFeatures<WsCampaign, String> cell) -> {
             String strPlayers;
             if (cell.getValue().getPhase() == CampaignPhase.HERO_SELECTION) {
@@ -208,7 +210,7 @@ public class CampaignSelectionPresenter implements Initializable {
         if (selectedCampaign.getPhase() == CampaignPhase.HERO_SELECTION) {
             switchFullscreenScene(event, new HeroSelectionView());
         } else {
-            if (Objects.equals(credentials.getUsername(), selectedCampaign.getOverlord())) {
+            if (Objects.equals(credentials.getPlayer(), selectedCampaign.getOverlord().getPlayedBy())) {
                 switchFullscreenScene(event, new OverlordGameView());
             } else {
                 switchFullscreenScene(event, new HeroGameView());

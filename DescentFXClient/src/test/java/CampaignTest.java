@@ -43,7 +43,7 @@ public class CampaignTest {
         assert (campaign1.getId() > 0);
         assert (campaign1.getPhase() == CampaignPhase.HERO_SELECTION);
         assert (campaign1.getNextQuest() == QuestTemplate.FIRST_BLOOD_INTRO);
-        assert (Objects.equals(campaign1.getOverlord(), campTest.getUsername()));
+        assert (Objects.equals(campaign1.getOverlord().getPlayedBy(), campTest));
 
         // campTest creates campaign2 as overlord
         WsCampaign campaign2 = CampaignClient.newCampaign(campTest);

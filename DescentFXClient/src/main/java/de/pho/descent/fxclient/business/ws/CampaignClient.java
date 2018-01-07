@@ -143,7 +143,40 @@ public class CampaignClient extends BaseRESTClient {
             }
         }
     }
-    
+
+    public static WsCampaign getCampaignById(String username, String pwdHash, long campaignId) throws ServerException {
+        Client client = null;
+
+        try {
+            client = ClientBuilder.newClient();
+            WebTarget securedTarget = client.target(getSecuredBaseUri());
+            WebTarget campaignsTarget = securedTarget.path("campaigns");
+            WebTarget campaignByIdTarget = campaignsTarget.path("{" + ParamValue.CAMPAIGN_ID + "}");
+
+            String uriPath = campaignByIdTarget.resolveTemplate(ParamValue.CAMPAIGN_ID, campaignId).getUri().getPath();
+            String authToken = SecurityTools.createAuthenticationToken(username, pwdHash, HttpMethod.GET, uriPath);
+
+            WsCampaign updatedCampaign = null;
+            Response getResponse = campaignByIdTarget
+                    .resolveTemplate(ParamValue.CAMPAIGN_ID, campaignId)
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
+                    .get();
+
+            if (getResponse.getStatus() == Status.OK.getStatusCode()) {
+                updatedCampaign = getResponse.readEntity(WsCampaign.class);
+            } else {
+                ErrorMessage errorMsg = getResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
+            }
+            return updatedCampaign;
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+    }
+
     public static WsCampaign startCampaign(String username, String pwdHash, WsCampaign wsCampaign) throws ServerException {
         Client client = null;
 

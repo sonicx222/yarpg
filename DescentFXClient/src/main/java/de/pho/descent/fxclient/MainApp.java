@@ -2,11 +2,11 @@ package de.pho.descent.fxclient;
 
 import com.airhacks.afterburner.injection.Injector;
 import com.airhacks.afterburner.views.FXMLView;
-import static de.pho.descent.fxclient.business.config.Configuration.loadProperties;
-import de.pho.descent.fxclient.business.ws.ServerException;
+import static de.pho.descent.fxclient.business.config.Configuration.*;
 import de.pho.descent.fxclient.presentation.loginscreen.LoginscreenView;
 import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -21,8 +21,19 @@ import org.controlsfx.control.Notifications;
 
 public class MainApp extends Application {
 
+    private static final LogManager LOGMANAGER = LogManager.getLogManager();
     private static final Logger LOGGER = Logger.getLogger(MainApp.class.getName());
     public static Font gameFont;
+
+    //setup logging configuration
+    static {
+        try {
+            LOGMANAGER.readConfiguration(MainApp.class.getClassLoader()
+                    .getResourceAsStream(LOGGING_PROPERTIES_FILE));
+        } catch (IOException ioex) {
+            LOGGER.log(Level.SEVERE, ERROR_LOGGING_PROPERTIES, ioex);
+        }
+    }
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
@@ -38,11 +49,15 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            showError(throwable);
+        });
+
         loadProperties();
 
         // load Font
-        gameFont = Font.loadFont(getClass().getResourceAsStream("Windlass.ttf"), 12);
-        
+        gameFont = Font.loadFont(MainApp.class.getClassLoader().getResourceAsStream("fonts/Garamond_Premier_Pro.ttf"), 18);
+
         LoginscreenView loginscreenView = new LoginscreenView();
         Scene scene = new Scene(loginscreenView.getView());
 
@@ -88,11 +103,11 @@ public class MainApp extends Application {
         stage.show();
     }
 
-    public static void showError(ServerException exception) {
-        LOGGER.log(Level.SEVERE, exception.getMessage());
+    public static void showError(Throwable t) {
+        LOGGER.log(Level.SEVERE, t.getMessage(), t);
 
         Notifications tmp = Notifications.create();
-        tmp.darkStyle().position(Pos.TOP_RIGHT).text(exception.getMessage()).showError();
+        tmp.darkStyle().position(Pos.TOP_RIGHT).text(t.getMessage()).showError();
     }
 
     public static void showError(String errorMsg) {

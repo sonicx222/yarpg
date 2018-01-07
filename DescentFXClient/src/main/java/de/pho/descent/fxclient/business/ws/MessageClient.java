@@ -7,6 +7,7 @@ import de.pho.descent.shared.dto.WsMessage;
 import de.pho.descent.shared.exception.ErrorMessage;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
+import de.pho.descent.shared.model.message.MessageType;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class MessageClient extends BaseRESTClient {
                     HttpMethod.POST, uriPath);
 
             long campaignId = campaign == null ? 0 : campaign.getId();
-            WsMessage wsMessage = new WsMessage(player.getUsername(), campaignId, text);
+            WsMessage wsMessage = new WsMessage(player.getUsername(), MessageType.PLAYER, campaignId, text);
             Response postResponse = messagesTarget
                     .request(MediaType.APPLICATION_JSON)
                     .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)

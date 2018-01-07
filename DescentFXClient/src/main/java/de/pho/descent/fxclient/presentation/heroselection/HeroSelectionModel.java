@@ -45,6 +45,5 @@ public class HeroSelectionModel {
     public void setSelectedTemplate(HeroTemplate selectedTemplate) {
         this.selectedTemplate = selectedTemplate;
     }
-    
-    
+
 }

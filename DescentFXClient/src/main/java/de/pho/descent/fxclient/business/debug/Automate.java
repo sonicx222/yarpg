@@ -8,7 +8,7 @@ import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.QuestClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
-import de.pho.descent.fxclient.presentation.game.map.MapService;
+import de.pho.descent.shared.service.MapRangeService;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsGameMap;
@@ -78,7 +78,7 @@ public class Automate {
 
             MessageClient.postMessage(player1, wsCampaign, "yay, we started!");
             MessageClient.postMessage(overlord, null, "New Campaign started!");
-            
+
 //            WsQuestEncounter encounter = QuestClient.getQuestEncounter(credentialsOverlord,
 //                    SecurityTools.createHash(credentialsOverlord, false), wsCampaign.getQuestEncounterId());
 //            
@@ -90,11 +90,10 @@ public class Automate {
 //                    .filter(h -> h.isActive())
 //                    .findAny().get().getCurrentLocation();
 //            List<MapField> fieldsInRange = ms.getFieldsInRange(testField, 3, map);
-
         } catch (ServerException ex) {
             MainApp.showError(ex);
         }
-        
+
         Object[] result = new Object[2];
         result[0] = overlord;
         result[1] = wsCampaign;

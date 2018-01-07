@@ -8,5 +8,6 @@ import de.pho.descent.shared.model.hero.GameHero;
  */
 @FunctionalInterface
 public interface HeroAbility {
+
     public void perform(GameHero hero);
 }

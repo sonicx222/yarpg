@@ -3,11 +3,13 @@ package de.pho.descent.shared.dto;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -19,7 +21,7 @@ public class WsCampaign {
 
     private CampaignPhase phase;
 
-    private String overlord;
+    private Overlord overlord;
 
     private QuestTemplate nextQuest;
 
@@ -36,11 +38,17 @@ public class WsCampaign {
     public WsCampaign() {
     }
 
-    public WsCampaign(String overlord, CampaignPhase phase, QuestTemplate nextQuest, long questEncounterId) {
+    public WsCampaign(Overlord overlord, CampaignPhase phase, QuestTemplate nextQuest, long questEncounterId) {
         this.phase = phase;
         this.overlord = overlord;
         this.nextQuest = nextQuest;
         this.questEncounterId = questEncounterId;
+    }
+    
+    @XmlTransient
+    public GameHero getActiveHero() {
+        return gameHeroes.stream()
+                .filter(hero -> hero.isActive()).findAny().orElse(null);
     }
 
     public long getId() {
@@ -59,11 +67,11 @@ public class WsCampaign {
         this.phase = phase;
     }
 
-    public String getOverlord() {
+    public Overlord getOverlord() {
         return overlord;
     }
 
-    public void setOverlord(String overlord) {
+    public void setOverlord(Overlord overlord) {
         this.overlord = overlord;
     }
 
@@ -126,8 +134,7 @@ public class WsCampaign {
         WsCampaign wsCampaign = new WsCampaign();
 
         wsCampaign.setId(campaign.getId());
-        wsCampaign.setOverlord(
-                campaign.getOverlord() == null ? null : campaign.getOverlord().getUsername());
+        wsCampaign.setOverlord(campaign.getOverlord());
         wsCampaign.setPhase(campaign.getPhase());
         wsCampaign.setNextQuest(campaign.getTemplateNextQuest());
         wsCampaign.setQuestEncounterId(campaign.getActiveQuest() == null ? 0 : campaign.getActiveQuest().getId());

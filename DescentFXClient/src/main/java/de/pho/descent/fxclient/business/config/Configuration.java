@@ -15,6 +15,9 @@ import java.util.logging.Logger;
  * @author pho
  */
 public class Configuration {
+
+    public static final String LOGGING_PROPERTIES_FILE = "logging.properties";
+    public static final String ERROR_LOGGING_PROPERTIES = "Error loading the configuration from 'logging.properties'";
     
     private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
     private static final Properties CONFIG_PROPERTIES = new Properties();
@@ -38,7 +41,7 @@ public class Configuration {
             }
         }
     }
-    
+
     public static String get(String key) {
         return CONFIG_PROPERTIES.getProperty(key);
     }

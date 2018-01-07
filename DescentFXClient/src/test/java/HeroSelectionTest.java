@@ -9,6 +9,8 @@ import de.pho.descent.shared.dto.WsHeroSelection;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import static de.pho.descent.shared.model.hero.HeroTemplate.*;
+import de.pho.descent.shared.model.overlord.Overlord;
+import de.pho.descent.shared.model.overlord.OverlordClass;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.List;
 import org.junit.FixMethodOrder;
@@ -129,7 +131,6 @@ public class HeroSelectionTest {
         campaign3 = CampaignClient.newCampaign(player1);
 
         // campaign 3, 2-man group on selection stage
-        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, TOMBLEBURROWELL, true);
         WsHeroSelection heroSelectionP2 = new WsHeroSelection(credentialsP2, GRISBAN, true);
         WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, JAINFAIRWOOD, true);
 
@@ -144,7 +145,8 @@ public class HeroSelectionTest {
         // check: overlord can not select
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Overlord can not take part in hero selection");
-        HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign1);
+        WsHeroSelection heroSelectionP1 = new WsHeroSelection(credentialsP1, TOMBLEBURROWELL, true);
+        HeroSelectionClient.saveSelection(credentialsP1, SecurityTools.createHash(credentialsP1, false), heroSelectionP1, campaign3);
     }
 
     @Test
@@ -173,8 +175,9 @@ public class HeroSelectionTest {
     @Test
     public void testHeroSelectionCampaign5() throws ServerException {
         // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
+        Overlord overlord = new Overlord(player1, OverlordClass.BASIC, null);
         campaign5 = CampaignClient.createCampaign(player1,
-                new WsCampaign(player1.getUsername(), CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+                new WsCampaign(overlord, CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         // check: game already started error
         expectedException.expect(ServerException.class);
@@ -186,8 +189,9 @@ public class HeroSelectionTest {
     @Test
     public void testHeroSelectionCampaign6() throws ServerException {
         // player2 creates campaign6 as overlord, campaign in stage TRAVEL
+        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
         campaign6 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.TRAVEL, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+                new WsCampaign(overlord, CampaignPhase.TRAVEL, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
@@ -198,8 +202,9 @@ public class HeroSelectionTest {
     @Test
     public void testHeroSelectionCampaign7() throws ServerException {
         // player2 creates campaign7 as overlord, campaign in stage FINISHED
+        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
         campaign7 = CampaignClient.createCampaign(player2,
-                new WsCampaign(player1.getUsername(), CampaignPhase.FINISHED, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+                new WsCampaign(overlord, CampaignPhase.FINISHED, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
 
         expectedException.expect(ServerException.class);
         expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
@@ -210,7 +215,8 @@ public class HeroSelectionTest {
     @Test
     public void testHeroSelectionCampaign8() throws ServerException {
         // wrong campaign id
-        WsCampaign falseCampaign = new WsCampaign(player6.getUsername(), CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l);
+        Overlord overlord = new Overlord(player6, OverlordClass.BASIC, null);
+        WsCampaign falseCampaign = new WsCampaign(overlord, CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l);
         falseCampaign.setId(666L);
         WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
 

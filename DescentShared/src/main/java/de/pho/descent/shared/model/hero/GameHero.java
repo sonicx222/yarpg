@@ -2,10 +2,14 @@ package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.GameUnit;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -32,6 +36,9 @@ public class GameHero extends GameUnit implements Serializable {
     private int awareness;
 
     private int initiative;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastMessageUpdate;
 
     public GameHero() {
     }
@@ -116,6 +123,73 @@ public class GameHero extends GameUnit implements Serializable {
 
     public int getAwareness() {
         return awareness;
+    }
+
+    public Date getLastMessageUpdate() {
+        return lastMessageUpdate;
+    }
+
+    public void setLastMessageUpdate(Date lastMessageUpdate) {
+        this.lastMessageUpdate = lastMessageUpdate;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.heroTemplate);
+        hash = 59 * hash + this.stamina;
+        hash = 59 * hash + this.exhaustion;
+        hash = 59 * hash + this.might;
+        hash = 59 * hash + this.knowledge;
+        hash = 59 * hash + this.willpower;
+        hash = 59 * hash + this.awareness;
+        hash = 59 * hash + this.initiative;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameHero other = (GameHero) obj;
+        if (!Objects.equals(this.getId(), other.getId())) {
+            return false;
+        }
+        if (!Objects.equals(this.getPlayedBy().getUsername(), getPlayedBy().getUsername())) {
+            return false;
+        }
+        if (this.stamina != other.stamina) {
+            return false;
+        }
+        if (this.exhaustion != other.exhaustion) {
+            return false;
+        }
+        if (this.might != other.might) {
+            return false;
+        }
+        if (this.knowledge != other.knowledge) {
+            return false;
+        }
+        if (this.willpower != other.willpower) {
+            return false;
+        }
+        if (this.awareness != other.awareness) {
+            return false;
+        }
+        if (this.initiative != other.initiative) {
+            return false;
+        }
+        if (this.heroTemplate != other.heroTemplate) {
+            return false;
+        }
+        return true;
     }
 
 }

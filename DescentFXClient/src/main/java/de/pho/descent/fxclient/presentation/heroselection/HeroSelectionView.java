@@ -12,9 +12,9 @@ import com.airhacks.afterburner.views.FXMLView;
  * @author pho
  */
 public class HeroSelectionView extends FXMLView {
-    
+
     public HeroSelectionPresenter getRealPresenter() {
         return (HeroSelectionPresenter) super.getPresenter();
     }
-    
+
 }

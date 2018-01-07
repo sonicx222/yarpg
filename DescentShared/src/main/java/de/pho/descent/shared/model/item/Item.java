@@ -1,7 +1,6 @@
 package de.pho.descent.shared.model.item;
 
-import de.pho.descent.shared.model.ItemEffect;
-import static de.pho.descent.shared.model.ItemEffect.*;
+import static de.pho.descent.shared.model.item.ItemEffect.*;
 import de.pho.descent.shared.model.SurgeAction;
 import static de.pho.descent.shared.model.SurgeAction.*;
 import de.pho.descent.shared.model.dice.AttackDice;
@@ -36,7 +35,7 @@ public enum Item {
     START_WILDLANDER_WEAPON("Yew Shortbow", SCOUT, WILDLANDER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(TWO_RANGE, ONE_DAMAGE), RANGED, BOW, TWO_HAND, 0, 25, "scout_wildlander_bow"),
     START_NECROMANCER_WEAPON("Reapers Scythe", MAGE, NECROMANCER, ZERO, Arrays.asList(BLUE, YELLOW), null, GAIN_ONE_HEALTH_PER_KILL, Arrays.asList(ONE_RANGE), RANGED, STAFF, TWO_HAND, 0, 25, "mage_necromancer_staff"),
     START_RUNEMASTER_WEAPON("Arcane Bolt", MAGE, RUNEMASTER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(ONE_RANGE, TWO_PIERCE), RANGED, RUNE, TWO_HAND, 0, 25, "mage_runemaster_rune");
-    
+
     private final String name;
 
     private final Archetype archetype;
@@ -50,7 +49,7 @@ public enum Item {
     private final List<DefenseDice> defenseDice;
 
     private final ItemEffect itemEffect;
-    
+
     private final List<SurgeAction> surgeActions;
 
     private final RangeType range;

@@ -8,9 +8,9 @@ import com.airhacks.afterburner.views.FXMLView;
  * @author pho
  */
 public class OverlordGameView extends FXMLView {
-    
+
     public OverlordGamePresenter getRealPresenter() {
         return (OverlordGamePresenter) super.getPresenter();
     }
-    
+
 }

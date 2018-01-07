@@ -12,24 +12,24 @@
 
 
 <Pane fx:id="messagePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="500.0" style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.message.MessagePresenter">
-   <children>
-      <ListView fx:id="chatListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="160.0" prefWidth="500.0" />
-      <VBox layoutX="350.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefWidth="150.0">
-         <children>
-            <Line endX="150.0" stroke="DARKGRAY" />
-            <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
-               <children>
-                  <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
-                  <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-               </children>
-            </StackPane>
-            <Line endX="150.0" stroke="DARKGRAY" />
-         </children>
-      </VBox>
-      <TextField fx:id="messageTextField" layoutY="180.0" prefHeight="30.0" prefWidth="329.0" />
-   </children>
+    <children>
+        <ListView fx:id="chatListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.8" prefHeight="160.0" prefWidth="500.0" />
+        <VBox layoutX="350.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefWidth="150.0">
+            <children>
+                <Line endX="150.0" stroke="DARKGRAY" />
+                <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
+                    <children>
+                        <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
+                        <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </StackPane>
+                <Line endX="150.0" stroke="DARKGRAY" />
+            </children>
+        </VBox>
+        <TextField fx:id="messageTextField" layoutY="180.0" prefHeight="30.0" prefWidth="329.0" />
+    </children>
 </Pane>

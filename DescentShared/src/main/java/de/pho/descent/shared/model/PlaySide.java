@@ -6,5 +6,5 @@ package de.pho.descent.shared.model;
  */
 public enum PlaySide {
     HEROES,
-    GM;
+    OVERLORD;
 }

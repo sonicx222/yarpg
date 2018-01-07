@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -177,6 +176,16 @@
                     </image>
                 </ImageView>
                 <fx:include fx:id="messagePane" layoutX="870.0" layoutY="32.0" source="../message/message.fxml" />
+            <Label layoutX="687.0" layoutY="274.0" text="Hero Ability">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="688.0" layoutY="492.0" text="Heroic Feat">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
     </children>

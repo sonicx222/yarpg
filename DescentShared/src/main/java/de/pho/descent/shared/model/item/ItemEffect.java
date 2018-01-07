@@ -1,4 +1,4 @@
-package de.pho.descent.shared.model;
+package de.pho.descent.shared.model.item;
 
 /**
  *

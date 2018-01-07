@@ -2,7 +2,6 @@ package de.pho.descent.shared.model.quest;
 
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.PlaySide;
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
@@ -49,17 +48,12 @@ public class QuestEncounter implements Serializable {
     @Enumerated(EnumType.STRING)
     private QuestPart part;
 
-//    @Column(length = 4000)
-//    private String prolog;
-// 
-//    @Column(length = 4000)
-//    private String epilog;
-    private boolean isActive;
+    private boolean active;
 
-    @OneToOne
-    private GameHero activeHero;
-    
     private int round;
+
+    @Enumerated(EnumType.STRING)
+    private PlaySide currentTurn;
 
     @Enumerated(EnumType.STRING)
     private PlaySide winner;
@@ -74,6 +68,11 @@ public class QuestEncounter implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "encounter_id")
     private List<Token> token = new ArrayList<>();
+
+    public GameMonster getActiveMonster() {
+        return monsters.stream()
+                .filter(monster -> monster.isActive()).findAny().orElse(null);
+    }
 
     public Long getId() {
         return id;
@@ -99,20 +98,12 @@ public class QuestEncounter implements Serializable {
         this.part = part;
     }
 
-    public boolean isIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public GameHero getActiveHero() {
-        return activeHero;
-    }
-
-    public void setActiveHero(GameHero activeHero) {
-        this.activeHero = activeHero;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getRound() {
@@ -121,6 +112,14 @@ public class QuestEncounter implements Serializable {
 
     public void setRound(int round) {
         this.round = round;
+    }
+
+    public PlaySide getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void setCurrentTurn(PlaySide currentTurn) {
+        this.currentTurn = currentTurn;
     }
 
     public PlaySide getWinner() {

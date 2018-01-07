@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane id="Pane" fx:id="prologPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.prolog.PrologPresenter">
+   <children>
+      <ImageView fitHeight="413.0" fitWidth="567.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@textlist.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="247.0" layoutY="26.0" text="Prolog" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Text fx:id="prologText" fill="WHITE" layoutX="14.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As you are travelling toward Arhynn, you come across the still-smoldering remains of a travelling caravan. One of the caravan guards, wearing the livery of Baron Greigory, lies wounded nearby.&quot;An ambush,&quot; he gasps. &quot;That ettin is sending his minions straight into Arhynn through the secret path! How could he have known? Ahead, you see the lumbering, two-headed form of an ettin. &quot;He said his name was Mauler. You must stop him!&quot; Mauler's goblin minions are taking a secret route to attack Arhynn, Baron Greigory's seat. If too many of his goblins escape off the far side of the trail, Mauler will have triumphed over you. Your goal is to kill him before that happens." textAlignment="JUSTIFY" wrappingWidth="538.21875" />
+      <VBox layoutX="234.0" layoutY="361.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefWidth="100.0">
+         <children>
+            <Line endX="100.0" stroke="DARKGRAY" />
+            <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleOk" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="100.0">
+               <children>
+                  <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="100.0" />
+                  <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="OK">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Line endX="100.0" stroke="DARKGRAY" />
+         </children>
+      </VBox>
+   </children>
+</Pane>

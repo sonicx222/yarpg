@@ -180,6 +180,7 @@
                     <include>**/*.css</include>
                     <include>**/*.properties</include>
                     <include>**/*.txt</include>
+                    <include>**/*.ttf</include>
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
                 </includes>
@@ -191,6 +192,7 @@
                     <include>**/*.css</include>
                     <include>**/*.properties</include>
                     <include>**/*.txt</include>
+                    <include>**/*.ttf</include>
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
                 </includes>

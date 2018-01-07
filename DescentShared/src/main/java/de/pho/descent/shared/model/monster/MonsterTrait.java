@@ -30,5 +30,5 @@ public enum MonsterTrait {
     public List<MonsterGroup> getMonsterGroups() {
         return monsterGroups;
     }
-    
+
 }

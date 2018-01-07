@@ -50,6 +50,7 @@ public class FirstBloodQuestSetup {
         }
         if (GOBLIN_ARCHER.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(GOBLIN_ARCHER_ELITE_ACT1);
+            gameMonster.setName("Elite " + gameMonster.getName());
             gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(GOBLIN_ARCHER).add(gameMonster);
         }
@@ -63,6 +64,7 @@ public class FirstBloodQuestSetup {
         }
         if (ETTIN.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(ETTIN_ELITE_ACT1);
+            gameMonster.setName("Elite " + gameMonster.getName());
             gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
             monsterMap.get(ETTIN).add(gameMonster);
         }

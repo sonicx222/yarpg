@@ -4,12 +4,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * REST DTO for errors
- * 
+ *
  * @author pho
  */
 @XmlRootElement
 public class ErrorMessage {
-    
+
     private String errorMessage;
     private int errorCode;
 
@@ -36,5 +36,5 @@ public class ErrorMessage {
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
-    
+
 }

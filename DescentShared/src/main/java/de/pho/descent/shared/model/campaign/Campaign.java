@@ -1,8 +1,8 @@
 package de.pho.descent.shared.model.campaign;
 
-import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
+import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.io.Serializable;
@@ -13,12 +13,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -56,8 +54,8 @@ public class Campaign implements Serializable {
     @Enumerated(EnumType.STRING)
     private QuestTemplate templateNextQuest;
 
-    @ManyToOne
-    private Player overlord;
+    @OneToOne
+    private Overlord overlord;
 
     @OneToOne
     private QuestEncounter activeQuest;
@@ -69,6 +67,11 @@ public class Campaign implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "campaign_id")
     private List<HeroSelection> heroSelections = new ArrayList<>();
+
+    public GameHero getActiveHero() {
+        return heroes.stream()
+                .filter(hero -> hero.isActive()).findAny().orElse(null);
+    }
 
     public Long getId() {
         return id;
@@ -114,11 +117,11 @@ public class Campaign implements Serializable {
         this.templateNextQuest = templateNextQuest;
     }
 
-    public Player getOverlord() {
+    public Overlord getOverlord() {
         return overlord;
     }
 
-    public void setOverlord(Player overlord) {
+    public void setOverlord(Overlord overlord) {
         this.overlord = overlord;
     }
 

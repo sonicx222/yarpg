@@ -1,7 +1,6 @@
 package de.pho.descent.shared.dto;
 
 import de.pho.descent.shared.model.PlaySide;
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -10,6 +9,7 @@ import de.pho.descent.shared.model.token.Token;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,8 +24,8 @@ public class WsQuestEncounter {
     private QuestPart part;
 
     private boolean isActive;
-
-    private GameHero activeHero;
+    
+        private PlaySide currentTurn;
 
     private PlaySide winner;
 
@@ -38,6 +38,12 @@ public class WsQuestEncounter {
     private List<Token> tokens = new ArrayList<>();
 
     public WsQuestEncounter() {
+    }
+
+    @XmlTransient
+    public GameMonster getActiveMonster() {
+        return gameMonsters.stream()
+                .filter(monster -> monster.isActive()).findAny().orElse(null);
     }
 
     public long getId() {
@@ -72,12 +78,12 @@ public class WsQuestEncounter {
         this.isActive = isActive;
     }
 
-    public GameHero getActiveHero() {
-        return activeHero;
+    public PlaySide getCurrentTurn() {
+        return currentTurn;
     }
 
-    public void setActiveHero(GameHero activeHero) {
-        this.activeHero = activeHero;
+    public void setCurrentTurn(PlaySide currentTurn) {
+        this.currentTurn = currentTurn;
     }
 
     public PlaySide getWinner() {
@@ -131,11 +137,11 @@ public class WsQuestEncounter {
         WsQuestEncounter wsEncounter = new WsQuestEncounter();
 
         wsEncounter.setId(qe.getId());
-        wsEncounter.setActiveHero(qe.getActiveHero());
-        wsEncounter.setIsActive(qe.isIsActive());
+        wsEncounter.setIsActive(qe.isActive());
         wsEncounter.setMapId(qe.getMap().getId());
         wsEncounter.setPart(qe.getPart());
         wsEncounter.setQuest(qe.getQuest());
+        wsEncounter.setCurrentTurn(qe.getCurrentTurn());
         wsEncounter.setWinner(qe.getWinner());
         wsEncounter.setRound(qe.getRound());
         wsEncounter.setGameMonsters(new ArrayList<>(qe.getMonsters()));

@@ -12,9 +12,9 @@ import com.airhacks.afterburner.views.FXMLView;
  * @author pho
  */
 public class MessageView extends FXMLView {
-    
+
     public MessagePresenter getRealPresenter() {
         return (MessagePresenter) super.getPresenter();
     }
-    
+
 }
