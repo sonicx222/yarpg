@@ -4,6 +4,8 @@ import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.overlord.Overlord;
+import de.pho.descent.shared.model.quest.Quest;
+import de.pho.descent.shared.model.quest.QuestPart;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,10 @@ public class WsCampaign {
     private CampaignPhase phase;
 
     private Overlord overlord;
+
+    private Quest currentQuest;
+
+    private QuestPart currentPart;
 
     private QuestTemplate nextQuest;
 
@@ -44,7 +50,7 @@ public class WsCampaign {
         this.nextQuest = nextQuest;
         this.questEncounterId = questEncounterId;
     }
-    
+
     @XmlTransient
     public GameHero getActiveHero() {
         return gameHeroes.stream()
@@ -73,6 +79,22 @@ public class WsCampaign {
 
     public void setOverlord(Overlord overlord) {
         this.overlord = overlord;
+    }
+
+    public Quest getCurrentQuest() {
+        return currentQuest;
+    }
+
+    public void setCurrentQuest(Quest currentQuest) {
+        this.currentQuest = currentQuest;
+    }
+
+    public QuestPart getCurrentPart() {
+        return currentPart;
+    }
+
+    public void setCurrentPart(QuestPart currentPart) {
+        this.currentPart = currentPart;
     }
 
     public QuestTemplate getNextQuest() {
@@ -136,6 +158,8 @@ public class WsCampaign {
         wsCampaign.setId(campaign.getId());
         wsCampaign.setOverlord(campaign.getOverlord());
         wsCampaign.setPhase(campaign.getPhase());
+        wsCampaign.setCurrentQuest(campaign.getActiveQuest() == null ? null : campaign.getActiveQuest().getQuest());
+        wsCampaign.setCurrentPart(campaign.getActiveQuest() == null ? null : campaign.getActiveQuest().getPart());
         wsCampaign.setNextQuest(campaign.getTemplateNextQuest());
         wsCampaign.setQuestEncounterId(campaign.getActiveQuest() == null ? 0 : campaign.getActiveQuest().getId());
 

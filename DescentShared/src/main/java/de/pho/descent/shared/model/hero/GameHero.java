@@ -1,13 +1,21 @@
 package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.item.Item;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -37,6 +45,20 @@ public class GameHero extends GameUnit implements Serializable {
 
     private int initiative;
 
+    @Enumerated(EnumType.STRING)
+    private Item weapon;
+
+    @Enumerated(EnumType.STRING)
+    private Item shield;
+
+    @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
+    @Column(name = "item", nullable = false)
+    @CollectionTable(name = "hero_inventory")
+    @Enumerated(EnumType.STRING)
+    private Collection<Item> inventory = new ArrayList<>();
+
+    private int xp;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastMessageUpdate;
 
@@ -55,6 +77,15 @@ public class GameHero extends GameUnit implements Serializable {
         this.willpower = template.getWillpower();
         this.awareness = template.getAwareness();
         this.initiative = template.getInitiative();
+
+        // starting gear
+        this.weapon = template.getStartWeapon();
+        this.shield = template.getStartShield();
+        if (template.getStartTrinket() != null) {
+            this.inventory.add(template.getStartTrinket());
+        }
+
+        this.xp = 0;
     }
 
     public int rollInitiative() {
@@ -109,6 +140,42 @@ public class GameHero extends GameUnit implements Serializable {
         this.initiative = initiative;
     }
 
+    public Item getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Item weapon) {
+        this.weapon = weapon;
+    }
+
+    public Item getShield() {
+        return shield;
+    }
+
+    public void setShield(Item shield) {
+        this.shield = shield;
+    }
+
+    public Collection<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public void addXp(int amount) {
+        this.xp = this.xp + amount;
+    }
+
     public int getMight() {
         return might;
     }
@@ -135,15 +202,20 @@ public class GameHero extends GameUnit implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.heroTemplate);
-        hash = 59 * hash + this.stamina;
-        hash = 59 * hash + this.exhaustion;
-        hash = 59 * hash + this.might;
-        hash = 59 * hash + this.knowledge;
-        hash = 59 * hash + this.willpower;
-        hash = 59 * hash + this.awareness;
-        hash = 59 * hash + this.initiative;
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.heroTemplate);
+        hash = 53 * hash + this.stamina;
+        hash = 53 * hash + this.exhaustion;
+        hash = 53 * hash + this.might;
+        hash = 53 * hash + this.knowledge;
+        hash = 53 * hash + this.willpower;
+        hash = 53 * hash + this.awareness;
+        hash = 53 * hash + this.initiative;
+        hash = 53 * hash + Objects.hashCode(this.weapon);
+        hash = 53 * hash + Objects.hashCode(this.shield);
+        hash = 53 * hash + Objects.hashCode(this.inventory);
+        hash = 53 * hash + this.xp;
+        hash = 53 * hash + Objects.hashCode(this.lastMessageUpdate);
         return hash;
     }
 
@@ -159,12 +231,6 @@ public class GameHero extends GameUnit implements Serializable {
             return false;
         }
         final GameHero other = (GameHero) obj;
-        if (!Objects.equals(this.getId(), other.getId())) {
-            return false;
-        }
-        if (!Objects.equals(this.getPlayedBy().getUsername(), getPlayedBy().getUsername())) {
-            return false;
-        }
         if (this.stamina != other.stamina) {
             return false;
         }
@@ -186,7 +252,22 @@ public class GameHero extends GameUnit implements Serializable {
         if (this.initiative != other.initiative) {
             return false;
         }
+        if (this.xp != other.xp) {
+            return false;
+        }
         if (this.heroTemplate != other.heroTemplate) {
+            return false;
+        }
+        if (this.weapon != other.weapon) {
+            return false;
+        }
+        if (this.shield != other.shield) {
+            return false;
+        }
+        if (!Objects.equals(this.inventory, other.inventory)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastMessageUpdate, other.lastMessageUpdate)) {
             return false;
         }
         return true;

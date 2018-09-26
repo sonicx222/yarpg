@@ -8,8 +8,10 @@ public enum CampaignPhase {
 
     HERO_SELECTION,
     ENCOUNTER,
+    FINISHED_ENCOUNTER,
     MARKETPLACE,
+    SKILL_SELECTION,
+    QUEST_SELECTION,
     TRAVEL,
     FINISHED;
-
 }

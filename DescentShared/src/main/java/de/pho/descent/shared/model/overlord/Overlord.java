@@ -31,6 +31,8 @@ public class Overlord implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private OverlordClass overlordClass;
+    
+    private int xp;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastMessageUpdate;
@@ -63,6 +65,19 @@ public class Overlord implements Serializable {
     public void setOverlordClass(OverlordClass overlordClass) {
         this.overlordClass = overlordClass;
     }
+
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+    
+    public void addXp(int amount) {
+        this.xp = this.xp + amount;
+    }
+    
 
     public Date getLastMessageUpdate() {
         return lastMessageUpdate;

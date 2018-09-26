@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,6 +52,9 @@ public class QuestEncounter implements Serializable {
     private boolean active;
 
     private int round;
+    
+    private int trigger;
+    
 
     @Enumerated(EnumType.STRING)
     private PlaySide currentTurn;
@@ -104,6 +108,14 @@ public class QuestEncounter implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(int trigger) {
+        this.trigger = trigger;
     }
 
     public int getRound() {
