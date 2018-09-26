@@ -34,7 +34,9 @@ public enum Item {
     START_THIEF_TRINKET("Lucky Charm", SCOUT, THIEF, ZERO, null, null, REROLL_ATTRIBUTE_TEST, null, null, TRINKET, OTHER, 0, 25, "scout_thief_trinket"),
     START_WILDLANDER_WEAPON("Yew Shortbow", SCOUT, WILDLANDER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(TWO_RANGE, ONE_DAMAGE), RANGED, BOW, TWO_HAND, 0, 25, "scout_wildlander_bow"),
     START_NECROMANCER_WEAPON("Reapers Scythe", MAGE, NECROMANCER, ZERO, Arrays.asList(BLUE, YELLOW), null, GAIN_ONE_HEALTH_PER_KILL, Arrays.asList(ONE_RANGE), RANGED, STAFF, TWO_HAND, 0, 25, "mage_necromancer_staff"),
-    START_RUNEMASTER_WEAPON("Arcane Bolt", MAGE, RUNEMASTER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(ONE_RANGE, TWO_PIERCE), RANGED, RUNE, TWO_HAND, 0, 25, "mage_runemaster_rune");
+    START_RUNEMASTER_WEAPON("Arcane Bolt", MAGE, RUNEMASTER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(ONE_RANGE, TWO_PIERCE), RANGED, RUNE, TWO_HAND, 0, 25, "mage_runemaster_rune"),
+    
+    IRON_BATTLEAXE("Iron Battleaxe", null, null, Tier.ONE, Arrays.asList(BLUE, RED), null, ItemEffect.ONE_PIERCE, Arrays.asList(SurgeAction.ONE_DAMAGE, SurgeAction.ONE_PIERCE), MELEE, AXE, TWO_HAND, 100, 75, "act1_iron_battleaxe");
 
     private final String name;
 
