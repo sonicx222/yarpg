@@ -29,7 +29,7 @@ public class QuestService {
     public QuestEncounter loadEncounterById(long encounterId) {
         QuestEncounter encounter = em.find(QuestEncounter.class, encounterId);
 
-        // prevent lazy load exception
+//        // prevent lazy load exception
         encounter.getMonsters().size();
         encounter.getToken().size();
 

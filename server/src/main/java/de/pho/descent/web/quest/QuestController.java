@@ -2,6 +2,7 @@ package de.pho.descent.web.quest;
 
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.campaign.Campaign;
+import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.monster.GameMonster;
@@ -9,7 +10,7 @@ import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.map.MapController;
-import de.pho.descent.web.quest.encounter.FirstBloodQuestSetup;
+import de.pho.descent.web.quest.encounter.FirstBlood;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedMap;
@@ -63,7 +64,7 @@ public class QuestController {
 
         switch (questTemplate) {
             case FIRST_BLOOD_INTRO:
-                FirstBloodQuestSetup.setup(encounter, campaign);
+                FirstBlood.setup(encounter, campaign);
                 break;
             default:
                 break;
@@ -71,6 +72,28 @@ public class QuestController {
 
         return questService.saveEncounter(encounter);
     }
+
+    public boolean isActiveQuestFinished(Campaign campaign) throws QuestValidationException {
+        QuestEncounter encounter = campaign.getActiveQuest();
+        boolean finished = false;
+
+        switch (encounter.getQuest()) {
+            case FIRST_BLOOD:
+                finished = FirstBlood.checkState(encounter);
+                if (finished) {
+                    FirstBlood.endQuest(campaign);
+
+                    // next phase
+                    campaign.setPhase(CampaignPhase.MARKETPLACE);
+                }
+                break;
+            default:
+                break;
+        }
+
+        return finished;
+    }
+    
 
     public void setNextActiveHero(Campaign campaign) {
         Objects.requireNonNull(campaign);
@@ -93,7 +116,7 @@ public class QuestController {
 
     }
 
-    public void setNextActiveUnit(Campaign campaign) {
+    public void setNextActiveUnit(Campaign campaign) throws QuestValidationException {
         Objects.requireNonNull(campaign);
         QuestEncounter activeQuest = campaign.getActiveQuest();
         List<GameMonster> activeMonsters = activeQuest.getMonsters().stream()
@@ -170,23 +193,34 @@ public class QuestController {
             campaign.getActiveHero().setActive(false);
         }
     }
+    
+    public void updateQuestTrigger(QuestEncounter encounter) {
+        switch (encounter.getQuest()) {
+            case FIRST_BLOOD:
+                FirstBlood.updateQuestTrigger(encounter);
+                break;
+            default:
+                break;
+        }
+    }
 
-    public void endRound(Campaign campaign) {
-        
+    public void endRound(Campaign campaign) throws QuestValidationException {
+
         QuestEncounter activeQuest = campaign.getActiveQuest();
         // increase round number
         activeQuest.setRound(activeQuest.getRound() + 1);
 
-        // TODO: check victory conditions for quest
-        
-        // reset all action points
-        campaign.getHeroes().stream()
-                .forEach(hero -> hero.setActions(2));
-        activeQuest.getMonsters().stream()
-                .forEach(monster -> monster.setActions(2));
+        // check victory conditions for specific quest round timer
+        if (!isActiveQuestFinished(campaign)) {
+            // reset all action points
+            campaign.getHeroes().stream()
+                    .forEach(hero -> hero.setActions(2));
+            activeQuest.getMonsters().stream()
+                    .forEach(monster -> monster.setActions(2));
 
-        // set random hero for new  round
-        setNextActiveHero(campaign);
+            // set random hero for new  round
+            setNextActiveHero(campaign);
+        }
     }
 
 }

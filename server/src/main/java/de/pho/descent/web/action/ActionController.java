@@ -34,7 +34,7 @@ public class ActionController {
     private MessageController messageController;
 
     public Campaign handleAction(Player actionPlayer, WsAction wsAction) throws NotFoundException, QuestValidationException, ActionException {
-
+        boolean questIsFinished = false;
         Campaign campaign = campaignController.getCampaignById(wsAction.getCampaignId());
 
         // check correct encounter
@@ -49,10 +49,12 @@ public class ActionController {
                 throw new QuestValidationException("Not your turn! Currently active hero: " + currentActiveHero.getName());
             }
 
-            // handle different types
-            handleActionType(actionPlayer, wsAction, campaign);
+            // handle different action types
+            questIsFinished = handleActionType(actionPlayer, wsAction, campaign);
 
-            if (currentActiveHero.getActions() == 0) {
+            if (questIsFinished) {
+                campaign = campaignController.endActiveQuest(campaign);
+            } else if (currentActiveHero.getActions() == 0) {
                 questController.setNextActiveUnit(campaign);
             }
         } else {
@@ -61,10 +63,12 @@ public class ActionController {
                 throw new QuestValidationException("Not your turn! Currently active monster: " + currentActiveMonster.getName());
             }
 
-            // handle different types
-            handleActionType(actionPlayer, wsAction, campaign);
+            // handle different action types
+            questIsFinished = handleActionType(actionPlayer, wsAction, campaign);
 
-            if (currentActiveMonster.getActions() == 0) {
+            if (questIsFinished) {
+                campaign = campaignController.endActiveQuest(campaign);
+            } else if (currentActiveMonster.getActions() == 0) {
                 questController.setNextActiveUnit(campaign);
             }
         }
@@ -72,7 +76,7 @@ public class ActionController {
         return campaign;
     }
 
-    private void handleActionType(Player actionPlayer, WsAction wsAction, Campaign campaign) throws ActionException {
+    private boolean handleActionType(Player actionPlayer, WsAction wsAction, Campaign campaign) throws ActionException, QuestValidationException {
         Message logMsg = null;
         switch (wsAction.getType()) {
             case MOVE:
@@ -84,5 +88,11 @@ public class ActionController {
                 messageController.saveMessage(logMsg);
                 break;
         }
+
+        // update quest based on actions
+        questController.updateQuestTrigger(campaign.getActiveQuest());
+
+        // check post action victory conditions for quest
+        return questController.isActiveQuestFinished(campaign);
     }
 }

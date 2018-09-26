@@ -15,6 +15,8 @@ import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.quest.QuestController;
+import de.pho.descent.web.quest.QuestValidationException;
+import de.pho.descent.web.quest.encounter.FirstBlood;
 import de.pho.descent.web.service.PersistenceService;
 import java.util.ArrayList;
 import java.util.Date;
@@ -184,6 +186,59 @@ public class CampaignController {
         c.setTemplateNextQuest(QuestTemplate.FIRST_BLOOD_INTRO);
 
         return campaignService.saveCampaign(c);
+    }
+
+    public Campaign endActiveQuest(Campaign campaign) throws QuestValidationException, NotFoundException {
+        QuestEncounter encounter = campaign.getActiveQuest();
+
+        switch (encounter.getQuest()) {
+            case FIRST_BLOOD: {
+                FirstBlood.endQuest(campaign);
+
+                // next phase
+                campaign = setNextCampaignPhase(campaign);
+            }
+            break;
+            default:
+                break;
+        }
+
+        return campaign;
+    }
+
+    public Campaign setNextCampaignPhase(String campaignId) throws NotFoundException {
+        Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
+
+        return setNextCampaignPhase(campaign);
+    }
+
+    public Campaign setNextCampaignPhase(Campaign campaign) throws NotFoundException {
+
+        switch (campaign.getPhase()) {
+            case HERO_SELECTION:
+                campaign.setPhase(CampaignPhase.ENCOUNTER);
+                break;
+            case ENCOUNTER:
+                campaign.setPhase(CampaignPhase.FINISHED_ENCOUNTER);
+                break;
+            case FINISHED:
+                campaign.setPhase(CampaignPhase.MARKETPLACE);
+                break;
+            case MARKETPLACE:
+                campaign.setPhase(CampaignPhase.SKILL_SELECTION);
+                break;
+            case SKILL_SELECTION:
+                campaign.setPhase(CampaignPhase.QUEST_SELECTION);
+                break;
+            case QUEST_SELECTION:
+                campaign.setPhase(CampaignPhase.TRAVEL);
+                break;
+            case TRAVEL:
+                campaign.setPhase(CampaignPhase.ENCOUNTER);
+                break;
+        }
+
+        return campaign;
     }
 
     /**
