@@ -32,6 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(de.pho.descent.web.campaign.CampaignBoundary.class);
         resources.add(de.pho.descent.web.campaign.HeroSelectionBoundary.class);
         resources.add(de.pho.descent.web.campaign.HeroSelectionExceptionMapper.class);
+        resources.add(de.pho.descent.web.cheat.CheatBoundary.class);
         resources.add(de.pho.descent.web.exception.GenericExceptionMapper.class);
         resources.add(de.pho.descent.web.hero.HeroBoundary.class);
         resources.add(de.pho.descent.web.map.MapBoundary.class);
