@@ -3,6 +3,7 @@ package de.pho.descent.fxclient.presentation.campaignselection;
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.config.Configuration;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
@@ -19,7 +20,7 @@ import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
 import java.net.URL;
-import java.util.Date;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
@@ -75,7 +76,7 @@ public class CampaignSelectionPresenter implements Initializable {
     private TableColumn<WsCampaign, QuestPart> campaignQuestPartColumn;
 
     @FXML
-    private TableColumn<WsCampaign, Date> campaignCreatedColumn;
+    private TableColumn<WsCampaign, String> campaignCreatedColumn;
 
     @FXML
     private ListView<WsMessage> chatListView;
@@ -123,9 +124,13 @@ public class CampaignSelectionPresenter implements Initializable {
             return new SimpleStringProperty(strPlayers);
         });
         campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));
-        campaignQuestColumn.setCellValueFactory(new PropertyValueFactory<>("activeQuest"));
-        campaignQuestPartColumn.setCellValueFactory(new PropertyValueFactory<>("part"));
-        campaignCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("createdOn"));
+        campaignQuestColumn.setCellValueFactory(new PropertyValueFactory<>("currentQuest"));
+        campaignQuestPartColumn.setCellValueFactory(new PropertyValueFactory<>("currentPart"));
+        campaignCreatedColumn.setCellValueFactory(
+                (TableColumn.CellDataFeatures<WsCampaign, String> p) -> new SimpleStringProperty(
+                        Configuration.DATE_TIME_FORMAT.format(p.getValue().getCreatedOn()
+                                .toInstant().atZone(ZoneId.systemDefault())
+                                .toLocalDateTime())));
 
         // selection action
         campaignsTableView.getSelectionModel().selectedItemProperty()
@@ -199,12 +204,14 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     public void handleRefresh(MouseEvent event) {
+        LOGGER.info("CampaignSelectionPresenter: handleRefresh");
         updatePlayableCampaigns();
         messageService.updateGeneralMessages();
     }
 
     @FXML
     public void handleContinue(MouseEvent event) {
+        LOGGER.info("CampaignSelectionPresenter: handleContinue");
         requireNonNull(selectedCampaign);
         gameDataModel.setCurrentCampaign(selectedCampaign);
         if (selectedCampaign.getPhase() == CampaignPhase.HERO_SELECTION) {
@@ -220,6 +227,7 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     public void handleSendMessage(MouseEvent event) {
+        LOGGER.info("CampaignSelectionPresenter: handleSendMessage");
         // cast Event to prevent recursive stack overflow
         handleSendMessage((Event) event);
     }

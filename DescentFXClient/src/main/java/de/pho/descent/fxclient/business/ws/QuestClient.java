@@ -40,6 +40,7 @@ public class QuestClient extends BaseRESTClient {
                     .request(MediaType.APPLICATION_JSON)
                     .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
                     .get();
+            LOG.info(getResponse.toString());
 
             WsQuestEncounter wsQuestEncounter = null;
             if (getResponse.getStatus() == Response.Status.OK.getStatusCode()) {

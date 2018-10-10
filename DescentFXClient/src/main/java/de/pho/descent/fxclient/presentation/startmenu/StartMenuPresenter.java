@@ -19,13 +19,13 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.controlsfx.control.Notifications;
 
@@ -47,7 +47,7 @@ public class StartMenuPresenter implements Initializable {
     private StackPane paneJoinCampaign;
 
     @FXML
-    private Text textJoinCampaign;
+    private Label labelJoinCampaign;
 
     @Inject
     private Credentials credentials;
@@ -69,10 +69,10 @@ public class StartMenuPresenter implements Initializable {
         // update menu
         if (gameDataModel.getPlayableCampaigns().isEmpty()) {
             paneJoinCampaign.setDisable(true);
-            textJoinCampaign.setFill(Color.BLACK);
+            labelJoinCampaign.setTextFill(Color.BLACK);
         } else {
             paneJoinCampaign.setDisable(false);
-            textJoinCampaign.setFill(Color.DARKGRAY);
+            labelJoinCampaign.setTextFill(Color.DARKGRAY);
         }
     }
 

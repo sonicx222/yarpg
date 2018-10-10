@@ -1,22 +1,18 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
+@font-face {
+    src: url('/fonts/Windlass.ttf');
+}
 
-/* 
- * This file can be manually injected into your file loginscreen.fxml via:
- * 
- * <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.descentfxclient.presentation.loginscreen.LoginscreenPresenter">
- *     <stylesheets>
- *         <URL value="@loginscreen.css"/>
- *     </stylesheets>
- * </AnchorPane>
- * 
- * The above shown soucecode will be automatically generated if you have the
- * options to create (and to inject) the 'optional' .css file into your 
- * file loginscreen.fxml selected in the page 'Optional Files'.
- * 
- * Created on : 08.04.2017, 10:40:02
- * Author     : pho
- */
+#user-text {
+    -fx-font-size: 18pt;
+    -fx-font-family: 'Windlass';
+}
+#pwd-text {
+    -fx-font-size: 18pt;
+    -fx-font-family: 'Windlass';
+}
+
+/* button-text */
+VBox > StackPane > .label {
+    -fx-font-size: 18pt;
+    -fx-font-family: 'Windlass';
+}

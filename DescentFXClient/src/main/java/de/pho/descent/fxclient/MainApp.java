@@ -67,6 +67,7 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         Injector.forgetAll();
+        LOGMANAGER.reset();
     }
 
     public static void switchToScene(final Stage previousStage, FXMLView viewOfScene) {

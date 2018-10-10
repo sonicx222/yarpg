@@ -2,6 +2,7 @@ package de.pho.descent.fxclient.presentation.message;
 
 import static de.pho.descent.fxclient.MainApp.showError;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.config.Configuration;
 import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
@@ -9,7 +10,6 @@ import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.shared.dto.WsMessage;
 import java.net.URL;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -58,7 +58,6 @@ public class MessagePresenter implements Initializable {
         chatListView.setItems(gameDataModel.getCampaignMessages());
         chatListView.setCellFactory(param -> new ListCell<WsMessage>() {
             private Text text;
-            private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss");
 
             @Override
             protected void updateItem(WsMessage item, boolean empty) {
@@ -76,7 +75,7 @@ public class MessagePresenter implements Initializable {
                             text.setFill(Color.CORNFLOWERBLUE);
                             break;
                         default:
-                            text = new Text(dateTimeFormatter.format(item.getCreatedOn()
+                            text = new Text(Configuration.DATE_TIME_FORMAT.format(item.getCreatedOn()
                                     .toInstant().atZone(ZoneId.systemDefault())
                                     .toLocalDateTime())
                                     + " " + item.getUsername() + ": " + item.getMessageText());

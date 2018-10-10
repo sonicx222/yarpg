@@ -14,9 +14,7 @@ import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.action.ActionType;
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.MapField;
-import de.pho.descent.shared.model.monster.GameMonster;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -178,16 +176,15 @@ public class MapPresenter implements Initializable {
         moveAction.setCampaignId(gameDataModel.getCurrentCampaign().getId());
         moveAction.setQuestEncounterId(gameDataModel.getCurrentQuestEncounter().getId());
         moveAction.setType(ActionType.MOVE);
-        moveAction.setSourceField(mapDataModel.getActiveUnit().getKey().getCurrentLocation());
-        moveAction.setTargetField((MapField) r.getUserData());
+        moveAction.setSourceFields(mapDataModel.getActiveUnit().getKey().getCurrentLocation());
+        moveAction.getTargetFields().add((MapField) r.getUserData());
 
         if (gameDataModel.getCurrentQuestEncounter().getCurrentTurn() == PlaySide.HEROES) {
-            moveAction.setSourceHero((GameHero) mapDataModel.getActiveUnit().getKey());
             moveAction.setHeroAction(true);
         } else {
-            moveAction.setSourceMonster((GameMonster) mapDataModel.getActiveUnit().getKey());
             moveAction.setHeroAction(false);
         }
+        moveAction.setSourceUnitId(mapDataModel.getActiveUnit().getKey().getId());
 
         try {
             updatedCampaign = ActionClient.sendAction(credentials, moveAction);

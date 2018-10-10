@@ -8,6 +8,7 @@ import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.action.ActionType;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -42,6 +43,8 @@ public class GameDataModel {
     private WsQuestEncounter currentQuestEncounter;
 
     private WsGameMap currentQuestMap;
+    
+    private StringProperty round;
 
     private LinearGradient buttonGradient;
 
@@ -97,7 +100,13 @@ public class GameDataModel {
         this.prologBoxVisible = prologBoxVisible;
     }
 
-    
+    public StringProperty getRound() {
+        return round;
+    }
+
+    public void setRound(StringProperty round) {
+        this.round = round;
+    }
     
     public WsCampaign getCurrentCampaign() {
         return currentCampaign;

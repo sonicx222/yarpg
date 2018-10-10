@@ -7,6 +7,7 @@ import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
+import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.Player;
@@ -19,15 +20,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javax.inject.Inject;
 import org.controlsfx.control.Notifications;
-import org.controlsfx.validation.ValidationSupport;
-import org.controlsfx.validation.Validator;
-import org.controlsfx.validation.decoration.StyleClassValidationDecoration;
 
 /**
  *
@@ -41,45 +35,17 @@ public class LoginscreenPresenter implements Initializable {
     @FXML
     private TextField loginPwdText;
 
-    @FXML
-    private StackPane paneRegister;
-
-    @FXML
-    private Rectangle itemRegister;
-
-    @FXML
-    private Text textRegister;
-
-    @FXML
-    private StackPane paneLogin;
-
-    @FXML
-    private Rectangle itemLogin;
-
-    @FXML
-    private Text textLogin;
-
-    @FXML
-    private StackPane paneExit;
-
-    @FXML
-    private Rectangle itemExit;
-
-    @FXML
-    private Text textExit;
-
     @Inject
     private Credentials credentials;
 
     @Inject
     private GameDataModel gameDataModel;
 
-    private final ValidationSupport validationSupport = new ValidationSupport();
+    @Inject
+    private GameService gameService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        validationSupport.setValidationDecorator(new StyleClassValidationDecoration());
 
         // return key on pwd field
         loginPwdText.setOnKeyPressed(e -> {
@@ -87,67 +53,10 @@ public class LoginscreenPresenter implements Initializable {
                 handleLogin(e);
             }
         });
-
-        // on Mouse entered
-        paneRegister.setOnMouseEntered(event -> {
-            itemRegister.setFill(gameDataModel.getButtonGradient());
-            textRegister.setFill(Color.WHITE);
-        });
-        paneLogin.setOnMouseEntered(event -> {
-            itemLogin.setFill(gameDataModel.getButtonGradient());
-            textLogin.setFill(Color.WHITE);
-        });
-        paneExit.setOnMouseEntered(event -> {
-            itemExit.setFill(gameDataModel.getButtonGradient());
-            textExit.setFill(Color.WHITE);
-        });
-
-        // on Mouse exited
-        paneRegister.setOnMouseExited(event -> {
-            itemRegister.setFill(Color.BLACK);
-            textRegister.setFill(Color.DARKGREY);
-        });
-        paneLogin.setOnMouseExited(event -> {
-            itemLogin.setFill(Color.BLACK);
-            textLogin.setFill(Color.DARKGREY);
-        });
-        paneExit.setOnMouseExited(event -> {
-            itemExit.setFill(Color.BLACK);
-            textExit.setFill(Color.DARKGREY);
-        });
-
-        // on Mouse pressed
-        paneRegister.setOnMousePressed(event -> {
-            itemRegister.setFill(Color.DARKVIOLET);
-        });
-        paneLogin.setOnMousePressed(event -> {
-            itemLogin.setFill(Color.DARKVIOLET);
-        });
-        paneExit.setOnMousePressed(event -> {
-            itemExit.setFill(Color.DARKVIOLET);
-        });
-
-        // on Mouse released
-        paneRegister.setOnMouseReleased(event -> {
-            itemRegister.setFill(gameDataModel.getButtonGradient());
-        });
-        paneLogin.setOnMouseReleased(event -> {
-            itemLogin.setFill(gameDataModel.getButtonGradient());
-        });
-        paneExit.setOnMouseReleased(event -> {
-            itemExit.setFill(gameDataModel.getButtonGradient());
-        });
-
-        // set font
-//        textLogin.setFont(gameFont);
-//        textRegister.setFont(gameFont);
     }
 
     @FXML
     public void handleRegister(MouseEvent event) {
-        validationSupport.registerValidator(loginUserText, Validator.createEmptyValidator("Username is required"));
-        validationSupport.registerValidator(loginPwdText, Validator.createEmptyValidator("Password is required"));
-
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {
             Player player = null;
@@ -194,5 +103,25 @@ public class LoginscreenPresenter implements Initializable {
                 switchFullscreenScene(event, new StartMenuView());
             }
         }
+    }
+
+    @FXML
+    public void handleOnMouseEntered(MouseEvent event) {
+        gameService.handleOnMouseEntered(event);
+    }
+
+    @FXML
+    public void handleOnMouseExited(MouseEvent event) {
+        gameService.handleOnMouseExited(event);
+    }
+
+    @FXML
+    public void handleOnMousePressed(MouseEvent event) {
+        gameService.handleOnMousePressed(event);
+    }
+
+    @FXML
+    public void handleOnMouseReleased(MouseEvent event) {
+        gameService.handleOnMouseReleased(event);
     }
 }

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -20,11 +21,7 @@
                 <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
                     <children>
                         <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
-                        <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Text>
+                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150" text="Send" textFill="DARKGRAY" />
                     </children>
                 </StackPane>
                 <Line endX="150.0" stroke="DARKGRAY" />

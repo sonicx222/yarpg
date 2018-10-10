@@ -10,9 +10,11 @@ import de.pho.descent.shared.model.token.Token;
 import de.pho.descent.shared.model.token.TokenType;
 import de.pho.descent.shared.service.MapRangeService;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -65,13 +67,21 @@ public class MapService {
 
         node.setEffect(borderGlow);
     }
-    
+
     public void calcAndDisplayAllowedPositions(GameUnit unit) {
-        List<MapField> unpassableFields = gameDataModel.getCurrentCampaign().getGameHeroes().stream()
-                .map(GameHero::getCurrentLocation).collect(Collectors.toList());
-        unpassableFields.addAll(gameDataModel.getCurrentQuestEncounter().getGameMonsters().stream()
-                .map(GameMonster::getCurrentLocation).collect(Collectors.toList()));
-        Set<MapField> fieldsInRange = MapRangeService.getFieldsInRange(
+        // treat GameUnit locations as unpassable fields for range check
+        List<MapField> unpassableFields = new ArrayList<>();
+
+        // add hero locations
+        for (GameHero hero : gameDataModel.getCurrentCampaign().getGameHeroes()) {
+            unpassableFields.addAll(hero.getCurrentLocation());
+        }
+        // add monster locations
+        for (GameMonster monster : gameDataModel.getCurrentQuestEncounter().getGameMonsters()) {
+            unpassableFields.addAll(monster.getCurrentLocation());
+        }
+
+        Set<MapField> fieldsInRange = MapRangeService.getFieldsInMovementRange(
                 unit.getCurrentLocation(),
                 unit.getMovementPoints(), gameDataModel.getCurrentQuestMap().getMapFields(), unpassableFields);
 
@@ -99,8 +109,8 @@ public class MapService {
 //                handleHeroSelected(b);
 //            });
             }
-            heroButton.setTranslateX(hero.getCurrentLocation().getxPos() * FIELD_SIZE);
-            heroButton.setTranslateY(hero.getCurrentLocation().getyPos() * FIELD_SIZE);
+            heroButton.setTranslateX(hero.getCurrentLocation().get(0).getxPos() * FIELD_SIZE);
+            heroButton.setTranslateY(hero.getCurrentLocation().get(0).getyPos() * FIELD_SIZE);
 
             mapDataModel.getMapStackPaneElements().add(heroButton);
         });
@@ -117,8 +127,14 @@ public class MapService {
 //                Button b = (Button) e.getSource();
 //                handleHeroSelected(b);
 //            });
-            monsterButton.setTranslateX(monster.getCurrentLocation().getxPos() * FIELD_SIZE);
-            monsterButton.setTranslateY(monster.getCurrentLocation().getyPos() * FIELD_SIZE);
+
+            // make sure the northwest field of 2x2 monsters is used: lowest field id
+            MapField northwestField = monster.getCurrentLocation()
+                    .stream()
+                    .min(Comparator.comparing(MapField::getId))
+                    .orElseThrow(NoSuchElementException::new);
+            monsterButton.setTranslateX(northwestField.getxPos() * FIELD_SIZE);
+            monsterButton.setTranslateY(northwestField.getyPos() * FIELD_SIZE);
 
             mapDataModel.getMapStackPaneElements().add(monsterButton);
         });

@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -18,6 +19,9 @@ public class Configuration {
 
     public static final String LOGGING_PROPERTIES_FILE = "logging.properties";
     public static final String ERROR_LOGGING_PROPERTIES = "Error loading the configuration from 'logging.properties'";
+    
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss");
     
     private static final Logger LOGGER = Logger.getLogger(Configuration.class.getName());
     private static final Properties CONFIG_PROPERTIES = new Properties();

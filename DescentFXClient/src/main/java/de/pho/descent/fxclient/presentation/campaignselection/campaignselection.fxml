@@ -30,11 +30,7 @@
                         <StackPane fx:id="paneBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
                             <children>
                                 <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
-                                    <font>
-                                        <Font name="Tw Cen MT Condensed" size="22.0" />
-                                    </font>
-                                </Text>
+                                <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Back" textFill="DARKGRAY" />
                             </children>
                         </StackPane>
                         <Line endX="200.0" stroke="DARKGRAY" />

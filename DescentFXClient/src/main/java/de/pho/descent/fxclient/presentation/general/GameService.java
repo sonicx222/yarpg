@@ -2,6 +2,7 @@ package de.pho.descent.fxclient.presentation.general;
 
 import static de.pho.descent.fxclient.MainApp.showError;
 import de.pho.descent.fxclient.business.auth.Credentials;
+import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.MapClient;
 import de.pho.descent.fxclient.business.ws.QuestClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
@@ -15,6 +16,7 @@ import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.GameUnit;
 import java.util.Objects;
 import java.util.logging.Logger;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -96,6 +98,8 @@ public class GameService {
                     ((Rectangle) node).setFill(gameDataModel.getButtonGradient());
                 } else if (node instanceof Text) {
                     ((Text) node).setFill(Color.WHITE);
+                } else if (node instanceof Label) {
+                    ((Label) node).setTextFill(Color.WHITE);
                 }
             });
         }
@@ -110,6 +114,8 @@ public class GameService {
                     ((Rectangle) node).setFill(Color.BLACK);
                 } else if (node instanceof Text) {
                     ((Text) node).setFill(Color.DARKGREY);
+                } else if (node instanceof Label) {
+                    ((Label) node).setTextFill(Color.DARKGREY);
                 }
             });
         }
@@ -136,6 +142,35 @@ public class GameService {
                     ((Rectangle) node).setFill(gameDataModel.getButtonGradient());
                 }
             });
+        }
+    }
+
+    public void startCampaign() {
+        WsCampaign startedCampaign = null;
+        try {
+            startedCampaign = CampaignClient.startCampaign(credentials.getUsername(),
+                    credentials.getPassword(), gameDataModel.getCurrentCampaign());
+        } catch (ServerException ex) {
+            showError(ex);
+        }
+        if (startedCampaign != null) {
+            gameDataModel.setCurrentCampaign(startedCampaign);
+        }
+    }
+
+    public void updateCampaign() {
+        WsCampaign updatedCampaign = null;
+        try {
+            updatedCampaign = CampaignClient.getCampaignById(
+                    credentials.getUsername(),
+                    credentials.getPassword(),
+                    gameDataModel.getCurrentCampaign().getId());
+        } catch (ServerException ex) {
+            showError(ex);
+        }
+        if (updatedCampaign != null) {
+            // update
+            gameDataModel.setCurrentCampaign(updatedCampaign);
         }
     }
 
