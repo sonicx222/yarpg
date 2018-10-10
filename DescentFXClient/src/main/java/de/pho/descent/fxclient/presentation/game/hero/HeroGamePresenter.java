@@ -1,17 +1,12 @@
 package de.pho.descent.fxclient.presentation.game.hero;
 
-import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.ws.CampaignClient;
-import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
-import de.pho.descent.fxclient.presentation.game.map.MapDataModel;
 import de.pho.descent.fxclient.presentation.game.map.MapService;
 
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
-import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.hero.GameHero;
 import java.io.InputStream;
@@ -38,6 +33,9 @@ public class HeroGamePresenter implements Initializable {
 
     @FXML
     private VBox prologBox;
+
+    @FXML
+    private Label labelRound;
 
     /**
      * Hero Data & Sheet
@@ -94,8 +92,6 @@ public class HeroGamePresenter implements Initializable {
     private HeroGameModel heroGameModel;
     @Inject
     private MapService mapService;
-    @Inject
-    private MapDataModel mapDataModel;
 
     private String buttonMoveText;
     private String buttonAttackText;
@@ -116,7 +112,6 @@ public class HeroGamePresenter implements Initializable {
         heroGameService.updateHeroStats();
 
         // show prolog
-        gameDataModel.setPrologBoxVisible(prologBox.visibleProperty());
         if (gameDataModel.getCurrentQuestEncounter().getRound() == 1) {
             prologBox.setVisible(true);
         }
@@ -126,6 +121,9 @@ public class HeroGamePresenter implements Initializable {
         buttonMoveText = resources.getString("button.hero.game.move.toggle");
         buttonAttackText = resources.getString("button.hero.game.attack.toggle");
         buttonCancelText = resources.getString("button.hero.game.cancel.toggle");
+
+        gameDataModel.setPrologBoxVisible(prologBox.visibleProperty());
+        gameDataModel.setRound(labelRound.textProperty());
 
         gameDataModel.setMoveButton(moveButton);
         gameDataModel.setAttackButton(attackButton);
@@ -177,19 +175,8 @@ public class HeroGamePresenter implements Initializable {
     @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("HeroGamePresenter: handleRefresh()");
-        WsCampaign updatedCampaign = null;
-        try {
-            updatedCampaign = CampaignClient.getCampaignById(
-                    credentials.getUsername(),
-                    credentials.getPassword(),
-                    gameDataModel.getCurrentCampaign().getId());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-        if (updatedCampaign != null) {
-            // update
-            gameService.updateGameState(updatedCampaign);
-        }
+        gameService.updateCampaign();
+        gameService.updateGameState(gameDataModel.getCurrentCampaign());
     }
 
     @FXML
