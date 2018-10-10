@@ -11,7 +11,8 @@ public class WsCheatBox {
 
     private long campaignId;
     private PlaySide winner;
-    private long heroId;
+    private long unitId;
+    private long fieldId;
     private Item item;
 
     public long getCampaignId() {
@@ -30,12 +31,20 @@ public class WsCheatBox {
         this.winner = winner;
     }
 
-    public long getHeroId() {
-        return heroId;
+    public long getUnitId() {
+        return unitId;
     }
 
-    public void setHeroId(long heroId) {
-        this.heroId = heroId;
+    public void setUnitId(long unitId) {
+        this.unitId = unitId;
+    }
+
+    public long getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(long fieldId) {
+        this.fieldId = fieldId;
     }
 
     public Item getItem() {

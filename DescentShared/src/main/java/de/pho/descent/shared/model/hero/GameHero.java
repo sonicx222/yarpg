@@ -2,6 +2,7 @@ package de.pho.descent.shared.model.hero;
 
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.item.Item;
+import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -27,7 +29,7 @@ import javax.persistence.TemporalType;
 public class GameHero extends GameUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Enumerated(EnumType.STRING)
     private HeroTemplate heroTemplate;
 

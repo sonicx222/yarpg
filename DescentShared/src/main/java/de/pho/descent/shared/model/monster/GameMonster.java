@@ -1,10 +1,13 @@
 package de.pho.descent.shared.model.monster;
 
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -14,7 +17,7 @@ import javax.persistence.Enumerated;
 public class GameMonster extends GameUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Enumerated(EnumType.STRING)
     private MonsterTemplate monsterTemplate;
 
@@ -29,7 +32,7 @@ public class GameMonster extends GameUnit implements Serializable {
         super.setActions(2);
         this.monsterTemplate = template;
     }
-
+    
     public MonsterTemplate getMonsterTemplate() {
         return monsterTemplate;
     }

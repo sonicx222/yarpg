@@ -1,9 +1,17 @@
 package de.pho.descent.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -11,13 +19,18 @@ import javax.persistence.TemporalType;
  *
  * @author pho
  */
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class GameUnit extends GameEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
     private Player playedBy;
+    
+    @OneToMany(mappedBy = "gameUnit")
+    @JsonManagedReference(value="unit-location")
+    private List<MapField> currentLocation = new ArrayList<>();
 
     @Temporal(TemporalType.DATE)
     private final Date createdOn = new Date();
@@ -33,6 +46,14 @@ public class GameUnit extends GameEntity implements Serializable {
     private int movementSpent;
 
     private boolean active;
+
+    public List<MapField> getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(List<MapField> currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 
     public Player getPlayedBy() {
         return playedBy;
@@ -89,5 +110,5 @@ public class GameUnit extends GameEntity implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
-
+    
 }

@@ -162,34 +162,38 @@ public class GameMap implements Serializable {
 
     @Override
     public String toString() {
+        return "GameMap{" + "id=" + id + ", quest=" + quest + ", part=" + part + '}';
+    }
+
+    public String asText() {
         Character[][] layout = new Character[gridXSize][gridYSize];
 
         for (int x = 0; x < gridXSize; x++) {
             for (int y = 0; y < gridYSize; y++) {
-                layout[x][y] = 'X';
+                layout[x][y] = ' ';
             }
         }
 
         for (MapField field : mapFields) {
-            layout[field.getxPos() - 1][field.getyPos() - 1] = Character.forDigit(field.getMoveCost(), 10);
+            layout[field.getxPos()][field.getyPos()] = Character.forDigit(field.getMoveCost(), 10);
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(toString());
         sb.append(System.lineSeparator());
 
         sb.append(System.lineSeparator()).append('+');
         for (int x = 0; x < gridXSize; x++) {
-            sb.append("-+");
+            sb.append(" - +");
         }
 
         for (int y = 0; y < gridYSize; y++) {
             sb.append(System.lineSeparator()).append('|');
             for (int x = 0; x < gridXSize; x++) {
-                sb.append(layout[x][y]).append('|');
+                sb.append(" ").append(layout[x][y]).append(" |");
             }
             sb.append(System.lineSeparator()).append('+');
             for (int x = 0; x < gridXSize; x++) {
-                sb.append("-+");
+                sb.append(" - +");
             }
         }
 

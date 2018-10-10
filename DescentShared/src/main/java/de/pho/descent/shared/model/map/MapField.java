@@ -1,12 +1,17 @@
 package de.pho.descent.shared.model.map;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -32,6 +37,21 @@ public class MapField implements Serializable {
     @ManyToOne
     private MapTileGroup tileGroup;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "gameunit_id", nullable = true)
+    @JsonBackReference(value="unit-location")
+    private GameUnit gameUnit;
+
+//    @ManyToOne
+//    @JoinColumn(name = "gamemonster_id")
+//    private GameMonster gameMonster;
+    
+    
+    @OneToOne(optional = true)
+    @JoinColumn(name = "token_id", nullable = true)
+    @JsonBackReference(value="token-location")
+    private Token token;
+
     private int xPos;
 
     private int yPos;
@@ -47,8 +67,10 @@ public class MapField implements Serializable {
     public MapField() {
     }
 
-    public MapField(MapTileGroup tileGroup, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn) {
+    public MapField(MapTileGroup tileGroup, GameUnit gameUnit, Token token, int xPos, int yPos, int moveCost, boolean passable, boolean heroSpawn, boolean monsterSpawn) {
         this.tileGroup = tileGroup;
+        this.gameUnit = gameUnit;
+        this.token = token;
         this.xPos = xPos;
         this.yPos = yPos;
         this.moveCost = moveCost;
@@ -71,6 +93,37 @@ public class MapField implements Serializable {
 
     public void setTileGroup(MapTileGroup tileGroup) {
         this.tileGroup = tileGroup;
+    }
+
+//    public GameHero getGameHero() {
+//        return gameHero;
+//    }
+//
+//    public void setGameHero(GameHero gameHero) {
+//        this.gameHero = gameHero;
+//    }
+//
+//    public GameMonster getGameMonster() {
+//        return gameMonster;
+//    }
+//
+//    public void setGameMonster(GameMonster gameMonster) {
+//        this.gameMonster = gameMonster;
+//    }
+    public GameUnit getGameUnit() {
+        return gameUnit;
+    }
+
+    public void setGameUnit(GameUnit gameUnit) {
+        this.gameUnit = gameUnit;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
     }
 
     public int getxPos() {
@@ -124,14 +177,13 @@ public class MapField implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + Objects.hashCode(this.tileGroup);
-        hash = 79 * hash + this.xPos;
-        hash = 79 * hash + this.yPos;
-        hash = 79 * hash + this.moveCost;
-        hash = 79 * hash + (this.passable ? 1 : 0);
-        hash = 79 * hash + (this.heroSpawn ? 1 : 0);
-        hash = 79 * hash + (this.monsterSpawn ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.tileGroup);
+        hash = 97 * hash + this.xPos;
+        hash = 97 * hash + this.yPos;
+        hash = 97 * hash + this.moveCost;
+        hash = 97 * hash + (this.passable ? 1 : 0);
+        hash = 97 * hash + (this.heroSpawn ? 1 : 0);
+        hash = 97 * hash + (this.monsterSpawn ? 1 : 0);
         return hash;
     }
 
@@ -165,13 +217,12 @@ public class MapField implements Serializable {
         if (this.monsterSpawn != other.monsterSpawn) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.tileGroup, other.tileGroup)) {
             return false;
         }
         return true;
     }
+
+
 
 }

@@ -1,10 +1,9 @@
 package de.pho.descent.shared.dto;
 
-import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.action.ActionType;
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.MapField;
-import de.pho.descent.shared.model.monster.GameMonster;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,37 +14,29 @@ public class WsAction {
     private long campaignId;
 
     private long questEncounterId;
-    
+
     private boolean heroAction;
 
     private ActionType type;
 
-    private GameHero sourceHero;
-    
-    private GameHero targetHero;
+    private long sourceUnitId;
 
-    private GameMonster sourceMonster;
-    
-    private GameMonster targetMonster;
+    private long targetUnitId;
 
-    private MapField sourceField;
+    private List<MapField> sourceFields = new ArrayList<>();
 
-    private MapField targetField;
+    private List<MapField> targetFields = new ArrayList<>();
 
     public WsAction() {
     }
 
-    public WsAction(long campaignId, long questEncounterId, boolean heroAction, ActionType type, GameHero sourceHero, GameHero targetHero, GameMonster sourceMonster, GameMonster targetMonster, MapField sourceField, MapField targetField) {
+    public WsAction(long campaignId, long questEncounterId, boolean heroAction, ActionType type, long sourceUnitId, long targetUnitId) {
         this.campaignId = campaignId;
         this.questEncounterId = questEncounterId;
         this.heroAction = heroAction;
         this.type = type;
-        this.sourceHero = sourceHero;
-        this.targetHero = targetHero;
-        this.sourceMonster = sourceMonster;
-        this.targetMonster = targetMonster;
-        this.sourceField = sourceField;
-        this.targetField = targetField;
+        this.sourceUnitId = sourceUnitId;
+        this.targetUnitId = targetUnitId;
     }
 
     public long getCampaignId() {
@@ -80,54 +71,36 @@ public class WsAction {
         this.heroAction = heroAction;
     }
 
-    public GameHero getSourceHero() {
-        return sourceHero;
+    public long getSourceUnitId() {
+        return sourceUnitId;
     }
 
-    public void setSourceHero(GameHero sourceHero) {
-        this.sourceHero = sourceHero;
+    public void setSourceUnitId(long sourceUnitId) {
+        this.sourceUnitId = sourceUnitId;
     }
 
-    public GameHero getTargetHero() {
-        return targetHero;
+    public long getTargetUnitId() {
+        return targetUnitId;
     }
 
-    public void setTargetHero(GameHero targetHero) {
-        this.targetHero = targetHero;
+    public void setTargetUnitId(long targetUnitId) {
+        this.targetUnitId = targetUnitId;
     }
 
-    public GameMonster getSourceMonster() {
-        return sourceMonster;
+    public List<MapField> getSourceFields() {
+        return sourceFields;
     }
 
-    public void setSourceMonster(GameMonster sourceMonster) {
-        this.sourceMonster = sourceMonster;
+    public void setSourceFields(List<MapField> sourceFields) {
+        this.sourceFields = sourceFields;
     }
 
-    public GameMonster getTargetMonster() {
-        return targetMonster;
+    public List<MapField> getTargetFields() {
+        return targetFields;
     }
 
-    public void setTargetMonster(GameMonster targetMonster) {
-        this.targetMonster = targetMonster;
-    }
-
-
-
-    public MapField getSourceField() {
-        return sourceField;
-    }
-
-    public void setSourceField(MapField sourceField) {
-        this.sourceField = sourceField;
-    }
-
-    public MapField getTargetField() {
-        return targetField;
-    }
-
-    public void setTargetField(MapField targetField) {
-        this.targetField = targetField;
+    public void setTargetFields(List<MapField> targetFields) {
+        this.targetFields = targetFields;
     }
 
 }

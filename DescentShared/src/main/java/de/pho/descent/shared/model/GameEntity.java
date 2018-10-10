@@ -2,6 +2,7 @@ package de.pho.descent.shared.model;
 
 import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,13 +11,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author pho
  */
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class GameEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,9 +27,6 @@ public class GameEntity implements Serializable {
     private Long id;
 
     private String name;
-
-    @ManyToOne
-    private MapField currentLocation;
 
     public Long getId() {
         return id;
@@ -45,13 +43,4 @@ public class GameEntity implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public MapField getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(MapField currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
 }
