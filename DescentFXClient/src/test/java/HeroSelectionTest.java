@@ -13,6 +13,7 @@ import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.overlord.OverlordClass;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import java.util.List;
+import java.util.logging.Logger;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +31,8 @@ import org.junit.Ignore;
 @Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HeroSelectionTest {
+
+    private static final Logger LOG = Logger.getLogger(HeroSelectionTest.class.getName());
 
     private static final String credentialsP1 = "player1";
     private static final String credentialsP2 = "player2";
@@ -68,6 +71,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign1() throws ServerException {
+        LOG.info("testHeroSelectionCampaign1");
+        
         // player1 creates new campaign1 as overlord
         campaign1 = CampaignClient.newCampaign(player1);
 
@@ -102,6 +107,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign2() throws ServerException {
+        LOG.info("testHeroSelectionCampaign2");
+        
         // player2 creates new campaign2 as overlord
         campaign2 = CampaignClient.newCampaign(player2);
 
@@ -127,6 +134,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign3() throws ServerException {
+         LOG.info("testHeroSelectionCampaign3");
+        
         // player1 creates new campaign3 as overlord
         campaign3 = CampaignClient.newCampaign(player1);
 
@@ -151,6 +160,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign4() throws ServerException {
+        LOG.info("testHeroSelectionCampaign4");
+        
         // player2 creates new campaign4 as overlord
         campaign4 = CampaignClient.newCampaign(player2);
 
@@ -174,6 +185,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign5() throws ServerException {
+        LOG.info("testHeroSelectionCampaign5");
+        
         // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
         Overlord overlord = new Overlord(player1, OverlordClass.BASIC, null);
         campaign5 = CampaignClient.createCampaign(player1,
@@ -188,6 +201,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign6() throws ServerException {
+        LOG.info("testHeroSelectionCampaign6");
+        
         // player2 creates campaign6 as overlord, campaign in stage TRAVEL
         Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
         campaign6 = CampaignClient.createCampaign(player2,
@@ -201,6 +216,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign7() throws ServerException {
+        LOG.info("testHeroSelectionCampaign7");
+        
         // player2 creates campaign7 as overlord, campaign in stage FINISHED
         Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
         campaign7 = CampaignClient.createCampaign(player2,
@@ -214,6 +231,8 @@ public class HeroSelectionTest {
 
     @Test
     public void testHeroSelectionCampaign8() throws ServerException {
+        LOG.info("testHeroSelectionCampaign8");
+        
         // wrong campaign id
         Overlord overlord = new Overlord(player6, OverlordClass.BASIC, null);
         WsCampaign falseCampaign = new WsCampaign(overlord, CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l);

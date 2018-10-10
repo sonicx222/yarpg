@@ -3,16 +3,16 @@ package de.pho.descent.fxclient.presentation.heroselection;
 import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
+import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
-import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
+import static de.pho.descent.shared.model.campaign.CampaignPhase.ENCOUNTER;
 import de.pho.descent.shared.model.hero.HeroTemplate;
 import java.io.InputStream;
 import java.net.URL;
@@ -140,21 +140,6 @@ public class HeroSelectionPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // setup buttons
-        if (Objects.equals(credentials.getPlayer(),
-                gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
-            // overlord screen
-            vboxAction.setVisible(false);
-            vboxStart.setVisible(true);
-        } else {
-            // hero player screen
-            vboxAction.setVisible(true);
-            vboxStart.setVisible(false);
-        }
-
-        buttonReadyText = resources.getString("button.hero.selection.ready.toggle");
-        buttonCancelText = resources.getString("button.hero.selection.cancel.toggle");
-
         // setup label properties
         labelAnnounce.setFont(Font.font("Verdana", FontPosture.ITALIC, 13));
 
@@ -182,38 +167,59 @@ public class HeroSelectionPresenter implements Initializable {
 
         preloadHeroTemplateImages();
 
-        // reset current user hero selection
-        heroSelectionModel.setCurrentSelection(null);
-
         heroSelectionModel.getHeroes().clear();
         heroSelectionModel.getHeroes().addAll(HeroTemplate.values());
 
         heroesListView.setItems(heroSelectionModel.getHeroes());
         heroesListView.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
-                    heroSelectionModel.setSelectedTemplate((HeroTemplate) newValue);
-                    HeroTemplate template = heroSelectionModel.getSelectedTemplate();
+                    if (newValue != null) {
+                        heroSelectionModel.setSelectedTemplate((HeroTemplate) newValue);
+                        HeroTemplate template = heroSelectionModel.getSelectedTemplate();
 
-                    labelArchetype.setText(template.getArchetype().name());
-                    labelSpeed.setText(String.valueOf(template.getSpeed()));
-                    labelHealth.setText(String.valueOf(template.getHealth()));
-                    labelStamina.setText(String.valueOf(template.getStamina()));
-                    labelMight.setText(String.valueOf(template.getMight()));
-                    labelKnowledge.setText(String.valueOf(template.getKnowledge()));
-                    labelWillpower.setText(String.valueOf(template.getWillpower()));
-                    labelAwareness.setText(String.valueOf(template.getAwareness()));
-                    labelAnnounce.setText("\"" + template.getAnnounce() + "\"");
-                    labelHeroAbility.setText(template.getHeroAbilityText());
-                    labelHeroicFeat.setText(template.getHeroicFeatText());
-                    heroImageView.setImage(heroImages.get(template)[0]);
-                    startSkillView.setImage(heroImages.get(template)[1]);
-                    startItem1View.setImage(heroImages.get(template)[2]);
-                    startItem2View.setImage(heroImages.get(template)[3]);
+                        labelArchetype.setText(template.getArchetype().name());
+                        labelSpeed.setText(String.valueOf(template.getSpeed()));
+                        labelHealth.setText(String.valueOf(template.getHealth()));
+                        labelStamina.setText(String.valueOf(template.getStamina()));
+                        labelMight.setText(String.valueOf(template.getMight()));
+                        labelKnowledge.setText(String.valueOf(template.getKnowledge()));
+                        labelWillpower.setText(String.valueOf(template.getWillpower()));
+                        labelAwareness.setText(String.valueOf(template.getAwareness()));
+                        labelAnnounce.setText("\"" + template.getAnnounce() + "\"");
+                        labelHeroAbility.setText(template.getHeroAbilityText());
+                        labelHeroicFeat.setText(template.getHeroicFeatText());
+                        heroImageView.setImage(heroImages.get(template)[0]);
+                        startSkillView.setImage(heroImages.get(template)[1]);
+                        startItem1View.setImage(heroImages.get(template)[2]);
+                        startItem2View.setImage(heroImages.get(template)[3]);
+                    }
                 }
                 );
 
         // preselect first element
         heroesListView.getSelectionModel().select(0);
+
+        // setup buttons
+        buttonReadyText = resources.getString("button.hero.selection.ready.toggle");
+        buttonCancelText = resources.getString("button.hero.selection.cancel.toggle");
+
+        if (Objects.equals(credentials.getPlayer(),
+                gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
+            // overlord screen
+            vboxAction.setVisible(false);
+            vboxStart.setVisible(true);
+        } else {
+            // hero player screen
+            vboxAction.setVisible(true);
+            vboxStart.setVisible(false);
+        }
+
+        // set correct text if player made already an earlier selection when entering screen
+        if (heroSelectionModel.getCurrentSelection() != null
+                && heroSelectionModel.getCurrentSelection().isReady()) {
+            textAction.setText(buttonCancelText);
+        }
+
     }
 
     @FXML
@@ -239,23 +245,34 @@ public class HeroSelectionPresenter implements Initializable {
     @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("HeroSelectionPresenter: handleRefresh()");
-        updateHeroSelections();
-        messageService.updateCampaignMessages();
+
+        gameService.updateCampaign();
+        switch (gameDataModel.getCurrentCampaign().getPhase()) {
+            case HERO_SELECTION:
+                updateHeroSelections();
+                messageService.updateCampaignMessages();
+                break;
+            case ENCOUNTER:
+                if (Objects.equals(credentials.getPlayer(), gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
+                    switchFullscreenScene(event, new OverlordGameView());
+                } else {
+                    switchFullscreenScene(event, new HeroGameView());
+                }
+        }
     }
 
     @FXML
     public void handleStart(MouseEvent event) {
         LOGGER.info("HeroSelectionPresenter: handleStart()");
-        WsCampaign startedCampaign = null;
-        try {
-            startedCampaign = CampaignClient.startCampaign(credentials.getUsername(),
-                    credentials.getPassword(), gameDataModel.getCurrentCampaign());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-        if (startedCampaign != null) {
-            gameDataModel.setCurrentCampaign(startedCampaign);
-            switchFullscreenScene(event, new HeroGameView());
+
+        gameService.startCampaign();
+        if (gameDataModel.getCurrentCampaign() != null
+                && gameDataModel.getCurrentCampaign().getPhase() == ENCOUNTER) {
+            if (Objects.equals(credentials.getPlayer(), gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
+                switchFullscreenScene(event, new OverlordGameView());
+            } else {
+                switchFullscreenScene(event, new HeroGameView());
+            }
         }
     }
 
@@ -352,9 +369,9 @@ public class HeroSelectionPresenter implements Initializable {
             }
 
             // hero class start item 1
-            if (template.getStartItem1() != null) {
+            if (template.getStartWeapon() != null) {
                 StringBuilder ressourcePathStartItem1 = new StringBuilder("/img/items/");
-                ressourcePathStartItem1.append(template.getStartItem1().getImagePath());
+                ressourcePathStartItem1.append(template.getStartWeapon().getImagePath());
                 ressourcePathStartItem1.append(gameDataModel.getImageSuffix());
                 InputStream isStartItem1 = getClass().getResourceAsStream(ressourcePathStartItem1.toString());
                 if (isStartItem1 != null) {
@@ -363,9 +380,9 @@ public class HeroSelectionPresenter implements Initializable {
             }
 
             // hero class start item 2
-            if (template.getStartItem2() != null) {
+            if (template.getStartShield() != null) {
                 StringBuilder ressourcePathStartItem2 = new StringBuilder("/img/items/");
-                ressourcePathStartItem2.append(template.getStartItem2().getImagePath());
+                ressourcePathStartItem2.append(template.getStartShield().getImagePath());
                 ressourcePathStartItem2.append(gameDataModel.getImageSuffix());
 
                 InputStream isStartItem2 = getClass().getResourceAsStream(ressourcePathStartItem2.toString());
@@ -392,6 +409,11 @@ public class HeroSelectionPresenter implements Initializable {
 
         if (loadedSelections != null && !loadedSelections.isEmpty()) {
             heroSelectionModel.getHeroSelections().addAll(loadedSelections);
+
+            WsHeroSelection playerSelection = heroSelectionModel.getHeroSelections().stream()
+                    .filter(selection -> Objects.equals(selection.getUsername(), credentials.getUsername()))
+                    .findAny().orElse(null);
+            heroSelectionModel.setCurrentSelection(playerSelection);
         }
     }
 }
