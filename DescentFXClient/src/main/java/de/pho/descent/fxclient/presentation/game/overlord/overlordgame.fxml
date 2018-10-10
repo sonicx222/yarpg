@@ -37,7 +37,7 @@
                               <Image url="@../footer.png" />
                           </image>
                       </ImageView>
-                      <Label alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Map" textAlignment="JUSTIFY" textFill="WHITE">
+                      <Label fx:id="labelRound" alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Round 1" textAlignment="JUSTIFY" textFill="WHITE">
                           <font>
                               <Font name="Verdana" size="20.0" />
                           </font>
