@@ -1,15 +1,10 @@
 package de.pho.descent.fxclient.presentation.game.overlord;
 
-import static de.pho.descent.fxclient.MainApp.showError;
 import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
-import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.ws.CampaignClient;
-import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.map.MapService;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
-import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.monster.GameMonster;
 import java.net.URL;
@@ -20,7 +15,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +35,9 @@ public class OverlordGamePresenter implements Initializable {
 
     @FXML
     private VBox prologBox;
+
+    @FXML
+    private Label labelRound;
 
     @FXML
     private TableView monsterTable;
@@ -71,9 +71,6 @@ public class OverlordGamePresenter implements Initializable {
 
     @FXML
     private Button attackButton;
-
-    @Inject
-    private Credentials credentials;
 
     @Inject
     private GameDataModel gameDataModel;
@@ -110,7 +107,6 @@ public class OverlordGamePresenter implements Initializable {
         overlordGameService.updateMonsterStats();
 
         // show prolog
-        gameDataModel.setPrologBoxVisible(prologBox.visibleProperty());
         if (gameDataModel.getCurrentQuestEncounter().getRound() == 1) {
             prologBox.setVisible(true);
         }
@@ -121,6 +117,9 @@ public class OverlordGamePresenter implements Initializable {
         buttonAttackText = resources.getString("button.hero.game.attack.toggle");
         buttonCancelText = resources.getString("button.hero.game.cancel.toggle");
 
+        gameDataModel.setPrologBoxVisible(prologBox.visibleProperty());
+        gameDataModel.setRound(labelRound.textProperty());
+
         gameDataModel.setMoveButton(moveButton);
         gameDataModel.setAttackButton(attackButton);
     }
@@ -128,6 +127,21 @@ public class OverlordGamePresenter implements Initializable {
     private void setupMonsterTable() {
         // table items
         monsterTable.setItems(overlordGameModel.getMonsters());
+
+        // highlight row with active monster
+        monsterTable.setRowFactory(tv -> new TableRow<GameMonster>() {
+            @Override
+            public void updateItem(GameMonster item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null) {
+                    setStyle("");
+                } else if (item.isActive()) {
+                    setStyle("-fx-background-color: CornflowerBlue;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
 
         // columns
         colMonsterName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -217,19 +231,8 @@ public class OverlordGamePresenter implements Initializable {
     @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("OverlordGamePresenter: handleRefresh()");
-        WsCampaign updatedCampaign = null;
-        try {
-            updatedCampaign = CampaignClient.getCampaignById(
-                    credentials.getUsername(),
-                    credentials.getPassword(),
-                    gameDataModel.getCurrentCampaign().getId());
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-        if (updatedCampaign != null) {
-            // update
-            gameService.updateGameState(updatedCampaign);
-        }
+        gameService.updateCampaign();
+        gameService.updateGameState(gameDataModel.getCurrentCampaign());
     }
 
     @FXML

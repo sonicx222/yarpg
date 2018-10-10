@@ -32,6 +32,9 @@ public class OverlordGameService {
     }
 
     public void updateUIControls() {
+        // round label
+        gameDataModel.getRound().set("Round "  + gameDataModel.getCurrentQuestEncounter().getRound());
+            
         // disable controls when it's not players turn
         if (gameDataModel.getCurrentQuestEncounter().getActiveMonster() != null
                 && gameDataModel.getCurrentQuestEncounter().getActiveMonster().getPlayedBy().getUsername().equals(credentials.getUsername())
