@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -27,9 +26,9 @@ public class GameUnit extends GameEntity implements Serializable {
 
     @ManyToOne
     private Player playedBy;
-    
+
     @OneToMany(mappedBy = "gameUnit")
-    @JsonManagedReference(value="unit-location")
+    @JsonManagedReference(value = "unit-location")
     private List<MapField> currentLocation = new ArrayList<>();
 
     @Temporal(TemporalType.DATE)
@@ -110,5 +109,5 @@ public class GameUnit extends GameEntity implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
+
 }
