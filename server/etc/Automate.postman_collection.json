@@ -1,0 +1,201 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Automate",
+		"_postman_id": "a6d90099-c3ef-76a1-4ead-9f432f24869e",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register Player pho",
+			"request": {
+				"url": "http://localhost:8080/server/rest/players",
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "pho",
+						"description": ""
+					},
+					{
+						"key": "password",
+						"value": "pho",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Register Player player1",
+			"request": {
+				"url": "http://localhost:8080/server/rest/players",
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "player1",
+						"description": ""
+					},
+					{
+						"key": "password",
+						"value": "player1",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Register Player player2",
+			"request": {
+				"url": "http://localhost:8080/server/rest/players",
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "player2",
+						"description": ""
+					},
+					{
+						"key": "password",
+						"value": "player2",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Campaign: Overlord pho",
+			"request": {
+				"url": "http://localhost:8080/server/rest/secured/campaigns/new",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "cGhvOkROMksyWHl2ZFpyVC9wbFJlK211ZVJXWDg2b0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "player1: save hero selection: GRISBAN",
+			"request": {
+				"url": "http://localhost:8080/server/rest/secured/campaigns/5/heroselections",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "cGxheWVyMTorZjA2clU3UExKSHhaNEt2M0ExaS9ORDZEdnNDZ00wTVRnU1ZVTmxiRzl1YVhNZ1VHRnlkRzVsY2lCTWFXTmxibk5sSUdadmNpQkZibTkzWVNBdElGTnBibWRzWlNCVmMyVnlJRVJsYlc4Z1RHbGpaVzV6WlRvZ1RtOTBJNXhVWUladnB2RVA3S2dnRHFJSkx2aHhzb2U2Z1dQbmtWemZadEJGYys3Qm9CQmFGeVZYdmoyOUVQcjdYZXNQ",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"campaignId\": 5,\n    \"username\": \"player1\",\n    \"userId\": 2,\n    \"selectedHero\": \"GRISBAN\",\n    \"ready\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "player2: save hero selection: SYNDRAEL",
+			"request": {
+				"url": "http://localhost:8080/server/rest/secured/campaigns/5/heroselections",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "cGxheWVyMjplVnAzWmU1ZkJIN3J3dFdRaG1XRTJ4UGdsTHdDZ00wTVRnU1ZVTmxiRzl1YVhNZ1VHRnlkRzVsY2lCTWFXTmxibk5sSUdadmNpQkZibTkzWVNBdElGTnBibWRzWlNCVmMyVnlJRVJsYlc4Z1RHbGpaVzV6WlRvZ1RtOTBJNXhVWUladnB2RVA3S2dnRHFJSkx2aHhzb2U2Z1dQbmtWemZadEJGYys3Qm9CQmFGeVZYdmoyOUVQcjdYZXNQ",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"campaignId\": 5,\n    \"username\": \"player2\",\n    \"userId\": 3,\n    \"selectedHero\": \"SYNDRAEL\",\n    \"ready\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Start Campaign",
+			"request": {
+				"url": "http://localhost:8080/server/rest/secured/campaigns/5/start",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "cGhvOnBwamlNbU9rd0FBV3Y2ZExOaUlWRDF0Z05FWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
