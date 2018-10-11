@@ -9,6 +9,7 @@ import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,8 +54,17 @@ public class CampaignBoundary {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling getActiveCampaigns for Player {0}", player.getUsername());
 
-        List<WsCampaign> campaigns = campaignController.getPlayableCampaigns(player);
-        GenericEntity<List<WsCampaign>> list = new GenericEntity<List<WsCampaign>>(campaigns) {
+        List<WsCampaign> wsCampaigns = new ArrayList<>();
+        campaignController.getPlayableCampaigns(player).forEach(
+                campaign -> {
+                    // prevent lazy load exception
+                    campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
+                    // create DTO
+                    wsCampaigns.add(WsCampaign.createInstance(campaign));
+                });
+        
+        // wrap WsCampaigns in special List for REST response
+        GenericEntity<List<WsCampaign>> list = new GenericEntity<List<WsCampaign>>(wsCampaigns) {
         };
 
         return Response.ok().entity(list).build();
@@ -68,6 +78,9 @@ public class CampaignBoundary {
         LOG.log(Level.INFO, "Calling getCampaignById for Id {0}", campaignId);
 
         Campaign campaign = campaignController.getCampaignById(Long.valueOf(campaignId));
+        
+        // prevent lazy load exception
+        campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
 
         return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
     }

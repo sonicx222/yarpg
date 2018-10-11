@@ -1,8 +1,12 @@
 package de.pho.descent.web.quest;
 
+import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.web.exception.NotFoundException;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -29,7 +33,7 @@ public class QuestService {
     public QuestEncounter loadEncounterById(long encounterId) {
         QuestEncounter encounter = em.find(QuestEncounter.class, encounterId);
 
-//        // prevent lazy load exception
+        // prevent lazy load exception
         encounter.getMonsters().size();
         encounter.getToken().size();
 
@@ -67,5 +71,24 @@ public class QuestService {
         }
 
         return encounter;
+    }
+
+    public GameUnit getGameUnitById(long unitId) throws NotFoundException {
+        GameUnit unit = null;
+
+        // try hero first
+        unit = em.find(GameHero.class, unitId);
+
+        // try monster second
+        if (unit == null) {
+            unit = em.find(GameMonster.class, unitId);
+        }
+
+        // invalid request
+        if (unit == null) {
+            throw new NotFoundException("GameUnit with Id: " + unitId + " not found");
+        }
+
+        return unit;
     }
 }

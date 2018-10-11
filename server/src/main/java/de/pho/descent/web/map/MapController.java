@@ -36,4 +36,8 @@ public class MapController {
     public GameMap getMapById(long id) {
         return mapService.getMapByID(id);
     }
+    
+    public MapField getMapFieldById(long id) {
+        return mapService.getMapFieldById(id);
+    }
 }

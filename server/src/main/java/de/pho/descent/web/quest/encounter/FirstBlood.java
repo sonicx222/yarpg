@@ -29,19 +29,12 @@ import java.util.stream.Collectors;
 public class FirstBlood {
 
     private static final QuestTemplate template = QuestTemplate.FIRST_BLOOD_INTRO;
-    
-    // TODO: remove static!! multiple instance solution required (for parallel quest games)
-    private static final Map<MonsterGroup, List<GameMonster>> monsterMap = new HashMap<>();
-    // TODO: remove static!! multiple instance solution required (for parallel quest games)
-    private static final List<Token> searchTokens = new ArrayList<>();
     private static final String MAULER = "Mauler";
 
     public static void setup(QuestEncounter encounter, Campaign campaign) {
         spawnHeroes(encounter, campaign);
-        createMonsters(campaign);
-        spawnMonsters(encounter);
-        createToken(campaign);
-        spawnToken(encounter);
+        spawnMonsters(encounter, campaign);
+        spawnToken(encounter, campaign);
     }
 
     public static boolean checkState(QuestEncounter encounter) throws QuestValidationException {
@@ -66,37 +59,37 @@ public class FirstBlood {
 
         return finished;
     }
-    
+
     public static void updateQuestTrigger(QuestEncounter encounter) {
-        
+
         List<GameMonster> goblins = encounter.getMonsters().stream()
                 .filter(monster -> (monster.getMonsterTemplate() == GOBLIN_ARCHER_NORMAL_ACT1
-                        || monster.getMonsterTemplate() == GOBLIN_ARCHER_ELITE_ACT1))
-                .filter(monster -> monster.getCurrentLocation().getTileGroup().getName().equals("EXITA"))
+                || monster.getMonsterTemplate() == GOBLIN_ARCHER_ELITE_ACT1))
+                .filter(monster -> monster.getCurrentLocation().get(0).getTileGroup().getName().equals("EXITA"))
                 .collect(Collectors.toList());
-        
+
         // update amount of left goblins
         encounter.setTrigger(encounter.getTrigger() + goblins.size());
-        
+
         // remove specific goblins from map
         encounter.getMonsters().removeAll(goblins);
     }
-    
+
     public static void endQuest(Campaign campaign) throws QuestValidationException {
         // validate
         validateQuest(campaign.getActiveQuest());
         campaign.getActiveQuest().setActive(false);
-        
+
         // rewards 1 xp for overlord
         campaign.getOverlord().addXp(1);
-        
+
         // rewards 1 xp for each hero
         campaign.getHeroes().stream()
                 .forEach(hero -> hero.addXp(1));
     }
-            
 
-    private static void createMonsters(Campaign campaign) {
+    private static Map<MonsterGroup, List<GameMonster>> createMonsters(Campaign campaign) {
+        Map<MonsterGroup, List<GameMonster>> monsterMap = new HashMap<>();
         int heroCount = campaign.getHeroes().size();
 
         // goblin archers
@@ -135,6 +128,8 @@ public class FirstBlood {
         ettin.setTotalLife(ettin.getTotalLife() + (2 * heroCount));
         ettin.setCurrentLife(ettin.getTotalLife());
         ettin.setName(MAULER);
+
+        return monsterMap;
     }
 
     private static void spawnHeroes(QuestEncounter encounter, Campaign campaign) {
@@ -147,13 +142,18 @@ public class FirstBlood {
 
         int i = 0;
         for (GameHero hero : campaign.getHeroes()) {
-            hero.setCurrentLocation(heroSpawnFields.get(i));
+            MapField heroSpawnField = heroSpawnFields.get(i);
+            hero.getCurrentLocation().add(heroSpawnField);
+            heroSpawnField.setGameUnit(hero);
             i++;
         }
     }
 
-    private static void spawnMonsters(QuestEncounter encounter) {
-        // goblins
+    private static void spawnMonsters(QuestEncounter encounter, Campaign campaign) {
+        // create monsters first
+        Map<MonsterGroup, List<GameMonster>> monsterMap = createMonsters(campaign);
+
+        // spawn goblins
         List<MapField> goblinSpawnFields = encounter
                 .getMap().getMonsterSpawnFields().stream()
                 .filter(field -> field.getTileGroup().getName().equals("26A"))
@@ -163,11 +163,13 @@ public class FirstBlood {
 
         for (int i = 0; i < monsterMap.get(GOBLIN_ARCHER).size(); i++) {
             GameMonster goblin = monsterMap.get(GOBLIN_ARCHER).get(i);
-            goblin.setCurrentLocation(goblinSpawnFields.get(i));
+            MapField monsterSpawnField = goblinSpawnFields.get(i);
+            goblin.getCurrentLocation().add(monsterSpawnField);
+            monsterSpawnField.setGameUnit(goblin);
             encounter.getMonsters().add(goblin);
         }
 
-        // ettins
+        // spawn ettins
         List<MapField> ettinSpawnFields = encounter
                 .getMap().getMonsterSpawnFields().stream()
                 .filter(field -> (field.getxPos() == 5 || field.getxPos() == 7)
@@ -178,35 +180,66 @@ public class FirstBlood {
 
         for (int i = 0; i < monsterMap.get(ETTIN).size(); i++) {
             GameMonster ettin = monsterMap.get(ETTIN).get(i);
-            ettin.setCurrentLocation(ettinSpawnFields.get(i));
+            MapField monsterSpawnField = ettinSpawnFields.get(i);
+            ettin.getCurrentLocation().add(monsterSpawnField);
+            monsterSpawnField.setGameUnit(ettin);
+
+            MapField east = encounter.getMap().getField(monsterSpawnField.getxPos() + 1, monsterSpawnField.getyPos());
+            ettin.getCurrentLocation().add(east);
+            east.setGameUnit(ettin);
+
+            MapField southeast = encounter.getMap().getField(monsterSpawnField.getxPos() + 1, monsterSpawnField.getyPos() + 1);
+            ettin.getCurrentLocation().add(southeast);
+            southeast.setGameUnit(ettin);
+
+            MapField south = encounter.getMap().getField(monsterSpawnField.getxPos(), monsterSpawnField.getyPos() + 1);
+            ettin.getCurrentLocation().add(south);
+            south.setGameUnit(ettin);
+
             encounter.getMonsters().add(ettin);
         }
     }
 
-    private static void createToken(Campaign campaign) {
+    private static List<Token> createToken(Campaign campaign) {
+        List<Token> searchTokens = new ArrayList<>();
         int heroCount = campaign.getHeroes().size();
 
         for (int i = 0; i < heroCount; i++) {
             searchTokens.add(new Token(TokenType.SEARCH, true));
         }
+
+        return searchTokens;
     }
 
-    private static void spawnToken(QuestEncounter encounter) {
+    private static void spawnToken(QuestEncounter encounter, Campaign campaign) {
         encounter.getToken().clear();
+
+        // create search tokens to be placed
+        List<Token> searchTokens = createToken(campaign);
+
         for (int i = 0; i < searchTokens.size(); i++) {
             Token searchToken = searchTokens.get(i);
+            MapField field = null;
             switch (i) {
                 case 0:
-                    searchToken.setCurrentLocation(encounter.getMap().getField(4, 9));
+                    field = encounter.getMap().getField(4, 9);
+                    searchToken.setCurrentLocation(field);
+                    field.setToken(searchToken);
                     break;
                 case 1:
-                    searchToken.setCurrentLocation(encounter.getMap().getField(4, 1));
+                    field = encounter.getMap().getField(4, 1);
+                    searchToken.setCurrentLocation(field);
+                    field.setToken(searchToken);
                     break;
                 case 2:
-                    searchToken.setCurrentLocation(encounter.getMap().getField(12, 5));
+                    field = encounter.getMap().getField(12, 5);
+                    searchToken.setCurrentLocation(field);
+                    field.setToken(searchToken);
                     break;
                 default:
-                    searchToken.setCurrentLocation(encounter.getMap().getField(0, 7));
+                    field = encounter.getMap().getField(0, 7);
+                    searchToken.setCurrentLocation(field);
+                    field.setToken(searchToken);
                     break;
             }
             encounter.getToken().add(searchToken);

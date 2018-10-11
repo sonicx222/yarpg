@@ -41,14 +41,14 @@ public class CampaignController {
     @Inject
     private transient PersistenceService persistenceService;
 
-    public List<WsCampaign> getPlayableCampaigns(Player player) throws UserValidationException {
+    public List<Campaign> getPlayableCampaigns(Player player) throws UserValidationException {
 
         List<Campaign> activeCampaigns = campaignService.getActiveCampaigns();
-        List<WsCampaign> playableCampaigns = new ArrayList<>();
+        List<Campaign> playableCampaigns = new ArrayList<>();
 
         for (Campaign c : activeCampaigns) {
             if (c.getOverlord().getPlayedBy().equals(player)) {
-                playableCampaigns.add(WsCampaign.createInstance(c));
+                playableCampaigns.add(c);
                 continue;
             }
 
@@ -57,7 +57,7 @@ public class CampaignController {
             for (GameHero hero : c.getHeroes()) {
                 if (player.equals(hero.getPlayedBy())) {
                     partOfCampaignHeroes = true;
-                    playableCampaigns.add(WsCampaign.createInstance(c));
+                    playableCampaigns.add(c);
                     break;
                 }
             }
@@ -67,12 +67,12 @@ public class CampaignController {
                 List<HeroSelection> selections = c.getHeroSelections();
                 if (selections.size() < 4) {
                     // hero selection still going with enough room
-                    playableCampaigns.add(WsCampaign.createInstance(c));
+                    playableCampaigns.add(c);
                     continue;
                 } else {
                     for (HeroSelection hs : selections) {
                         if (hs.getPlayer().equals(player)) {
-                            playableCampaigns.add(WsCampaign.createInstance(c));
+                            playableCampaigns.add(c);
                             break;
                         }
                     }
@@ -271,6 +271,11 @@ public class CampaignController {
         // check for hero selection phase
         checkCampaignPhase(campaign, CampaignPhase.HERO_SELECTION);
 
+        // check if hero selection user is same as service caller
+        if (!Objects.equals(player.getUsername(), wsSelection.getUsername())) {
+            throw new HeroSelectionException("Hero selection can only be made for same user calling service");
+        }
+        
         // check if user is overlord
         if (Objects.equals(player, campaign.getOverlord().getPlayedBy())) {
             throw new HeroSelectionException("Overlord can not take part in hero selection");
@@ -300,11 +305,15 @@ public class CampaignController {
             }
         } else {
             for (HeroSelection hSelection : heroSelections) {
-                if (Objects.equals(hSelection.getPlayer().getUsername(), wsSelection.getUsername())) {
+//                if (Objects.equals(hSelection.getPlayer().getUsername(), wsSelection.getUsername())) {
+                if (hSelection.getId() == wsSelection.getId()) {
                     selection = hSelection;
                     break;
                 }
             }
+        }
+        if (selection == null) {
+            throw new HeroSelectionException("Hero selection with id " + wsSelection.getId() + " not found for update");
         }
 
         // set selection attributes

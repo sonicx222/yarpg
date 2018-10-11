@@ -27,7 +27,11 @@ public class MapService implements Serializable {
     public GameMap getMapByID(long mapID) {
         return em.find(GameMap.class, mapID);
     }
-
+    
+    public MapField getMapFieldById(long fieldId) {
+        return em.find(MapField.class, fieldId);
+    }
+    
     public GameMap getMapByQuestAndPart(Quest quest, QuestPart part) throws NotFoundException {
         TypedQuery<GameMap> query = em.createNamedQuery(GameMap.FIND_MAP_BY_QUEST_AND_PART, GameMap.class)
                 .setParameter(GameMap.QUEST_PARAM, quest)

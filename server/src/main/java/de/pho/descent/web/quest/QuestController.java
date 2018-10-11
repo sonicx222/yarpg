@@ -1,5 +1,6 @@
 package de.pho.descent.web.quest;
 
+import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
@@ -8,14 +9,17 @@ import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestTemplate;
+import de.pho.descent.shared.model.token.Token;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.map.MapController;
 import de.pho.descent.web.quest.encounter.FirstBlood;
+import de.pho.descent.web.service.PersistenceService;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,11 +31,16 @@ import javax.inject.Inject;
 @Stateless
 public class QuestController {
 
+    private static final Logger LOG = Logger.getLogger(QuestController.class.getName());
+
     @Inject
     private QuestService questService;
 
     @Inject
     private MapController mapController;
+
+    @Inject
+    private transient PersistenceService persistenceService;
 
     public QuestEncounter getQuestEncounterById(long id) {
         return questService.loadEncounterById(id);
@@ -53,24 +62,44 @@ public class QuestController {
         encounter.setCurrentTurn(PlaySide.HEROES);
 
         // set first active hero based on highest initiative roll
-        if (!campaign.getHeroes().isEmpty()) {
-            SortedMap<Integer, GameHero> initiativeOrder = new TreeMap<>();
-            campaign.getHeroes().stream().forEach(hero -> {
-                initiativeOrder.put(hero.rollInitiative(), hero);
-            });
-            GameHero activeHero = initiativeOrder.get(initiativeOrder.lastKey());
-            activeHero.setActive(true);
-        }
+        setActiveHeroByInitiative(campaign);
 
         switch (questTemplate) {
             case FIRST_BLOOD_INTRO:
                 FirstBlood.setup(encounter, campaign);
+
+                // save newly created heroes (only after first quest)
+                campaign.getHeroes().forEach(hero -> persistenceService.create(hero));
                 break;
             default:
                 break;
         }
 
+        // save newly created monsters & tokens first
+        encounter.getMonsters().forEach(monster -> persistenceService.create(monster));
+        for (Token token : encounter.getToken()) {
+            LOG.info("Move Token to PersistenceContext: ID " + token.getId());
+            persistenceService.create(token);
+        }
+//        encounter.getToken().forEach(token -> persistenceService.create(token));
+
         return questService.saveEncounter(encounter);
+    }
+
+    private void setActiveHeroByInitiative(Campaign campaign) {
+        if (!campaign.getHeroes().isEmpty()) {
+            SortedMap<Integer, GameHero> initiativeOrder = new TreeMap<>();
+            campaign.getHeroes().stream().forEach(hero -> {
+                initiativeOrder.put(hero.rollInitiative(), hero);
+            });
+
+            // reset previous active hero
+            campaign.getHeroes().stream().forEach(hero -> hero.setActive(false));
+
+            // set active hero
+            GameHero activeHero = initiativeOrder.get(initiativeOrder.lastKey());
+            activeHero.setActive(true);
+        }
     }
 
     public boolean isActiveQuestFinished(Campaign campaign) throws QuestValidationException {
@@ -93,7 +122,6 @@ public class QuestController {
 
         return finished;
     }
-    
 
     public void setNextActiveHero(Campaign campaign) {
         Objects.requireNonNull(campaign);
@@ -193,7 +221,7 @@ public class QuestController {
             campaign.getActiveHero().setActive(false);
         }
     }
-    
+
     public void updateQuestTrigger(QuestEncounter encounter) {
         switch (encounter.getQuest()) {
             case FIRST_BLOOD:
@@ -223,4 +251,8 @@ public class QuestController {
         }
     }
 
+    
+    public GameUnit getGamUnit(long unitId) throws NotFoundException {
+        return questService.getGameUnitById(unitId);
+    }
 }

@@ -54,6 +54,6 @@ public class MapBoundary {
             throw new NotFoundException();
         }
 
-        return map.toString();
+        return map.asText();
     }
 }
