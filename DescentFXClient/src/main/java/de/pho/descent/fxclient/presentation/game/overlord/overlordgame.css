@@ -1,9 +1,10 @@
-pane {
-    -fx-background-image: url('./table.jpg');
+@font-face {
+    src: url('/fonts/Windlass.ttf');
 }
 
 /* button-text */
 VBox > StackPane > .label {
-    -fx-font-size: 17pt;
+    -fx-font-size: 16pt;
     -fx-font-family: 'Windlass';
 }
+

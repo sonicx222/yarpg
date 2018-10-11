@@ -15,168 +15,160 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.hero.HeroGamePresenter">
     <children>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
-         <children>
-              <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
-                  <children>
-                      <ImageView fitHeight="900.0" fitWidth="1600.0">
-                          <image>
-                              <Image url="@../table_bg.jpg" />
-                          </image>
-                      </ImageView>
-                      <fx:include fx:id="mapScrollPane" layoutX="80.0" layoutY="75.0" source="../map/map.fxml" />
-                      <ImageView fitHeight="50.0" fitWidth="800.0" layoutX="80.0" layoutY="25.0" pickOnBounds="true">
-                          <image>
-                              <Image url="@../section-header-gray.png" />
-                          </image>
-                      </ImageView>
-                      <ImageView fitHeight="12.0" fitWidth="800.0" layoutX="80.0" layoutY="675.0" pickOnBounds="true">
-                          <image>
-                              <Image url="@../footer.png" />
-                          </image>
-                      </ImageView>
-                      <Label fx:id="labelRound" alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Round 1" textAlignment="JUSTIFY" textFill="WHITE">
-                          <font>
-                              <Font name="Verdana" size="20.0" />
-                          </font>
-                      </Label>
-                      <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="880.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
-                          <image>
-                              <Image url="@../../../../../../../../resources/img/heroes/Grisban.png" />
-                          </image>
-                      </ImageView>
-                      <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="880.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
-                          <image>
-                              <Image url="@../../heroselection/Hero_Sheet_Template.png" />
-                          </image>
-                      </ImageView>
-                      <ImageView fitHeight="50.0" fitWidth="600.0" layoutX="880.0" layoutY="25.0" pickOnBounds="true">
-                          <image>
-                              <Image url="@../section-header-gray.png" />
-                          </image>
-                      </ImageView>
-                      <Label alignment="CENTER" layoutX="880.0" layoutY="25.0" prefHeight="31.0" prefWidth="600.0" text="Hero" textAlignment="JUSTIFY" textFill="WHITE">
-                          <font>
-                              <Font name="Verdana" size="20.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelName" alignment="CENTER" contentDisplay="CENTER" layoutX="893.0" layoutY="92.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
-                          <font>
-                              <Font size="17.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelSpeed" alignment="CENTER" layoutX="1163.0" layoutY="168.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelHealth" alignment="CENTER" layoutX="1183.0" layoutY="254.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelStamina" alignment="CENTER" layoutX="1187.0" layoutY="346.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelMight" alignment="CENTER" layoutX="953.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="1043.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelWillpower" alignment="CENTER" layoutX="934.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelAwareness" alignment="CENTER" layoutX="1062.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
-                          <font>
-                              <Font size="24.0" />
-                          </font>
-                      </Label>
-                      <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="1249.0" layoutY="138.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
-                      <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="1249.0" layoutY="361.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
-                      <VBox layoutX="1043.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT">
-                          <children>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                              <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
-                                  <children>
-                                      <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                      <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
-                                          <font>
-                                              <Font name="Tw Cen MT Condensed" size="22.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </StackPane>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                          </children>
-                      </VBox>
-                      <VBox layoutX="1279.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
-                          <children>
-                              <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
-                              <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
-                                  <children>
-                                      <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                      <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
-                                          <font>
-                                              <Font name="Tw Cen MT Condensed" size="22.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </StackPane>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                          </children>
-                      </VBox>
-                      <fx:include fx:id="messagePane" layoutX="80.0" layoutY="686.0" source="../../message/message.fxml" />
-                  <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">
-                     <children>
-                            <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" text="Attack">
-                                <font>
-                                    <Font size="18.0" />
-                                </font>
-                            </Button>
-                            <Button fx:id="moveButton" layoutX="44.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#handleToggleMove" text="Move">
-                                <font>
-                                    <Font size="18.0" />
-                                </font>
-                            </Button>
-                        <Label layoutX="294.0" layoutY="41.0" text="Actions:" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
+        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
+            <children>
+                <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
+                    <children>
+                        <ImageView fitHeight="900.0" fitWidth="1600.0">
+                            <image>
+                                <Image url="@../table_bg.jpg" />
+                            </image>
+                        </ImageView>
+                        <fx:include fx:id="mapScrollPane" layoutX="80.0" layoutY="75.0" source="../map/map.fxml" />
+                        <ImageView fitHeight="50.0" fitWidth="800.0" layoutX="80.0" layoutY="25.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../section-header-gray.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="12.0" fitWidth="800.0" layoutX="80.0" layoutY="675.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../footer.png" />
+                            </image>
+                        </ImageView>
+                        <Label fx:id="labelRound" alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Round 1" textAlignment="JUSTIFY" textFill="WHITE">
+                            <font>
+                                <Font name="Verdana" size="20.0" />
+                            </font>
                         </Label>
-                        <Label fx:id="labelActionsLeft" layoutX="381.0" layoutY="41.0" text="2" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
+                        <ImageView fx:id="heroImageView" fitHeight="320.0" layoutX="880.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../../../../../resources/img/heroes/Grisban.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="heroSheetView" fitWidth="600.0" layoutX="880.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../heroselection/Hero_Sheet_Template.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="50.0" fitWidth="600.0" layoutX="880.0" layoutY="25.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../section-header-gray.png" />
+                            </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="880.0" layoutY="25.0" prefHeight="31.0" prefWidth="600.0" text="Hero" textAlignment="JUSTIFY" textFill="WHITE">
+                            <font>
+                                <Font name="Verdana" size="20.0" />
+                            </font>
                         </Label>
-                     </children>
-                  </Pane>
-                  <Label layoutX="1299.0" layoutY="88.0" text="Hero Ability">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="1300.0" layoutY="305.0" text="Heroic Feat">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  </children>
-              </AnchorPane>
-            <VBox fx:id="prologBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: rgba(255, 255, 255, .7);" visible="false" StackPane.alignment="CENTER">
-               <children>
-                  <fx:include fx:id="prologPane" source="../prolog/prolog.fxml" />
-               </children>
-            </VBox>
-         </children>
-      </StackPane>
+                        <Label fx:id="labelName" alignment="CENTER" contentDisplay="CENTER" layoutX="893.0" layoutY="92.0" prefHeight="26.0" prefWidth="184.0" text="Warrior">
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelSpeed" alignment="CENTER" layoutX="1163.0" layoutY="168.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelHealth" alignment="CENTER" layoutX="1183.0" layoutY="254.0" prefHeight="35.0" prefWidth="47.0" text="14" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelStamina" alignment="CENTER" layoutX="1187.0" layoutY="346.0" prefHeight="30.0" prefWidth="39.0" text="4" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelMight" alignment="CENTER" layoutX="953.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="5" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelKnowledge" alignment="CENTER" layoutX="1043.0" layoutY="467.0" prefHeight="30.0" prefWidth="39.0" text="2" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelWillpower" alignment="CENTER" layoutX="934.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="3" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelAwareness" alignment="CENTER" layoutX="1062.0" layoutY="513.0" prefHeight="30.0" prefWidth="39.0" text="1" textFill="WHITE">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="labelHeroAbility" alignment="TOP_CENTER" layoutX="1249.0" layoutY="138.0" prefHeight="121.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+                        <Label fx:id="labelHeroicFeat" alignment="TOP_CENTER" layoutX="1249.0" layoutY="361.0" prefHeight="133.0" prefWidth="200.0" text="Label" textAlignment="CENTER" wrapText="true" />
+                        <VBox layoutX="1043.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT">
+                            <children>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                                <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                                    <children>
+                                        <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Back" textFill="DARKGRAY" />
+                                    </children>
+                                </StackPane>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                            </children>
+                        </VBox>
+                        <VBox layoutX="1279.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+                            <children>
+                                <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
+                                <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                                    <children>
+                                        <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Refresh" textFill="DARKGRAY" />
+                                    </children>
+                                </StackPane>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                            </children>
+                        </VBox>
+                        <fx:include fx:id="messagePane" layoutX="80.0" layoutY="686.0" source="../../message/message.fxml" />
+                        <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">
+                            <children>
+                                <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" text="Attack">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="moveButton" layoutX="44.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#handleToggleMove" text="Move">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Button>
+                                <Label layoutX="294.0" layoutY="41.0" text="Actions:" textFill="WHITE">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="labelActionsLeft" layoutX="381.0" layoutY="41.0" text="2" textFill="WHITE">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </Pane>
+                        <Label layoutX="1299.0" layoutY="88.0" text="Hero Ability">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="1300.0" layoutY="305.0" text="Heroic Feat">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+                <VBox fx:id="prologBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: rgba(255, 255, 255, .7);" visible="false" StackPane.alignment="CENTER">
+                    <children>
+                        <fx:include fx:id="prologPane" source="../prolog/prolog.fxml" />
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
     </children>
 </VBox>

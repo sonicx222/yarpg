@@ -13,7 +13,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <VBox id="VBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #000034;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionPresenter">
     <children>
@@ -42,11 +41,7 @@
                         <StackPane fx:id="paneRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
                             <children>
                                 <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
-                                    <font>
-                                        <Font name="Tw Cen MT Condensed" size="22.0" />
-                                    </font>
-                                </Text>
+                                <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Refresh" textFill="DARKGRAY" />
                             </children>
                         </StackPane>
                         <Line endX="200.0" stroke="DARKGRAY" />
@@ -58,11 +53,7 @@
                         <StackPane fx:id="paneContinue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleContinue" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="200.0">
                             <children>
                                 <Rectangle fx:id="itemContinue" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                <Text fx:id="textContinue" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="CONTINUE">
-                                    <font>
-                                        <Font name="Tw Cen MT Condensed" size="22.0" />
-                                    </font>
-                                </Text>
+                                <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Continue" textFill="DARKGRAY" />
                             </children>
                         </StackPane>
                         <Line endX="200.0" stroke="DARKGRAY" />
@@ -86,18 +77,17 @@
                         <StackPane fx:id="paneSend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleSendMessage" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="150.0">
                             <children>
                                 <Rectangle fx:id="itemSend" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="150.0" />
-                                <Text fx:id="textSend" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="SEND">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Text>
+                                <Label id="send-text" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0" prefWidth="200" text="Send" textFill="DARKGRAY">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                             </children>
                         </StackPane>
                         <Line endX="150.0" stroke="DARKGRAY" />
                     </children>
                 </VBox>
                 <TextField fx:id="messageTextField" layoutX="1078.0" layoutY="650.0" prefHeight="27.0" prefWidth="297.0" />
-                <Label layoutX="401.0" layoutY="14.0" text="Campaign Selection" textFill="WHITE">
+                <Label id="c_selection_title" layoutX="401.0" layoutY="14.0" text="Campaign Selection" textFill="WHITE">
                     <font>
                         <Font name="Verdana" size="30.0" />
                     </font>

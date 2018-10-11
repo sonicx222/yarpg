@@ -133,6 +133,12 @@ public class CampaignSelectionPresenter implements Initializable {
                                 .toLocalDateTime())));
 
         // selection action
+        // quality of life change: pre select only item in list
+        if (campaignsTableView.getItems().size() == 1) {
+            campaignsTableView.getSelectionModel().selectFirst();
+            selectedCampaign = (WsCampaign) campaignsTableView.getSelectionModel().getSelectedItem();
+            paneContinue.setDisable(false);
+        }
         campaignsTableView.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
                     selectedCampaign = (WsCampaign) campaignsTableView.getSelectionModel().getSelectedItem();

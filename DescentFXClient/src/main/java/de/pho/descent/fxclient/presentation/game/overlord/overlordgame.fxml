@@ -17,107 +17,99 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.overlord.OverlordGamePresenter">
     <children>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
-         <children>    
-              <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
-                  <children>
-                      <ImageView fitHeight="900.0" fitWidth="1600.0">
-                          <image>
-                              <Image url="@../table_bg.jpg" />
-                          </image>
-                      </ImageView>
-                      <fx:include fx:id="mapScrollPane" layoutX="80.0" layoutY="75.0" source="../map/map.fxml" />
-                      <ImageView fitHeight="50.0" fitWidth="800.0" layoutX="80.0" layoutY="25.0" pickOnBounds="true">
-                          <image>
-                              <Image url="@../section-header-gray.png" />
-                          </image>
-                      </ImageView>
-                      <ImageView fitHeight="12.0" fitWidth="800.0" layoutX="80.0" layoutY="675.0" pickOnBounds="true">
-                          <image>
-                              <Image url="@../footer.png" />
-                          </image>
-                      </ImageView>
-                      <Label fx:id="labelRound" alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Round 1" textAlignment="JUSTIFY" textFill="WHITE">
-                          <font>
-                              <Font name="Verdana" size="20.0" />
-                          </font>
-                      </Label>
-                      <VBox layoutX="1043.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT">
-                          <children>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                              <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
-                                  <children>
-                                      <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                      <Text fx:id="textBack" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="BACK">
-                                          <font>
-                                              <Font name="Tw Cen MT Condensed" size="22.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </StackPane>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                          </children>
-                      </VBox>
-                      <VBox layoutX="1279.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
-                          <children>
-                              <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
-                              <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
-                                  <children>
-                                      <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
-                                      <Text fx:id="textRefresh" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="REFRESH">
-                                          <font>
-                                              <Font name="Tw Cen MT Condensed" size="22.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </StackPane>
-                              <Line endX="200.0" stroke="DARKGRAY" />
-                          </children>
-                      </VBox>
-                      <fx:include fx:id="messagePane" layoutX="80.0" layoutY="686.0" source="../../message/message.fxml" />
-                  <ImageView fitHeight="50.0" fitWidth="632.0" layoutX="893.0" layoutY="25.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../section-header-gray.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" layoutX="893.0" layoutY="25.0" prefHeight="31.0" prefWidth="632.0" text="Monsters" textAlignment="JUSTIFY" textFill="WHITE">
-                     <font>
-                        <Font name="Verdana" size="20.0" />
-                     </font>
-                  </Label>
-                  <TableView fx:id="monsterTable" layoutX="893.0" layoutY="75.0" prefHeight="287.0" prefWidth="632.0">
-                    <columns>
-                      <TableColumn fx:id="colMonsterName" prefWidth="112.0" text="Name" />
-                      <TableColumn fx:id="colMonsterGroup" prefWidth="121.0" text="Monster Group" />
-                        <TableColumn fx:id="colMonsterActive" prefWidth="47.0" text="Active" />
-                        <TableColumn fx:id="colMonsterActions" prefWidth="53.0" text="Actions" />
-                        <TableColumn fx:id="colMonsterSpeed" prefWidth="51.0" text="Speed" />
-                        <TableColumn fx:id="colMonsterHealth" prefWidth="46.0" text="Health" />
-                        <TableColumn fx:id="colMonsterSpecials" prefWidth="197.0" text="Specials" />
-                    </columns>
-                  </TableView>
-                  <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">
-                     <children>
-                        <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" text="Attack">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="moveButton" layoutX="44.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#handleToggleMove" text="Move">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  </children>
-              </AnchorPane>
-            <VBox fx:id="prologBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: rgba(255, 255, 255, .7);" visible="false">
-               <children>
-                  <fx:include fx:id="prologPane" source="../prolog/prolog.fxml" />
-               </children>
-            </VBox>
-         </children>
-      </StackPane>
+        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
+            <children>    
+                <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0">
+                    <children>
+                        <ImageView fitHeight="900.0" fitWidth="1600.0">
+                            <image>
+                                <Image url="@../table_bg.jpg" />
+                            </image>
+                        </ImageView>
+                        <fx:include fx:id="mapScrollPane" layoutX="80.0" layoutY="75.0" source="../map/map.fxml" />
+                        <ImageView fitHeight="50.0" fitWidth="800.0" layoutX="80.0" layoutY="25.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../section-header-gray.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="12.0" fitWidth="800.0" layoutX="80.0" layoutY="675.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../footer.png" />
+                            </image>
+                        </ImageView>
+                        <Label fx:id="labelRound" alignment="CENTER" layoutX="80.0" layoutY="25.0" prefHeight="31.0" prefWidth="800.0" text="Round 1" textAlignment="JUSTIFY" textFill="WHITE">
+                            <font>
+                                <Font name="Verdana" size="20.0" />
+                            </font>
+                        </Label>
+                        <VBox layoutX="1043.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT">
+                            <children>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                                <StackPane fx:id="paneBack" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                                    <children>
+                                        <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Back" textFill="DARKGRAY" />
+                                    </children>
+                                </StackPane>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                            </children>
+                        </VBox>
+                        <VBox layoutX="1279.0" layoutY="864.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="185.0">
+                            <children>
+                                <Line fx:id="lineContinue11" endX="200.0" stroke="DARKGRAY" />
+                                <StackPane fx:id="paneRefresh" onMouseClicked="#handleRefresh" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased">
+                                    <children>
+                                        <Rectangle fx:id="itemRefresh" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="200.0" />
+                                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200" text="Refresh" textFill="DARKGRAY" />
+                                    </children>
+                                </StackPane>
+                                <Line endX="200.0" stroke="DARKGRAY" />
+                            </children>
+                        </VBox>
+                        <fx:include fx:id="messagePane" layoutX="80.0" layoutY="686.0" source="../../message/message.fxml" />
+                        <ImageView fitHeight="50.0" fitWidth="632.0" layoutX="893.0" layoutY="25.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@../section-header-gray.png" />
+                            </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="893.0" layoutY="25.0" prefHeight="31.0" prefWidth="632.0" text="Monsters" textAlignment="JUSTIFY" textFill="WHITE">
+                            <font>
+                                <Font name="Verdana" size="20.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="monsterTable" layoutX="893.0" layoutY="75.0" prefHeight="287.0" prefWidth="632.0">
+                            <columns>
+                                <TableColumn fx:id="colMonsterName" prefWidth="112.0" text="Name" />
+                                <TableColumn fx:id="colMonsterGroup" prefWidth="121.0" text="Monster Group" />
+                                <TableColumn fx:id="colMonsterActive" prefWidth="47.0" text="Active" />
+                                <TableColumn fx:id="colMonsterActions" prefWidth="53.0" text="Actions" />
+                                <TableColumn fx:id="colMonsterSpeed" prefWidth="51.0" text="Speed" />
+                                <TableColumn fx:id="colMonsterHealth" prefWidth="46.0" text="Health" />
+                                <TableColumn fx:id="colMonsterSpecials" prefWidth="197.0" text="Specials" />
+                            </columns>
+                        </TableView>
+                        <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">
+                            <children>
+                                <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" text="Attack">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="moveButton" layoutX="44.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#handleToggleMove" text="Move">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </Pane>
+                    </children>
+                </AnchorPane>
+                <VBox fx:id="prologBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: rgba(255, 255, 255, .7);" visible="false">
+                    <children>
+                        <fx:include fx:id="prologPane" source="../prolog/prolog.fxml" />
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
     </children>
 </VBox>
