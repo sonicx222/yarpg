@@ -67,11 +67,14 @@ public class HeroSelectionBoundary {
     }
 
     @POST
-    public Response saveSelection(@PathParam(ParamValue.CAMPAIGN_ID) String campaignId,
+    public Response saveSelection(
+            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
+            @PathParam(ParamValue.CAMPAIGN_ID) String campaignId,
             @Context UriInfo uriInfo,
             WsHeroSelection wsSelection)
-            throws HeroSelectionException, NotFoundException, CampaignValidationException {
-        Player player = playerController.getPlayerByName(wsSelection.getUsername());
+            throws HeroSelectionException, NotFoundException, CampaignValidationException, UserValidationException {
+//        Player player = playerController.getPlayerByName(wsSelection.getUsername());
+Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling saveSelection for Player {0}", player.getUsername());
 
         WsHeroSelection dtoSelection = WsHeroSelection.createInstance(
