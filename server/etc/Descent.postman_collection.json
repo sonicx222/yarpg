@@ -1,93 +1,161 @@
 {
-	"variables": [],
 	"info": {
-		"name": "Descent",
 		"_postman_id": "3813b7f8-cfc8-2586-6154-dc60d51ab37e",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"name": "Descent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get Entity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "dGVzdDo2T09jM1RCZDErRFVxSnFGL1d4VGtBaXA5WHNDZ00wTVRnU1ZVTmxiRzl1YVhNZ1VHRnlkRzVsY2lCTWFXTmxibk5sSUdadmNpQkZibTkzWVNBdElGTnBibWRzWlNCVmMyVnlJRVJsYlc4Z1RHbGpaVzV6WlRvZ1RtOTBJNXhVWUladnB2RVA3S2dnRHFJSkx2aHhzb2U2Z1dQbmtWemZadEJGYys3Qm9CQmFGeVZYdmoyOUVQcjdYZXNQ"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\": \"de.pho.descent.shared.model.Player\",\n\t\"id\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/admin/entities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"admin",
+								"entities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Player",
-			"description": "",
 			"item": [
 				{
 					"name": "Register Player",
 					"request": {
-						"url": "http://localhost:8080/server/rest/players",
 						"method": "POST",
 						"header": [
 							{
 								"key": "username",
-								"value": "pho",
-								"description": ""
+								"value": "pho"
 							},
 							{
 								"key": "password",
-								"value": "xxx",
-								"description": ""
+								"value": "xxx"
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/players",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"players"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Login Player",
 					"request": {
-						"url": "http://localhost:8080/server/rest/players/secured/pho",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOlgwOWJXeTM5YlR0bzRzWDJaRzM0YTZITkkrd0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOlgwOWJXeTM5YlR0bzRzWDJaRzM0YTZITkkrd0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"id\": 10,\n  \"isDeactive\": false,\n  \"password\": \"HAHA!\",\n  \"username\": \"u3\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/players/secured/pho",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"players",
+								"secured",
+								"pho"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Update Player",
 					"request": {
-						"url": "http://localhost:8080/server/rest/players/secured/pho",
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOjdLWHVmMURMNjcvTHRUb0crZWdiWEtmTUJVSUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOjdLWHVmMURMNjcvTHRUb0crZWdiWEtmTUJVSUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/players/secured/pho",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"players",
+								"secured",
+								"pho"
+							]
+						}
 					},
 					"response": []
 				}
@@ -95,130 +163,183 @@
 		},
 		{
 			"name": "Campaign",
-			"description": "",
 			"item": [
 				{
 					"name": "List Campaigns",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOkszWEd5czZLMkVnV0dka1k4dWJJNVFNUmJud0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOlJlMVF3TDgrYXVOczZCYmNhTDRqSmdYNTBnWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "New Campaign",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns/new",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOm04L2lNQS92OEttdGNmRTRoK2pCVENjcTVvWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOm04L2lNQS92OEttdGNmRTRoK2pCVENjcTVvWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"new"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Create specific Campaign",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOmdteHhpY011OXZtM2JBL3hVa2t6bGM2M0dkTUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOmdteHhpY011OXZtM2JBL3hVa2t6bGM2M0dkTUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": null,\n    \"phase\": \"ENCOUNTER\",\n    \"overlord\": {\n        \"id\": null,\n        \"playedBy\": {\n            \"id\": 1,\n            \"username\": \"pho\",\n            \"password\": \"lMkzwE3Diw+0Dg1O16h2QZNlfZoCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n            \"deactive\": false\n        },\n        \"overlordClass\": \"BASIC\",\n        \"xp\": 0,\n        \"lastMessageUpdate\": 1538923729122\n    },\n    \"currentQuest\": null,\n    \"currentPart\": null,\n    \"nextQuest\": \"FIRST_BLOOD_INTRO\",\n    \"questEncounterId\": 0,\n    \"createdOn\": 1538923729122,\n    \"startedOn\": null,\n    \"countHeroSelections\": 0,\n    \"gameHeroes\": []\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Get Campaign By ID",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns/5",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOlArd2NTYmpRR3BGSXEvNTBQYU5RWUhWTkdvNENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOlArd2NTYmpRR3BGSXEvNTBQYU5RWUhWTkdvNENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"5"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Start Campaign By ID",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns/3/start",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOmh3Y0xuaTlUZWhSa2EyRHl5L2E4S2d1MFRRWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOmh3Y0xuaTlUZWhSa2EyRHl5L2E4S2d1MFRRWUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/3/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"3",
+								"start"
+							]
+						}
 					},
 					"response": []
 				}
@@ -226,55 +347,154 @@
 		},
 		{
 			"name": "Map",
-			"description": "",
 			"item": [
 				{
 					"name": "Get Map By ID",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/maps/1",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOlhYYVh1MHpuV2ovNldLRWV6UEZLeHlGQzdQZ0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOlhYYVh1MHpuV2ovNldLRWV6UEZLeHlGQzdQZ0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/maps/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"maps",
+								"1"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Show Map As Text",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/maps/1/text",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOld3V25WWkhxRVVpaDM4VGdEalNBRDdua3FDQUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOld3V25WWkhxRVVpaDM4VGdEalNBRDdua3FDQUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/maps/1/text",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"maps",
+								"1",
+								"text"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Map",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOjBEZ2JnV1FZV0JRRGROSm5GTFNKK29ZeGNpa0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "text/plain",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "UNITID"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/maps/8/text",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"maps",
+								"8",
+								"text"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check LOS",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOnhyZVQ3TE1wRWhGSnVHUlJUeDl2UXd6T1pORUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"map\":1,\n\t\"source\": 44,\n\t\"target\":45\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/maps/los",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"maps",
+								"los"
+							]
+						}
 					},
 					"response": []
 				}
@@ -282,55 +502,78 @@
 		},
 		{
 			"name": "HeroSelection",
-			"description": "",
 			"item": [
 				{
 					"name": "Heroselections By Campaign",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns/3/heroselections",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOkFWU0pMZ2tVbHZsdmluVHFBMHYzTWhZWGZIMENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOkFWU0pMZ2tVbHZsdmluVHFBMHYzTWhZWGZIMENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/3/heroselections",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"3",
+								"heroselections"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Save Heroselection",
 					"request": {
-						"url": "http://localhost:8080/server/rest/secured/campaigns/3/heroselections",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOmRMSnU2S2l5WThudEY5ZVlFTTgySEhKT3VKY0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOmRMSnU2S2l5WThudEY5ZVlFTTgySEhKT3VKY0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 0,\n    \"campaignId\": 3,\n    \"username\": \"player1\",\n    \"userId\": 4,\n    \"selectedHero\": \"GRISBAN\",\n    \"ready\": true\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/3/heroselections",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"3",
+								"heroselections"
+							]
+						}
 					},
 					"response": []
 				}
@@ -338,46 +581,51 @@
 		},
 		{
 			"name": "TokenGenerator",
-			"description": "",
 			"item": [
 				{
 					"name": "Generate Auth Token",
 					"request": {
-						"url": "http://localhost:8080/server/rest/token",
 						"method": "GET",
 						"header": [
 							{
 								"key": "username",
-								"value": "pho",
-								"description": ""
+								"value": "pho"
 							},
 							{
 								"key": "password",
-								"value": "pho",
-								"description": ""
+								"value": "pho"
 							},
 							{
 								"key": "Content-Type",
 								"value": "application/json",
-								"description": "",
 								"disabled": true
 							},
 							{
 								"key": "method",
-								"value": "GET",
-								"description": ""
+								"value": "GET"
 							},
 							{
 								"key": "uri",
-								"value": "players/secured/pho",
-								"description": ""
+								"value": "players/secured/pho"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"token"
+							]
+						}
 					},
 					"response": []
 				}
@@ -385,30 +633,38 @@
 		},
 		{
 			"name": "Hero",
-			"description": "",
 			"item": [
 				{
 					"name": "List Available Heroes",
 					"request": {
-						"url": "http://localhost:8080/server/rest/heroes",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "cGhvOlArd2NTYmpRR3BGSXEvNTBQYU5RWUhWTkdvNENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A=",
-								"description": ""
+								"value": "cGhvOlArd2NTYmpRR3BGSXEvNTBQYU5RWUhWTkdvNENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/heroes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"heroes"
+							]
+						}
 					},
 					"response": []
 				}
@@ -416,65 +672,97 @@
 		},
 		{
 			"name": "Cheat",
-			"description": "",
 			"item": [
 				{
 					"name": "Set Weapon",
 					"request": {
-						"url": "http://localhost:8080/server/rest/cheat/setWeapon",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"campaignId\": 5,\n    \"winner\": null,\n    \"unitId\": 8,\n    \"fieldId\": 0,\n    \"item\": \"IRON_BATTLEAXE\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/cheat/setWeapon",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"cheat",
+								"setWeapon"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "End Active Quest",
 					"request": {
-						"url": "http://localhost:8080/server/rest/cheat/endActiveQuest",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"campaignId\": 5,\n    \"winner\": \"HEROES\",\n    \"unitId\": 0,\n    \"fieldId\": 0,\n    \"item\": null\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/cheat/endActiveQuest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"cheat",
+								"endActiveQuest"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Set Unit Location",
 					"request": {
-						"url": "http://localhost:8080/server/rest/cheat/setUnitLocation",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"campaignId\": 5,\n    \"winner\": null,\n    \"unitId\": 0,\n    \"fieldId\": 0,\n    \"item\": null\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "http://localhost:8080/server/rest/cheat/setUnitLocation",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"cheat",
+								"setUnitLocation"
+							]
+						}
 					},
 					"response": []
 				}
