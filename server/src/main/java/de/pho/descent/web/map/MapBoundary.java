@@ -10,6 +10,7 @@ import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.map.MapField;
 import de.pho.descent.shared.service.MapLosService;
 import de.pho.descent.web.quest.QuestController;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,7 +105,7 @@ public class MapBoundary {
         return false;
     }
 
-    @GET
+    @POST
     @Path("/losfields")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
@@ -114,10 +115,15 @@ public class MapBoundary {
         if (gameMap == null) {
             throw new NotFoundException();
         }
-        MapField sourceField = gameMap.getField(map.getSource());
-        MapField targetField = gameMap.getField(map.getTarget());
+        GameUnit sourceUnit = questController.getGamUnit(map.getSource());
+        GameUnit targetUnit = questController.getGamUnit(map.getTarget());
+        List<MapField> fields = new ArrayList<>();
 
-        List<MapField> fields = MapLosService.getLOSPath(sourceField, targetField, gameMap);
+        for (MapField sourceField : sourceUnit.getCurrentLocation()) {
+            for (MapField targetField : targetUnit.getCurrentLocation()) {
+                fields.addAll(MapLosService.getLOSPath(sourceField, targetField, gameMap));
+            }
+        }
 
         // wrap Fields in special List for REST response
         GenericEntity<List<MapField>> list = new GenericEntity<List<MapField>>(fields) {

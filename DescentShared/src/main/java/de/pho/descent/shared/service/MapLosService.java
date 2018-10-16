@@ -35,9 +35,6 @@ public class MapLosService {
         int y = y0;
         int n = 1 + dx + dy;
         int x_inc = (x1 > x0) ? 1 : -1;
-
-        // map specific change: y-axis is pointing south
-//        int y_inc = (y1 > y0) ? -1 : 1;
         int y_inc = (y1 > y0) ? 1 : -1;
         int error = dx - dy;
         dx *= 2;
