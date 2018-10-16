@@ -1,10 +1,10 @@
-package de.pho.descent.shared.model.item;
+package de.pho.descent.shared.model;
 
 /**
  *
  * @author pho
  */
-public enum RangeType {
+public enum AttackType {
     MELEE,
     RANGED_MELE,
     RANGED;

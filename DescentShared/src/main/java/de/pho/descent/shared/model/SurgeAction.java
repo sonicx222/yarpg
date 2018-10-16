@@ -13,6 +13,7 @@ public enum SurgeAction {
     THREE_RANGE,
     ONE_PIERCE,
     TWO_PIERCE,
+    THREE_PIERCE,
     STUN,
     TARGET_REROLL_ONE_DEFENSE_DICE;
 }

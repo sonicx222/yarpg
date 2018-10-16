@@ -107,7 +107,7 @@ public class ActionController {
                 messageController.saveMessage(logMsg);
                 break;
             case ATTACK:
-                logMsg = AttackHandler.handle(campaign, actionPlayer, wsAction);
+                logMsg = AttackHandler.handle(campaign, actionPlayer, activeUnit, wsAction);
                 messageController.saveMessage(logMsg);
                 break;
         }

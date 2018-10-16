@@ -1,5 +1,6 @@
 package de.pho.descent.shared.model.item;
 
+import de.pho.descent.shared.model.AttackType;
 import static de.pho.descent.shared.model.item.ItemEffect.*;
 import de.pho.descent.shared.model.SurgeAction;
 import static de.pho.descent.shared.model.SurgeAction.*;
@@ -8,7 +9,7 @@ import static de.pho.descent.shared.model.dice.AttackDice.*;
 import static de.pho.descent.shared.model.hero.Archetype.*;
 import static de.pho.descent.shared.model.hero.HeroClass.*;
 import static de.pho.descent.shared.model.item.ItemCategory.*;
-import static de.pho.descent.shared.model.item.RangeType.*;
+import static de.pho.descent.shared.model.AttackType.*;
 import static de.pho.descent.shared.model.item.Worn.*;
 import static de.pho.descent.shared.model.item.Tier.*;
 import de.pho.descent.shared.model.dice.DefenseDice;
@@ -54,7 +55,7 @@ public enum Item {
 
     private final List<SurgeAction> surgeActions;
 
-    private final RangeType range;
+    private final AttackType range;
 
     private final ItemCategory trait;
 
@@ -66,7 +67,7 @@ public enum Item {
 
     private final String imagePath;
 
-    private Item(String name, Archetype archetype, HeroClass heroClass, Tier itemTier, List<AttackDice> attackDice, List<DefenseDice> defenseDice, ItemEffect itemEffect, List<SurgeAction> surgeActions, RangeType range, ItemCategory trait, Worn worn, int value, int sell, String imagePath) {
+    private Item(String name, Archetype archetype, HeroClass heroClass, Tier itemTier, List<AttackDice> attackDice, List<DefenseDice> defenseDice, ItemEffect itemEffect, List<SurgeAction> surgeActions, AttackType range, ItemCategory trait, Worn worn, int value, int sell, String imagePath) {
         this.name = name;
         this.archetype = archetype;
         this.heroClass = heroClass;
@@ -126,7 +127,7 @@ public enum Item {
         return surgeActions;
     }
 
-    public RangeType getRange() {
+    public AttackType getRange() {
         return range;
     }
 
