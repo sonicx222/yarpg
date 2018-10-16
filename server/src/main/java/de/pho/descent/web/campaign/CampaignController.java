@@ -18,6 +18,7 @@ import de.pho.descent.web.quest.QuestController;
 import de.pho.descent.web.quest.QuestValidationException;
 import de.pho.descent.web.quest.encounter.FirstBlood;
 import de.pho.descent.web.service.PersistenceService;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -119,7 +120,7 @@ public class CampaignController {
      * @throws HeroSelectionException
      * @throws NotFoundException
      */
-    public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException {
+    public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException, IOException {
 
         Campaign campaignToBeStarted = campaignService.getCampaignById(Long.parseLong(campaignId));
 
@@ -164,7 +165,7 @@ public class CampaignController {
         return campaignService.saveCampaign(campaignToBeStarted);
     }
 
-    public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException {
+    public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException, IOException {
         Campaign c = new Campaign();
 
         Overlord overlord = wsCampaign.getOverlord();

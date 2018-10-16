@@ -5,7 +5,10 @@ import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,9 +35,10 @@ public class MapField implements Serializable {
     public static final String GROUPID_PARAM = "paramGroupId";
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MapTileGroup tileGroup;
 
     @ManyToOne(optional = true)

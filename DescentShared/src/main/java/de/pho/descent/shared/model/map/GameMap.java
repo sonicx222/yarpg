@@ -1,12 +1,16 @@
 package de.pho.descent.shared.model.map;
 
+import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -35,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class GameMap implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(GameMap.class.getName());
 
     public static final String FIND_MAP_BY_QUEST_AND_PART = "de.pho.descent.shared.model.map.findMapByQuestAndPart";
     public static final String QUEST_PARAM = "paramQuest";
@@ -54,9 +59,9 @@ public class GameMap implements Serializable {
 
     private int gridYSize;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "map_id")
-    private List<MapField> mapFields;
+    private List<MapField> mapFields = new ArrayList<>();
 
     @NotNull
     private String imagePath;
@@ -68,6 +73,13 @@ public class GameMap implements Serializable {
     public MapField getField(int x, int y) {
         return mapFields.stream()
                 .filter(field -> (field.getxPos() == x && field.getyPos() == y))
+                .findAny()
+                .orElse(null);
+    }
+
+    public MapField getField(long id) {
+        return mapFields.stream()
+                .filter(field -> (field.getId() == id))
                 .findAny()
                 .orElse(null);
     }
@@ -165,17 +177,37 @@ public class GameMap implements Serializable {
         return "GameMap{" + "id=" + id + ", quest=" + quest + ", part=" + part + '}';
     }
 
-    public String asText() {
-        Character[][] layout = new Character[gridXSize][gridYSize];
+    public String asText(FieldAttribute fieldAttribute) {
+        
+        String[][] layout = new String[gridXSize][gridYSize];
 
         for (int x = 0; x < gridXSize; x++) {
             for (int y = 0; y < gridYSize; y++) {
-                layout[x][y] = ' ';
+                layout[x][y] = " ";
             }
         }
 
         for (MapField field : mapFields) {
-            layout[field.getxPos()][field.getyPos()] = Character.forDigit(field.getMoveCost(), 10);
+            String strAttribute = " ";
+            switch (fieldAttribute) {
+                case MOVECOST:
+                    strAttribute = String.valueOf(field.getMoveCost());
+                    break;
+                case PASSABLE:
+                    strAttribute = field.isPassable() ? "O" : "B";
+                    break;
+                case UNITID:
+                    GameUnit unit = field.getGameUnit();
+                    if (unit != null) {
+                        strAttribute = String.valueOf(unit.getId());
+                    }
+                    break;
+                case FIELDID:
+                    strAttribute = String.valueOf(field.getId());
+                    break;
+
+            }
+            layout[field.getxPos()][field.getyPos()] = strAttribute;
         }
 
         StringBuilder sb = new StringBuilder(toString());
@@ -186,10 +218,18 @@ public class GameMap implements Serializable {
             sb.append(" - +");
         }
 
+        String attr = null;
         for (int y = 0; y < gridYSize; y++) {
             sb.append(System.lineSeparator()).append('|');
             for (int x = 0; x < gridXSize; x++) {
-                sb.append(" ").append(layout[x][y]).append(" |");
+                attr = layout[x][y];
+                if (attr.length() == 1) {
+                    sb.append(" ").append(attr).append(" |");
+                } else if (attr.length() == 2) {
+                    sb.append(attr).append(" |");
+                } else if (attr.length() == 3) {
+                    sb.append(attr).append("|");
+                }
             }
             sb.append(System.lineSeparator()).append('+');
             for (int x = 0; x < gridXSize; x++) {

@@ -12,8 +12,10 @@ import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.shared.model.token.Token;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.map.MapController;
+import de.pho.descent.web.map.MapFactory;
 import de.pho.descent.web.quest.encounter.FirstBlood;
 import de.pho.descent.web.service.PersistenceService;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedMap;
@@ -46,20 +48,23 @@ public class QuestController {
         return questService.loadEncounterById(id);
     }
 
-    public QuestEncounter startNextQuestEncounter(Campaign campaign) throws NotFoundException {
+    public QuestEncounter startNextQuestEncounter(Campaign campaign) throws NotFoundException, IOException {
         return createQuestEncounter(campaign.getTemplateNextQuest(), campaign);
     }
 
-    public QuestEncounter createQuestEncounter(QuestTemplate questTemplate, Campaign campaign) throws NotFoundException {
+    public QuestEncounter createQuestEncounter(QuestTemplate questTemplate, Campaign campaign) throws NotFoundException, IOException {
         QuestEncounter encounter = new QuestEncounter();
 
-        GameMap gameMap = mapController.getMapByQuestTemplate(questTemplate);
+        GameMap gameMap = MapFactory.createMapByTemplate(questTemplate);
+        persistenceService.create(gameMap);
+        
         encounter.setActive(true);
         encounter.setRound(1);
         encounter.setMap(gameMap);
         encounter.setQuest(questTemplate.getQuest());
         encounter.setPart(questTemplate.getQuestPart());
         encounter.setCurrentTurn(PlaySide.HEROES);
+        
 
         // set first active hero based on highest initiative roll
         setActiveHeroByInitiative(campaign);

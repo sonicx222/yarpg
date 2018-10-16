@@ -7,6 +7,7 @@ import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CampaignBoundary {
                     // create DTO
                     wsCampaigns.add(WsCampaign.createInstance(campaign));
                 });
-        
+
         // wrap WsCampaigns in special List for REST response
         GenericEntity<List<WsCampaign>> list = new GenericEntity<List<WsCampaign>>(wsCampaigns) {
         };
@@ -78,7 +79,7 @@ public class CampaignBoundary {
         LOG.log(Level.INFO, "Calling getCampaignById for Id {0}", campaignId);
 
         Campaign campaign = campaignController.getCampaignById(Long.valueOf(campaignId));
-        
+
         // prevent lazy load exception
         campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
 
@@ -90,7 +91,7 @@ public class CampaignBoundary {
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @Context UriInfo uriInfo,
             WsCampaign wsCampaign)
-            throws URISyntaxException, UserValidationException, NotFoundException {
+            throws URISyntaxException, UserValidationException, IOException, NotFoundException {
         Player player = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
 
@@ -120,7 +121,7 @@ public class CampaignBoundary {
     public Response startCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @PathParam(ParamValue.CAMPAIGN_ID) String campaignId)
-            throws UserValidationException, HeroSelectionException, NotFoundException {
+            throws UserValidationException, HeroSelectionException, NotFoundException, IOException {
         Player overlordPlayer = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling startCampaign with Player {0}", overlordPlayer.getUsername());
 
