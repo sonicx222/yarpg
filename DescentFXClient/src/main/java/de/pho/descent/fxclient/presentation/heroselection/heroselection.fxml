@@ -67,12 +67,12 @@
                         <Line endX="200.0" stroke="DARKGRAY" />
                     </children>
                 </VBox>
-                <Label layoutX="69.0" layoutY="14.0" text="Current Hero Selections" textFill="WHITE">
+                <Label id="current_selection" layoutX="69.0" layoutY="14.0" text="Current Hero Selections" textFill="WHITE">
                     <font>
                         <Font size="29.0" />
                     </font>
                 </Label>
-                <Label layoutX="69.0" layoutY="229.0" text="Select Your Hero">
+                <Label id="select_hero" layoutX="69.0" layoutY="229.0" text="Select Your Hero">
                     <font>
                         <Font size="25.0" />
                     </font>

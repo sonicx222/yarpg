@@ -7,3 +7,13 @@ VBox > StackPane > .label {
     -fx-font-size: 17pt;
     -fx-font-family: 'Windlass';
 }
+
+#current_selection {
+    -fx-font-size: 25pt;
+    -fx-font-family: 'Windlass';
+}
+
+#select_hero {
+    -fx-font-size: 23pt;
+    -fx-font-family: 'Windlass';
+}
