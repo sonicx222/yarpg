@@ -90,7 +90,7 @@ public class MapFactory {
         map.setPart(template.getQuestPart());
         map.setGridXSize(template.getGridXSize());
         map.setGridYSize(template.getGridYSize());
-        map.setImagePath(MAP_IMAGE_PATH + template.getQuest().name() + "_" + template.getQuestPart().name());
+        map.setImagePath(MAP_IMAGE_PATH + template.getQuest().name() + "_" + template.getQuestPart().name() + ".png");
 
         for (Map.Entry<MapTileGroup, List<MapField>> entry : mapFields.entrySet()) {
             map.getMapFields().addAll(entry.getValue());
