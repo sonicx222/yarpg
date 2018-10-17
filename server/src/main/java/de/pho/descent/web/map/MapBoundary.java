@@ -10,7 +10,6 @@ import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.map.MapField;
 import de.pho.descent.shared.service.MapLosService;
 import de.pho.descent.web.quest.QuestController;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,15 +93,7 @@ public class MapBoundary {
         GameUnit sourceUnit = questController.getGamUnit(map.getSource());
         GameUnit targetUnit = questController.getGamUnit(map.getTarget());
 
-        for (MapField sourceField : sourceUnit.getCurrentLocation()) {
-            for (MapField targetField : targetUnit.getCurrentLocation()) {
-                if (MapLosService.hasLineOfSight(sourceField, targetField, gameMap)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return MapLosService.hasLineOfSight(sourceUnit, targetUnit, gameMap);
     }
 
     @POST
@@ -117,13 +108,7 @@ public class MapBoundary {
         }
         GameUnit sourceUnit = questController.getGamUnit(map.getSource());
         GameUnit targetUnit = questController.getGamUnit(map.getTarget());
-        List<MapField> fields = new ArrayList<>();
-
-        for (MapField sourceField : sourceUnit.getCurrentLocation()) {
-            for (MapField targetField : targetUnit.getCurrentLocation()) {
-                fields.addAll(MapLosService.getLOSPath(sourceField, targetField, gameMap));
-            }
-        }
+        List<MapField> fields = MapLosService.getLOSPath(sourceUnit, targetUnit, gameMap);
 
         // wrap Fields in special List for REST response
         GenericEntity<List<MapField>> list = new GenericEntity<List<MapField>>(fields) {
