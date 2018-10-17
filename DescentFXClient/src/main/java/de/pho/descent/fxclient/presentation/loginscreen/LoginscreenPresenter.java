@@ -84,9 +84,9 @@ public class LoginscreenPresenter implements Initializable {
 
     private void handleLogin(Event event) {
         if (loginUserText.getText().equals("debug")) {
-            Object[] result = Automate.startCampaignWithTwoHeroes();
-            gameDataModel.setCurrentCampaign((WsCampaign) result[1]);
-            credentials.setPlayer((Player) result[0]);
+            Object[] result = Automate.startCampaignWithThreeHeroes();
+            gameDataModel.setCurrentCampaign((WsCampaign) result[2]);
+            credentials.setPlayer((Player) result[1]);
             switchFullscreenScene(event, new OverlordGameView());
         }
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()

@@ -30,7 +30,7 @@ public class Automate {
 
     private static WsCampaign wsCampaign;
 
-    public static Object[] startCampaignWithTwoHeroes() {
+    public static Object[] startCampaignWithThreeHeroes() {
         try {
             // register
             overlord = PlayerClient.registerPlayer(credentialsOverlord, credentialsOverlord);
@@ -98,9 +98,16 @@ public class Automate {
             MainApp.showError(ex);
         }
 
-        Object[] result = new Object[2];
+        Object[] result = new Object[3];
+        
+        // overlord
         result[0] = overlord;
-        result[1] = wsCampaign;
+        
+        // active player
+        result[1] = wsCampaign.getActiveHero().getPlayedBy();
+        
+        // campaign
+        result[2] = wsCampaign;
         return result;
     }
 }
