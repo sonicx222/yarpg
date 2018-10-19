@@ -57,7 +57,7 @@ public class CheatBoundary {
             throw new NotFoundException("Campaign with id " + cheatBox.getCampaignId() + " not found!");
         }
         
-        GameUnit unit = questController.getGamUnit(cheatBox.getUnitId());
+        GameUnit unit = questController.getGameUnit(cheatBox.getUnitId());
 
         MapField targetField = persistenceService.find(MapField.class, cheatBox.getFieldId());
         if (targetField == null) {
@@ -102,15 +102,14 @@ public class CheatBoundary {
 
         // prevent lazy load exception
         campaign.getHeroSelections().size();
-        campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
-
         QuestEncounter encounter = campaign.getActiveQuest();
+        encounter.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
         encounter.getMonsters().forEach(monster -> monster.getCurrentLocation().size());
         encounter.getToken().size();
 
         // set winning side
         encounter.setWinner(cheatBox.getWinner());
-        campaign = campaignController.endActiveQuest(campaign);
+        campaignController.endActiveQuest(campaign);
 
         LOG.log(Level.INFO, "Cheat used => endActiveQuest for campaign id {0}", cheatBox.getCampaignId());
 

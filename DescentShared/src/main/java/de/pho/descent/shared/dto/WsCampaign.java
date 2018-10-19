@@ -2,16 +2,12 @@ package de.pho.descent.shared.dto;
 
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
 import de.pho.descent.shared.model.quest.QuestTemplate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,13 +29,13 @@ public class WsCampaign {
 
     private long questEncounterId;
 
+    private int gold;
+
     private Date createdOn;
 
     private Date startedOn;
 
     private int countHeroSelections;
-
-    private List<GameHero> gameHeroes = new ArrayList<>();
 
     public WsCampaign() {
     }
@@ -49,12 +45,6 @@ public class WsCampaign {
         this.overlord = overlord;
         this.nextQuest = nextQuest;
         this.questEncounterId = questEncounterId;
-    }
-
-    @XmlTransient
-    public GameHero getActiveHero() {
-        return gameHeroes.stream()
-                .filter(hero -> hero.isActive()).findAny().orElse(null);
     }
 
     public long getId() {
@@ -105,6 +95,14 @@ public class WsCampaign {
         this.nextQuest = nextQuest;
     }
 
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
     public long getQuestEncounterId() {
         return questEncounterId;
     }
@@ -137,14 +135,6 @@ public class WsCampaign {
         this.countHeroSelections = countHeroSelections;
     }
 
-    public List<GameHero> getGameHeroes() {
-        return gameHeroes;
-    }
-
-    public void setGameHeroes(List<GameHero> gameHeroes) {
-        this.gameHeroes = gameHeroes;
-    }
-
     /**
      * Factory-Method to create new WsCampaign DTOs
      *
@@ -160,13 +150,13 @@ public class WsCampaign {
         wsCampaign.setPhase(campaign.getPhase());
         wsCampaign.setCurrentQuest(campaign.getActiveQuest() == null ? null : campaign.getActiveQuest().getQuest());
         wsCampaign.setCurrentPart(campaign.getActiveQuest() == null ? null : campaign.getActiveQuest().getPart());
-        wsCampaign.setNextQuest(campaign.getTemplateNextQuest());
+        wsCampaign.setNextQuest(campaign.getNextQuestTemplate());
         wsCampaign.setQuestEncounterId(campaign.getActiveQuest() == null ? 0 : campaign.getActiveQuest().getId());
 
         wsCampaign.setCreatedOn(campaign.getCreatedOn());
         wsCampaign.setStartedOn(campaign.getStartedOn());
         wsCampaign.setCountHeroSelections(campaign.getHeroSelections().size());
-        wsCampaign.setGameHeroes(new ArrayList<>(campaign.getHeroes()));
+        wsCampaign.setGold(campaign.getGold());
 
         return wsCampaign;
     }
@@ -176,7 +166,6 @@ public class WsCampaign {
         return "WsCampaign{" + "id=" + id + ", phase=" + phase + ", overlord="
                 + overlord + ", nextQuest=" + nextQuest + ", questEncounterId="
                 + questEncounterId + ", createdOn=" + createdOn + ", startedOn="
-                + startedOn + ", countHeroSelections=" + countHeroSelections
-                + ", gameHeroes=" + gameHeroes + '}';
+                + startedOn + ", countHeroSelections=" + countHeroSelections + '}';
     }
 }

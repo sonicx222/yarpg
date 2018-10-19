@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,10 +39,12 @@ public class QuestBoundary {
             @PathParam(ParamValue.QUEST_ID) String questId) {
         LOG.log(Level.INFO, "Calling getQuest for id {0}", questId);
         QuestEncounter questEncounter = questController.getQuestEncounterById(Long.parseLong(questId));
-        
+
         // prevent lazy load exception
+        questEncounter.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
         questEncounter.getMonsters().forEach(monster -> monster.getCurrentLocation().size());
 
         return Response.ok().entity(WsQuestEncounter.createInstance(questEncounter)).build();
     }
+    
 }

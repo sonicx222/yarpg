@@ -4,9 +4,7 @@ import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.map.MapField;
 import de.pho.descent.shared.model.map.MapTileGroup;
 import de.pho.descent.shared.model.quest.QuestTemplate;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,6 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -49,17 +46,15 @@ public class MapFactory {
                     boolean herospawn = false;
                     boolean monsterspawn = false;
 
-                    short colorindex = cell.getCellStyle().getFillBackgroundColor();
-                    short colorindex2 = cell.getCellStyle().getFillForegroundColor();
-                    short blue = HSSFColor.HSSFColorPredefined.BLUE.getIndex();
-
+//                    short colorindex = cell.getCellStyle().getFillBackgroundColor();
+//                    short colorindex2 = cell.getCellStyle().getFillForegroundColor();
+//                    short blue = HSSFColor.HSSFColorPredefined.BLUE.getIndex();
 //                    if ((cell.getColumnIndex() % 2) == 0) {
 //                        cell.getCellStyle().setFillForegroundColor(HSSFColor.HSSFColorPredefined.BLUE.getIndex());
 //                    } else {
 //                        cell.getCellStyle().setFillForegroundColor(HSSFColor.HSSFColorPredefined.GREEN.getIndex());
 //                    }
-                    XSSFColor color = cell.getCellStyle().getFont().getXSSFColor();
-
+//                    XSSFColor color = cell.getCellStyle().getFont().getXSSFColor();
                     if (cell.getCellStyle().getFillForegroundColor() == HSSFColor.HSSFColorPredefined.GREEN.getIndex()) {
                         herospawn = true;
                     } else if (cell.getCellStyle().getFillForegroundColor() == HSSFColor.HSSFColorPredefined.BLUE.getIndex()) {
@@ -84,6 +79,13 @@ public class MapFactory {
                 }
             }
         }
+        // Write the output to a file
+//        try (OutputStream fileOut = new FileOutputStream("workbook.xlsx")) {
+//            maps.write(fileOut);
+//        }
+
+        // close workbook, not needed anymore
+        maps.close();
 
         GameMap map = new GameMap();
         map.setQuest(template.getQuest());
@@ -96,13 +98,6 @@ public class MapFactory {
             map.getMapFields().addAll(entry.getValue());
         }
 
-        // Write the output to a file
-        try (OutputStream fileOut = new FileOutputStream("workbook.xlsx")) {
-            maps.write(fileOut);
-        }
-
-        maps.close();
-
         return map;
     }
 
@@ -111,7 +106,6 @@ public class MapFactory {
 
         try {
             book = new XSSFWorkbook(MapFactory.class.getResourceAsStream(MAPS_FILE_PATH));
-//            book = WorkbookFactory.create(MapFactory.class.getResourceAsStream(MAPS_FILE_PATH));
         } catch (EncryptedDocumentException ex) {
             Logger.getLogger(MapFactory.class.getName()).log(Level.SEVERE, null, ex);
         }

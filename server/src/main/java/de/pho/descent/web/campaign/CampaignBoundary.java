@@ -7,6 +7,7 @@ import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.player.PlayerController;
+import de.pho.descent.web.quest.QuestValidationException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,8 +59,6 @@ public class CampaignBoundary {
         List<WsCampaign> wsCampaigns = new ArrayList<>();
         campaignController.getPlayableCampaigns(player).forEach(
                 campaign -> {
-                    // prevent lazy load exception
-                    campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
                     // create DTO
                     wsCampaigns.add(WsCampaign.createInstance(campaign));
                 });
@@ -80,25 +79,7 @@ public class CampaignBoundary {
 
         Campaign campaign = campaignController.getCampaignById(Long.valueOf(campaignId));
 
-        // prevent lazy load exception
-        campaign.getHeroes().forEach(hero -> hero.getCurrentLocation().size());
-
         return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
-    }
-
-    @POST
-    public Response createCampaign(
-            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
-            @Context UriInfo uriInfo,
-            WsCampaign wsCampaign)
-            throws URISyntaxException, UserValidationException, IOException, NotFoundException {
-        Player player = playerController.getPlayerByToken(authToken);
-        LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
-
-        Campaign campaign = campaignController.createCampaign(wsCampaign);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(campaign.getId())).build();
-
-        return Response.created(uri).entity(WsCampaign.createInstance(campaign)).build();
     }
 
     @POST
@@ -121,7 +102,7 @@ public class CampaignBoundary {
     public Response startCampaign(
             @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
             @PathParam(ParamValue.CAMPAIGN_ID) String campaignId)
-            throws UserValidationException, HeroSelectionException, NotFoundException, IOException {
+            throws UserValidationException, HeroSelectionException, NotFoundException, IOException, QuestValidationException {
         Player overlordPlayer = playerController.getPlayerByToken(authToken);
         LOG.log(Level.INFO, "Calling startCampaign with Player {0}", overlordPlayer.getUsername());
 
@@ -130,4 +111,33 @@ public class CampaignBoundary {
         return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
     }
 
+    @POST
+    public Response createCampaign(
+            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
+            @Context UriInfo uriInfo,
+            WsCampaign wsCampaign)
+            throws URISyntaxException, UserValidationException, IOException, NotFoundException, QuestValidationException {
+        Player player = playerController.getPlayerByToken(authToken);
+        LOG.log(Level.INFO, "Calling createNewCampaign with Player {0}", player.getUsername());
+
+        Campaign campaign = campaignController.createCampaign(wsCampaign);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(campaign.getId())).build();
+
+        return Response.created(uri).entity(WsCampaign.createInstance(campaign)).build();
+    }
+
+    @POST
+    @Path("/{" + ParamValue.CAMPAIGN_ID + "}/endTurn")
+    public Response endActiveUnitTurn(
+            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
+            @PathParam(ParamValue.CAMPAIGN_ID) String campaignId) throws NotFoundException, UserValidationException, QuestValidationException {
+        Player player = playerController.getPlayerByToken(authToken);
+        LOG.log(Level.INFO, "Player {0} ending current turn for active quest id {1}", new Object[]{player.getUsername(), campaignId});
+        Campaign campaign = campaignController.getCampaignById(Long.parseLong(campaignId));
+
+        // end turn
+        campaignController.endActiveUnitTurn(campaign);
+
+        return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
+    }
 }

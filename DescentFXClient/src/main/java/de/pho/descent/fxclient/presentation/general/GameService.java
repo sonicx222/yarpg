@@ -52,7 +52,7 @@ public class GameService {
     }
 
     public GameUnit getActiveUnit() {
-        GameUnit unit = gameDataModel.getCurrentCampaign().getActiveHero();
+        GameUnit unit = gameDataModel.getCurrentQuestEncounter().getActiveHero();
 
         if (unit == null) {
             unit = gameDataModel.getCurrentQuestEncounter().getActiveMonster();

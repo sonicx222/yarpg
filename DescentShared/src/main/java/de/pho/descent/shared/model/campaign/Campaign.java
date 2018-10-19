@@ -1,6 +1,5 @@
 package de.pho.descent.shared.model.campaign;
 
-import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -52,26 +51,19 @@ public class Campaign implements Serializable {
     private CampaignPhase phase;
 
     @Enumerated(EnumType.STRING)
-    private QuestTemplate templateNextQuest;
+    private QuestTemplate nextQuestTemplate;
 
     @OneToOne
     private Overlord overlord;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private QuestEncounter activeQuest;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "campaign_id")
-    private List<GameHero> heroes = new ArrayList<>();
+    
+    private int gold;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "campaign_id")
     private List<HeroSelection> heroSelections = new ArrayList<>();
-
-    public GameHero getActiveHero() {
-        return heroes.stream()
-                .filter(hero -> hero.isActive()).findAny().orElse(null);
-    }
 
     public Long getId() {
         return id;
@@ -89,6 +81,14 @@ public class Campaign implements Serializable {
         this.activeQuest = activeQuest;
     }
 
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+    
     public Date getCreatedOn() {
         return createdOn;
     }
@@ -109,12 +109,12 @@ public class Campaign implements Serializable {
         this.phase = phase;
     }
 
-    public QuestTemplate getTemplateNextQuest() {
-        return templateNextQuest;
+    public QuestTemplate getNextQuestTemplate() {
+        return nextQuestTemplate;
     }
 
-    public void setTemplateNextQuest(QuestTemplate templateNextQuest) {
-        this.templateNextQuest = templateNextQuest;
+    public void setNextQuestTemplate(QuestTemplate nextQuestTemplate) {
+        this.nextQuestTemplate = nextQuestTemplate;
     }
 
     public Overlord getOverlord() {
@@ -123,17 +123,6 @@ public class Campaign implements Serializable {
 
     public void setOverlord(Overlord overlord) {
         this.overlord = overlord;
-    }
-
-    public List<GameHero> getHeroes() {
-        if (heroes == null) {
-            heroes = new ArrayList<>();
-        }
-        return heroes;
-    }
-
-    public void setHeroes(List<GameHero> heroes) {
-        this.heroes = heroes;
     }
 
     public List<HeroSelection> getHeroSelections() {

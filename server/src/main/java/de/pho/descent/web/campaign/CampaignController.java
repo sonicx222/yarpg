@@ -3,6 +3,7 @@ package de.pho.descent.web.campaign;
 import static java.util.Objects.requireNonNull;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
+import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
@@ -10,7 +11,9 @@ import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.overlord.OverlordClass;
+import de.pho.descent.shared.model.quest.LootBox;
 import de.pho.descent.shared.model.quest.QuestEncounter;
+import de.pho.descent.shared.model.quest.QuestReward;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
@@ -53,18 +56,20 @@ public class CampaignController {
                 continue;
             }
 
-            // check if player is part of campaignToBeStarted heroes
-            boolean partOfCampaignHeroes = false;
-            for (GameHero hero : c.getHeroes()) {
-                if (player.equals(hero.getPlayedBy())) {
-                    partOfCampaignHeroes = true;
-                    playableCampaigns.add(c);
-                    break;
+            // check if player is part of active quest heroes
+            boolean partOfActiveQuest = false;
+            if (c.getActiveQuest() != null) {
+                for (GameHero hero : c.getActiveQuest().getHeroes()) {
+                    if (player.equals(hero.getPlayedBy())) {
+                        partOfActiveQuest = true;
+                        playableCampaigns.add(c);
+                        break;
+                    }
                 }
             }
 
             // check if player is instead part of hero selections
-            if (!partOfCampaignHeroes && (c.getPhase() == CampaignPhase.HERO_SELECTION)) {
+            if (!partOfActiveQuest && (c.getPhase() == CampaignPhase.HERO_SELECTION)) {
                 List<HeroSelection> selections = c.getHeroSelections();
                 if (selections.size() < 4) {
                     // hero selection still going with enough room
@@ -120,7 +125,7 @@ public class CampaignController {
      * @throws HeroSelectionException
      * @throws NotFoundException
      */
-    public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException, IOException {
+    public Campaign startCampaign(Player player, String campaignId) throws UserValidationException, HeroSelectionException, NotFoundException, IOException, QuestValidationException {
 
         Campaign campaignToBeStarted = campaignService.getCampaignById(Long.parseLong(campaignId));
 
@@ -146,18 +151,8 @@ public class CampaignController {
             }
         }
 
-        // create game heroes
-        List<GameHero> heroes = new ArrayList<>();
-        for (HeroSelection hs : heroSelections) {
-            GameHero hero = new GameHero(hs.getSelectedHero());
-            hero.setPlayedBy(hs.getPlayer());
-            hero.setActions(2);
-            heroes.add(hero);
-        }
-        campaignToBeStarted.getHeroes().clear();
-        campaignToBeStarted.getHeroes().addAll(heroes);
-
-        QuestEncounter encounter = questController.startNextQuestEncounter(campaignToBeStarted);
+        // create initial start quest
+        QuestEncounter encounter = startNextQuestEncounter(campaignToBeStarted);
         campaignToBeStarted.setActiveQuest(encounter);
         campaignToBeStarted.setPhase(CampaignPhase.ENCOUNTER);
         campaignToBeStarted.setStartedOn(new Date());
@@ -165,15 +160,14 @@ public class CampaignController {
         return campaignService.saveCampaign(campaignToBeStarted);
     }
 
-    public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException, IOException {
+    public Campaign createCampaign(WsCampaign wsCampaign) throws NotFoundException, IOException, QuestValidationException {
         Campaign c = new Campaign();
 
-        Overlord overlord = wsCampaign.getOverlord();
-        persistenceService.create(overlord);
-        c.setOverlord(overlord);
-        c.setPhase(wsCampaign.getPhase());
-        c.setActiveQuest(questController.createQuestEncounter(wsCampaign.getNextQuest(), c));
-
+//        Overlord overlord = wsCampaign.getOverlord();
+//        persistenceService.create(overlord);
+//        c.setOverlord(overlord);
+//        c.setPhase(wsCampaign.getPhase());
+//        c.setActiveQuest(questController.createQuestEncounter(wsCampaign.getNextQuest(), c));
         return campaignService.saveCampaign(c);
     }
 
@@ -184,27 +178,78 @@ public class CampaignController {
         persistenceService.create(overlord);
         c.setOverlord(overlord);
         c.setPhase(CampaignPhase.HERO_SELECTION);
-        c.setTemplateNextQuest(QuestTemplate.FIRST_BLOOD_INTRO);
+        c.setNextQuestTemplate(QuestTemplate.FIRST_BLOOD_INTRO);
 
         return campaignService.saveCampaign(c);
     }
 
-    public Campaign endActiveQuest(Campaign campaign) throws QuestValidationException, NotFoundException {
-        QuestEncounter encounter = campaign.getActiveQuest();
+    public void endActiveUnitTurn(Campaign campaign) throws QuestValidationException, NotFoundException {
+        questController.deactivateCurrentUnit(campaign.getActiveQuest());
+        questController.setNextActiveUnit(campaign);
+    }
 
+    public void endActiveQuest(Campaign campaign) throws QuestValidationException, NotFoundException {
+        QuestEncounter encounter = campaign.getActiveQuest();
+        LootBox box = null;
+
+        encounter.setActive(false);
         switch (encounter.getQuest()) {
             case FIRST_BLOOD: {
-                FirstBlood.endQuest(campaign);
-
-                // next phase
-                campaign = setNextCampaignPhase(campaign);
+                box = FirstBlood.getQuestRewards();
             }
             break;
             default:
                 break;
         }
+        // rewards
+        handleQuestReward(campaign, box);
 
-        return campaign;
+        // next phase
+        campaign = setNextCampaignPhase(campaign);
+    }
+
+    public QuestEncounter startNextQuestEncounter(Campaign campaign) throws NotFoundException, IOException, QuestValidationException {
+        List<GameHero> heroes = null;
+
+        if (campaign.getActiveQuest() != null && !campaign.getActiveQuest().isActive() && campaign.getActiveQuest().getWinner() != null) {
+            // current quest = old quest => transfer heroes
+            heroes = campaign.getActiveQuest().getHeroes();
+        } else {
+            // create game heroes
+            heroes = new ArrayList<>();
+            for (HeroSelection hs : campaign.getHeroSelections()) {
+                GameHero hero = new GameHero(hs.getSelectedHero());
+                hero.setPlayedBy(hs.getPlayer());
+                hero.setActions(2);
+                heroes.add(hero);
+            }
+        }
+
+        return questController.createQuestEncounter(campaign.getNextQuestTemplate(), campaign, heroes);
+    }
+
+    private void handleQuestReward(Campaign campaign, LootBox box) {
+        QuestEncounter encounter = campaign.getActiveQuest();
+
+        if (encounter.getWinner() == PlaySide.HEROES) {
+            QuestReward heroesReward = box.getRewardBySide(PlaySide.HEROES);
+
+            // gold
+            campaign.setGold(campaign.getGold() + heroesReward.getGold());
+
+            // xp
+            encounter.getHeroes().stream()
+                    .forEach(hero -> hero.addXp(heroesReward.getXp()));
+
+            // TODO item e.g relics
+        } else {
+            QuestReward overlordReward = box.getRewardBySide(PlaySide.OVERLORD);
+
+            // xp
+            campaign.getOverlord().addXp(overlordReward.getXp());
+
+            // TODO item e.g relics
+        }
     }
 
     public Campaign setNextCampaignPhase(String campaignId) throws NotFoundException {
@@ -276,7 +321,7 @@ public class CampaignController {
         if (!Objects.equals(player.getUsername(), wsSelection.getUsername())) {
             throw new HeroSelectionException("Hero selection can only be made for same user calling service");
         }
-        
+
         // check if user is overlord
         if (Objects.equals(player, campaign.getOverlord().getPlayedBy())) {
             throw new HeroSelectionException("Overlord can not take part in hero selection");

@@ -183,51 +183,51 @@ public class HeroSelectionTest {
         HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign4);
     }
 
-    @Test
-    public void testHeroSelectionCampaign5() throws ServerException {
-        LOG.info("testHeroSelectionCampaign5");
-        
-        // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
-        Overlord overlord = new Overlord(player1, OverlordClass.BASIC, null);
-        campaign5 = CampaignClient.createCampaign(player1,
-                new WsCampaign(overlord, CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
-
-        // check: game already started error
-        expectedException.expect(ServerException.class);
-        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
-        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign5);
-    }
-
-    @Test
-    public void testHeroSelectionCampaign6() throws ServerException {
-        LOG.info("testHeroSelectionCampaign6");
-        
-        // player2 creates campaign6 as overlord, campaign in stage TRAVEL
-        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
-        campaign6 = CampaignClient.createCampaign(player2,
-                new WsCampaign(overlord, CampaignPhase.TRAVEL, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
-
-        expectedException.expect(ServerException.class);
-        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
-        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign6);
-    }
-
-    @Test
-    public void testHeroSelectionCampaign7() throws ServerException {
-        LOG.info("testHeroSelectionCampaign7");
-        
-        // player2 creates campaign7 as overlord, campaign in stage FINISHED
-        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
-        campaign7 = CampaignClient.createCampaign(player2,
-                new WsCampaign(overlord, CampaignPhase.FINISHED, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
-
-        expectedException.expect(ServerException.class);
-        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
-        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
-        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign7);
-    }
+//    @Test
+//    public void testHeroSelectionCampaign5() throws ServerException {
+//        LOG.info("testHeroSelectionCampaign5");
+//        
+//        // player1 creates campaign5 as overlord, campaign5 in stage ENCOUNTER
+//        Overlord overlord = new Overlord(player1, OverlordClass.BASIC, null);
+//        campaign5 = CampaignClient.createCampaign(player1,
+//                new WsCampaign(overlord, CampaignPhase.ENCOUNTER, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+//
+//        // check: game already started error
+//        expectedException.expect(ServerException.class);
+//        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
+//        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
+//        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign5);
+//    }
+//
+//    @Test
+//    public void testHeroSelectionCampaign6() throws ServerException {
+//        LOG.info("testHeroSelectionCampaign6");
+//        
+//        // player2 creates campaign6 as overlord, campaign in stage TRAVEL
+//        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
+//        campaign6 = CampaignClient.createCampaign(player2,
+//                new WsCampaign(overlord, CampaignPhase.TRAVEL, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+//
+//        expectedException.expect(ServerException.class);
+//        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
+//        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
+//        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign6);
+//    }
+//
+//    @Test
+//    public void testHeroSelectionCampaign7() throws ServerException {
+//        LOG.info("testHeroSelectionCampaign7");
+//        
+//        // player2 creates campaign7 as overlord, campaign in stage FINISHED
+//        Overlord overlord = new Overlord(player2, OverlordClass.BASIC, null);
+//        campaign7 = CampaignClient.createCampaign(player2,
+//                new WsCampaign(overlord, CampaignPhase.FINISHED, QuestTemplate.FIRST_BLOOD_INTRO, 0l));
+//
+//        expectedException.expect(ServerException.class);
+//        expectedException.expectMessage("Campaign not in phase: " + CampaignPhase.HERO_SELECTION.name());
+//        WsHeroSelection heroSelectionP6 = new WsHeroSelection(credentialsP6, JAINFAIRWOOD, true);
+//        HeroSelectionClient.saveSelection(credentialsP6, SecurityTools.createHash(credentialsP6, false), heroSelectionP6, campaign7);
+//    }
 
     @Test
     public void testHeroSelectionCampaign8() throws ServerException {

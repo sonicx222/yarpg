@@ -115,12 +115,7 @@ public class CampaignSelectionPresenter implements Initializable {
             return new SimpleStringProperty(cell.getValue().getOverlord().getPlayedBy().getUsername());
         });
         campaignPlayersColumn.setCellValueFactory((TableColumn.CellDataFeatures<WsCampaign, String> cell) -> {
-            String strPlayers;
-            if (cell.getValue().getPhase() == CampaignPhase.HERO_SELECTION) {
-                strPlayers = String.valueOf(cell.getValue().getCountHeroSelections());
-            } else {
-                strPlayers = String.valueOf(cell.getValue().getGameHeroes().size());
-            }
+            String strPlayers = String.valueOf(cell.getValue().getCountHeroSelections());
             return new SimpleStringProperty(strPlayers);
         });
         campaignPhaseColumn.setCellValueFactory(new PropertyValueFactory<>("phase"));

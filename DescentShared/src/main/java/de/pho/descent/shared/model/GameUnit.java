@@ -1,12 +1,15 @@
 package de.pho.descent.shared.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -35,6 +38,9 @@ public class GameUnit extends GameEntity implements Serializable {
     private final Date createdOn = new Date();
 
     private int actions;
+
+    @Enumerated(EnumType.STRING)
+    private ActionType lastAction;
 
     private int totalLife;
 
@@ -68,6 +74,14 @@ public class GameUnit extends GameEntity implements Serializable {
 
     public void setActions(int actions) {
         this.actions = actions;
+    }
+
+    public ActionType getLastAction() {
+        return lastAction;
+    }
+
+    public void setLastAction(ActionType lastAction) {
+        this.lastAction = lastAction;
     }
 
     public int getTotalLife() {

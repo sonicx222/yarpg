@@ -58,7 +58,7 @@ public class MessageController {
                 dateFrom = (date == null ? new Date() : new Date(date.getTime()));
                 campaign.getOverlord().setLastMessageUpdate(new Date());
             } else {
-                GameHero hero = campaign.getHeroes().stream()
+                GameHero hero = campaign.getActiveQuest().getHeroes().stream()
                         .filter(h -> h.getPlayedBy().getUsername().equals(username))
                         .findAny().orElse(null);
                 if (hero == null) {

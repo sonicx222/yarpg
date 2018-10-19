@@ -1,6 +1,7 @@
 package de.pho.descent.web.quest.encounter;
 
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.MapField;
@@ -8,8 +9,10 @@ import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.monster.MonsterGroup;
 import static de.pho.descent.shared.model.monster.MonsterGroup.*;
 import static de.pho.descent.shared.model.monster.MonsterTemplate.*;
+import de.pho.descent.shared.model.quest.LootBox;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
+import de.pho.descent.shared.model.quest.QuestReward;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.shared.model.token.Token;
 import de.pho.descent.shared.model.token.TokenType;
@@ -19,6 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -31,13 +36,16 @@ public class FirstBlood {
     private static final QuestTemplate template = QuestTemplate.FIRST_BLOOD_INTRO;
     private static final String MAULER = "Mauler";
 
-    public static void setup(QuestEncounter encounter, Campaign campaign) {
-        spawnHeroes(encounter, campaign);
-        spawnMonsters(encounter, campaign);
-        spawnToken(encounter, campaign);
+    public static void setup(QuestEncounter encounter, Player overlord) throws QuestValidationException {
+        // validate
+        validateQuest(encounter);
+
+        spawnHeroes(encounter);
+        spawnMonsters(encounter, overlord);
+        spawnToken(encounter);
     }
 
-    public static boolean checkState(QuestEncounter encounter) throws QuestValidationException {
+    public static boolean isFinished(QuestEncounter encounter) throws QuestValidationException {
         boolean finished = false;
 
         // validate
@@ -60,49 +68,52 @@ public class FirstBlood {
         return finished;
     }
 
-    public static void updateQuestTrigger(QuestEncounter encounter) {
+    public static void updateQuestTrigger(QuestEncounter encounter) throws QuestValidationException {
+        // validate
+        validateQuest(encounter);
 
+        // calculate successfully fled goblins => EXITA
         List<GameMonster> goblins = encounter.getMonsters().stream()
                 .filter(monster -> (monster.getMonsterTemplate() == GOBLIN_ARCHER_NORMAL_ACT1
                 || monster.getMonsterTemplate() == GOBLIN_ARCHER_ELITE_ACT1))
                 .filter(monster -> monster.getCurrentLocation().get(0).getTileGroup().getName().equals("EXITA"))
                 .collect(Collectors.toList());
 
-        // update amount of left goblins
+        // update amount of fled goblins
         encounter.setTrigger(encounter.getTrigger() + goblins.size());
 
-        // remove specific goblins from map
+        // remove successfully fled goblins from map
         encounter.getMonsters().removeAll(goblins);
     }
 
-    public static void endQuest(Campaign campaign) throws QuestValidationException {
-        // validate
-        validateQuest(campaign.getActiveQuest());
-        campaign.getActiveQuest().setActive(false);
-
-        // rewards 1 xp for overlord
-        campaign.getOverlord().addXp(1);
-
+    public static LootBox getQuestRewards() {
         // rewards 1 xp for each hero
-        campaign.getHeroes().stream()
-                .forEach(hero -> hero.addXp(1));
+        QuestReward heroesReward = new QuestReward(0, 1, null);
+        // rewards 1 xp for overlord
+        QuestReward overlordReward = new QuestReward(0, 1, null);
+
+        LootBox loot = new LootBox();
+        loot.setRewardBySide(PlaySide.HEROES, heroesReward);
+        loot.setRewardBySide(PlaySide.OVERLORD, overlordReward);
+
+        return loot;
     }
 
-    private static Map<MonsterGroup, List<GameMonster>> createMonsters(Campaign campaign) {
+    private static Map<MonsterGroup, List<GameMonster>> createMonsters(QuestEncounter encounter, Player overlord) {
         Map<MonsterGroup, List<GameMonster>> monsterMap = new HashMap<>();
-        int heroCount = campaign.getHeroes().size();
+        int heroCount = encounter.getHeroes().size();
 
         // goblin archers
         monsterMap.put(GOBLIN_ARCHER, new ArrayList<GameMonster>());
         for (int i = 0; i < GOBLIN_ARCHER.getNormalCount(heroCount); i++) {
             GameMonster gameMonster = new GameMonster(GOBLIN_ARCHER_NORMAL_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
+            gameMonster.setPlayedBy(overlord);
             monsterMap.get(GOBLIN_ARCHER).add(gameMonster);
         }
         if (GOBLIN_ARCHER.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(GOBLIN_ARCHER_ELITE_ACT1);
             gameMonster.setName("Elite " + gameMonster.getName());
-            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
+            gameMonster.setPlayedBy(overlord);
             monsterMap.get(GOBLIN_ARCHER).add(gameMonster);
         }
 
@@ -110,13 +121,13 @@ public class FirstBlood {
         monsterMap.put(ETTIN, new ArrayList<GameMonster>());
         for (int i = 0; i < ETTIN.getNormalCount(heroCount); i++) {
             GameMonster gameMonster = new GameMonster(ETTIN_NORMAL_ACT1);
-            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
+            gameMonster.setPlayedBy(overlord);
             monsterMap.get(ETTIN).add(gameMonster);
         }
         if (ETTIN.hasElite(heroCount)) {
             GameMonster gameMonster = new GameMonster(ETTIN_ELITE_ACT1);
             gameMonster.setName("Elite " + gameMonster.getName());
-            gameMonster.setPlayedBy(campaign.getOverlord().getPlayedBy());
+            gameMonster.setPlayedBy(overlord);
             monsterMap.get(ETTIN).add(gameMonster);
         }
 
@@ -132,7 +143,7 @@ public class FirstBlood {
         return monsterMap;
     }
 
-    private static void spawnHeroes(QuestEncounter encounter, Campaign campaign) {
+    private static void spawnHeroes(QuestEncounter encounter) {
         List<MapField> heroSpawnFields = encounter
                 .getMap().getHeroSpawnFields().stream()
                 .filter(field -> field.getTileGroup().getName().equals("EXITA"))
@@ -141,17 +152,36 @@ public class FirstBlood {
         Collections.shuffle(heroSpawnFields);
 
         int i = 0;
-        for (GameHero hero : campaign.getHeroes()) {
+        for (GameHero hero : encounter.getHeroes()) {
             MapField heroSpawnField = heroSpawnFields.get(i);
             hero.getCurrentLocation().add(heroSpawnField);
             heroSpawnField.setGameUnit(hero);
             i++;
         }
+
+        // set first active hero based on highest initiative roll
+        setActiveHeroByInitiative(encounter);
     }
 
-    private static void spawnMonsters(QuestEncounter encounter, Campaign campaign) {
+    private static void setActiveHeroByInitiative(QuestEncounter questEncounter) {
+        if (!questEncounter.getHeroes().isEmpty()) {
+            SortedMap<Integer, GameHero> initiativeOrder = new TreeMap<>();
+            questEncounter.getHeroes().stream().forEach(hero -> {
+                initiativeOrder.put(hero.rollInitiative(), hero);
+            });
+
+            // reset previous active hero
+            questEncounter.getHeroes().stream().forEach(hero -> hero.setActive(false));
+
+            // set active hero
+            GameHero activeHero = initiativeOrder.get(initiativeOrder.lastKey());
+            activeHero.setActive(true);
+        }
+    }
+
+    private static void spawnMonsters(QuestEncounter encounter, Player overlord) {
         // create monsters first
-        Map<MonsterGroup, List<GameMonster>> monsterMap = createMonsters(campaign);
+        Map<MonsterGroup, List<GameMonster>> monsterMap = createMonsters(encounter, overlord);
 
         // spawn goblins
         List<MapField> goblinSpawnFields = encounter
@@ -200,9 +230,9 @@ public class FirstBlood {
         }
     }
 
-    private static List<Token> createToken(Campaign campaign) {
+    private static List<Token> createToken(QuestEncounter encounter) {
         List<Token> searchTokens = new ArrayList<>();
-        int heroCount = campaign.getHeroes().size();
+        int heroCount = encounter.getHeroes().size();
 
         for (int i = 0; i < heroCount; i++) {
             searchTokens.add(new Token(TokenType.SEARCH, true));
@@ -211,11 +241,11 @@ public class FirstBlood {
         return searchTokens;
     }
 
-    private static void spawnToken(QuestEncounter encounter, Campaign campaign) {
+    private static void spawnToken(QuestEncounter encounter) {
         encounter.getToken().clear();
 
         // create search tokens to be placed
-        List<Token> searchTokens = createToken(campaign);
+        List<Token> searchTokens = createToken(encounter);
 
         for (int i = 0; i < searchTokens.size(); i++) {
             Token searchToken = searchTokens.get(i);

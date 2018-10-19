@@ -1,6 +1,7 @@
 package de.pho.descent.shared.dto;
 
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -24,8 +25,8 @@ public class WsQuestEncounter {
     private QuestPart part;
 
     private boolean isActive;
-    
-        private PlaySide currentTurn;
+
+    private PlaySide currentTurn;
 
     private PlaySide winner;
 
@@ -33,11 +34,19 @@ public class WsQuestEncounter {
 
     private long mapId;
 
+    private List<GameHero> gameHeroes = new ArrayList<>();
+
     private List<GameMonster> gameMonsters = new ArrayList<>();
 
     private List<Token> tokens = new ArrayList<>();
 
     public WsQuestEncounter() {
+    }
+
+    @XmlTransient
+    public GameHero getActiveHero() {
+        return gameHeroes.stream()
+                .filter(hero -> hero.isActive()).findAny().orElse(null);
     }
 
     @XmlTransient
@@ -110,6 +119,14 @@ public class WsQuestEncounter {
         this.mapId = mapId;
     }
 
+    public List<GameHero> getGameHeroes() {
+        return gameHeroes;
+    }
+
+    public void setGameHeroes(List<GameHero> gameHeroes) {
+        this.gameHeroes = gameHeroes;
+    }
+
     public List<GameMonster> getGameMonsters() {
         return gameMonsters;
     }
@@ -144,6 +161,7 @@ public class WsQuestEncounter {
         wsEncounter.setCurrentTurn(qe.getCurrentTurn());
         wsEncounter.setWinner(qe.getWinner());
         wsEncounter.setRound(qe.getRound());
+        wsEncounter.setGameHeroes(new ArrayList<>(qe.getHeroes()));
         wsEncounter.setGameMonsters(new ArrayList<>(qe.getMonsters()));
         wsEncounter.setTokens(new ArrayList<>(qe.getToken()));
 

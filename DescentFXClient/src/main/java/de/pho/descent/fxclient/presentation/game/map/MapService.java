@@ -73,7 +73,7 @@ public class MapService {
         List<MapField> unpassableFields = new ArrayList<>();
 
         // add hero locations
-        for (GameHero hero : gameDataModel.getCurrentCampaign().getGameHeroes()) {
+        for (GameHero hero : gameDataModel.getCurrentQuestEncounter().getGameHeroes()) {
             unpassableFields.addAll(hero.getCurrentLocation());
         }
         // add monster locations
@@ -99,7 +99,7 @@ public class MapService {
     }
 
     private void addHeroesToMap() {
-        gameDataModel.getCurrentCampaign().getGameHeroes().forEach((hero) -> {
+        gameDataModel.getCurrentQuestEncounter().getGameHeroes().forEach((hero) -> {
             Button heroButton = createHeroFieldButton(hero);
             heroButton.setUserData(hero);
             if (hero.isActive()) {

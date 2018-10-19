@@ -5,10 +5,12 @@ import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.HeroSelectionClient;
 import de.pho.descent.fxclient.business.ws.MessageClient;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
+import de.pho.descent.fxclient.business.ws.QuestClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
+import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.Player;
 import static de.pho.descent.shared.model.hero.HeroTemplate.*;
 
@@ -29,6 +31,7 @@ public class Automate {
     private static Player player3;
 
     private static WsCampaign wsCampaign;
+    private static WsQuestEncounter wsQuestEncounter;
 
     public static Object[] startCampaignWithThreeHeroes() {
         try {
@@ -62,7 +65,7 @@ public class Automate {
                     heroSelectionP2,
                     wsCampaign);
             MessageClient.postMessage(player2, wsCampaign, "I made my selection aswell!");
-            
+
             // Player 3 hero selection    
             WsHeroSelection heroSelectionP3 = new WsHeroSelection(credentialsP3, TOMBLEBURROWELL, true);
             heroSelectionP3 = HeroSelectionClient.saveSelection(
@@ -83,6 +86,10 @@ public class Automate {
             MessageClient.postMessage(player1, wsCampaign, "yay, we started!");
             MessageClient.postMessage(overlord, null, "Yep, new campaign started!");
 
+            wsQuestEncounter = QuestClient.getQuestEncounter(
+                    credentialsOverlord, SecurityTools.createHash(credentialsOverlord, false),
+                    wsCampaign.getQuestEncounterId());
+
 //            WsQuestEncounter encounter = QuestClient.getQuestEncounter(credentialsOverlord,
 //                    SecurityTools.createHash(credentialsOverlord, false), wsCampaign.getQuestEncounterId());
 //            
@@ -99,15 +106,16 @@ public class Automate {
         }
 
         Object[] result = new Object[3];
-        
+
         // overlord
         result[0] = overlord;
-        
+
         // active player
-        result[1] = wsCampaign.getActiveHero().getPlayedBy();
+        result[1] = wsQuestEncounter.getActiveHero().getPlayedBy();
         
         // campaign
         result[2] = wsCampaign;
+        
         return result;
     }
 }

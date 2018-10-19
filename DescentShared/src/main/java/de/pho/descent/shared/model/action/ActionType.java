@@ -6,5 +6,14 @@ package de.pho.descent.shared.model.action;
  */
 public enum ActionType {
     MOVE,
-    ATTACK
+    ATTACK,
+    HERO_ABILITY,
+    HEROIC_FEAT,
+    HERO_SKILL,
+    REST,
+    SEARCH,
+    STAND_UP,
+    REVIVE_HERO,
+    OPEN_CLOSE_DOOR,
+    SPECIAL
 }

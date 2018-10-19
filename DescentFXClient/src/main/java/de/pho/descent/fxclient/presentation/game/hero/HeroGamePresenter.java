@@ -130,7 +130,7 @@ public class HeroGamePresenter implements Initializable {
     }
 
     private void setupHeroSheet() {
-        GameHero hero = gameDataModel.getCurrentCampaign().getGameHeroes().stream()
+        GameHero hero = gameDataModel.getCurrentQuestEncounter().getGameHeroes().stream()
                 .filter(h -> h.getPlayedBy().getUsername().equals(credentials.getUsername()))
                 .findAny()
                 .orElse(null);

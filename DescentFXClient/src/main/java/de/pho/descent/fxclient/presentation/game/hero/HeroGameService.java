@@ -26,7 +26,7 @@ public class HeroGameService {
     }
 
     public void updateHeroStats() {
-        GameHero hero = gameDataModel.getCurrentCampaign().getGameHeroes().stream()
+        GameHero hero = gameDataModel.getCurrentQuestEncounter().getGameHeroes().stream()
                 .filter(h -> h.getPlayedBy().getUsername().equals(credentials.getUsername()))
                 .findAny()
                 .orElse(null);
@@ -39,9 +39,9 @@ public class HeroGameService {
 
     public void updateUIControls() {
         // disable controls when it's not players turn
-        if (gameDataModel.getCurrentCampaign().getActiveHero() != null
-                && gameDataModel.getCurrentCampaign().getActiveHero().getPlayedBy().getUsername().equals(credentials.getUsername())
-                && gameDataModel.getCurrentCampaign().getActiveHero().getActions() > 0) {
+        if (gameDataModel.getCurrentQuestEncounter().getActiveHero() != null
+                && gameDataModel.getCurrentQuestEncounter().getActiveHero().getPlayedBy().getUsername().equals(credentials.getUsername())
+                && gameDataModel.getCurrentQuestEncounter().getActiveHero().getActions() > 0) {
             gameDataModel.getMoveButton().setDisable(false);
             gameDataModel.getAttackButton().setDisable(false);
         } else {

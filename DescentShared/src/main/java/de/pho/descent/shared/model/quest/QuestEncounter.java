@@ -2,6 +2,7 @@ package de.pho.descent.shared.model.quest;
 
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
@@ -11,7 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,9 +52,8 @@ public class QuestEncounter implements Serializable {
     private boolean active;
 
     private int round;
-    
+
     private int trigger;
-    
 
     @Enumerated(EnumType.STRING)
     private PlaySide currentTurn;
@@ -62,8 +61,12 @@ public class QuestEncounter implements Serializable {
     @Enumerated(EnumType.STRING)
     private PlaySide winner;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private GameMap map;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "encounter_id")
+    private List<GameHero> heroes = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "encounter_id")
@@ -73,6 +76,11 @@ public class QuestEncounter implements Serializable {
     @JoinColumn(name = "encounter_id")
     private List<Token> token = new ArrayList<>();
 
+    public GameHero getActiveHero() {
+        return heroes.stream()
+                .filter(hero -> hero.isActive()).findAny().orElse(null);
+    }
+    
     public GameMonster getActiveMonster() {
         return monsters.stream()
                 .filter(monster -> monster.isActive()).findAny().orElse(null);
@@ -148,6 +156,14 @@ public class QuestEncounter implements Serializable {
 
     public void setMap(GameMap map) {
         this.map = map;
+    }
+
+    public List<GameHero> getHeroes() {
+        return heroes;
+    }
+
+    public void setHeroes(List<GameHero> heroes) {
+        this.heroes = heroes;
     }
 
     public List<GameMonster> getMonsters() {

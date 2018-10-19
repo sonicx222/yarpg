@@ -90,8 +90,8 @@ public class MapBoundary {
             throw new NotFoundException();
         }
 
-        GameUnit sourceUnit = questController.getGamUnit(map.getSource());
-        GameUnit targetUnit = questController.getGamUnit(map.getTarget());
+        GameUnit sourceUnit = questController.getGameUnit(map.getSource());
+        GameUnit targetUnit = questController.getGameUnit(map.getTarget());
 
         return MapLosService.hasLineOfSight(sourceUnit, targetUnit, gameMap);
     }
@@ -106,8 +106,8 @@ public class MapBoundary {
         if (gameMap == null) {
             throw new NotFoundException();
         }
-        GameUnit sourceUnit = questController.getGamUnit(map.getSource());
-        GameUnit targetUnit = questController.getGamUnit(map.getTarget());
+        GameUnit sourceUnit = questController.getGameUnit(map.getSource());
+        GameUnit targetUnit = questController.getGameUnit(map.getTarget());
         List<MapField> fields = MapLosService.getLOSPath(sourceUnit, targetUnit, gameMap);
 
         // wrap Fields in special List for REST response

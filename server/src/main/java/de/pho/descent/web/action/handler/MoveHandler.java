@@ -29,7 +29,7 @@ public class MoveHandler {
         List<MapField> unpassableFields = new ArrayList<>();
 
         // add hero locations
-        for (GameHero hero : campaign.getHeroes()) {
+        for (GameHero hero : campaign.getActiveQuest().getHeroes()) {
             unpassableFields.addAll(hero.getCurrentLocation());
         }
         // add monster locations
@@ -58,9 +58,6 @@ public class MoveHandler {
             targetLocation.add(targetLocationField);
         }
         activeUnit.setCurrentLocation(targetLocation);
-        
-        // used one action point
-        activeUnit.setActions(activeUnit.getActions() - 1);
 
         //create log message
         sbLog.append("Unit '").append(activeUnit.getName()).append("' moved from field(s): ");
