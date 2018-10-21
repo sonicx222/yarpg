@@ -1,5 +1,6 @@
 package de.pho.descent.shared.service;
 
+import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.map.MapField;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,10 +37,26 @@ public class MapRangeService {
         return inRangeSet;
     }
 
-    public static Set<MapField> getFieldsInAttackRange(MapField rootField, int range, List<MapField> mapFields, List<MapField> heroFields) {
+    public static boolean isInAttackRange(GameUnit sourceUnit, GameUnit targetUnit, int range, List<MapField> mapFields) {
+        Set<MapField> fieldsInRange = new HashSet<>();
+        for (MapField sourceUnitLoc : sourceUnit.getCurrentLocation()) {
+            fieldsInRange.addAll(getFieldsInAttackRange(sourceUnitLoc, range, mapFields));
+        }
+
+        // check if one of target unit fields is part of the calculated fields from the source unit
+        for (MapField targetUnitLoc : targetUnit.getCurrentLocation()) {
+            if (fieldsInRange.contains(targetUnitLoc)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Set<MapField> getFieldsInAttackRange(MapField rootField, int range, List<MapField> mapFields) {
         Set<MapField> inRangeSet = new HashSet<>();
 
-        searchFieldsInRange(rootField, false, 0, range, mapFields, heroFields, inRangeSet);
+        searchFieldsInRange(rootField, false, 0, range, mapFields, new ArrayList<>(), inRangeSet);
         inRangeSet.remove(rootField);
 
         return inRangeSet;
@@ -52,15 +69,15 @@ public class MapRangeService {
 
         for (MapField nbField : nbFields) {
 //            LOGGER.info("Current nb field: " + field.getId() + "-" + nbField.getId());
+            int fieldMoveCost = 1;
             if (useMovementCost) {
-                if ((currentMoveCost + nbField.getMoveCost() <= rangeToCheck)
-                        && nbField.isPassable()
-                        && !unpassableFields.contains(nbField)) {
-                    inRangeSet.add(nbField);
-                    searchFieldsInRange(nbField, useMovementCost, currentMoveCost + nbField.getMoveCost(), rangeToCheck, mapFields, unpassableFields, inRangeSet);
-                }
-            } else {
-                searchFieldsInRange(nbField, useMovementCost, 0, rangeToCheck, mapFields, unpassableFields, inRangeSet);
+                fieldMoveCost = nbField.getMoveCost();
+            }
+            if ((currentMoveCost + fieldMoveCost <= rangeToCheck)
+                    && nbField.isPassable()
+                    && !unpassableFields.contains(nbField)) {
+                inRangeSet.add(nbField);
+                searchFieldsInRange(nbField, useMovementCost, currentMoveCost + fieldMoveCost, rangeToCheck, mapFields, unpassableFields, inRangeSet);
             }
         }
     }

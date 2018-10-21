@@ -1,6 +1,8 @@
 package de.pho.descent.shared.model.hero;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.dice.DefenseDice;
 import de.pho.descent.shared.model.item.Item;
 import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
@@ -20,6 +22,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -35,7 +38,7 @@ public class GameHero extends GameUnit implements Serializable {
 
     private int stamina;
 
-    private int exhaustion;
+    private int fatigue;
 
     private int might;
 
@@ -46,6 +49,8 @@ public class GameHero extends GameUnit implements Serializable {
     private int awareness;
 
     private int initiative;
+    
+    private boolean knockedOut;
 
     @Enumerated(EnumType.STRING)
     private Item weapon;
@@ -93,6 +98,42 @@ public class GameHero extends GameUnit implements Serializable {
     public int rollInitiative() {
         return ThreadLocalRandom.current().nextInt(0, 20) + initiative;
     }
+    
+    @Transient
+    @JsonIgnore
+    public List<DefenseDice> getDefense() {
+        List<DefenseDice> defense = new ArrayList<>();
+        defense.add(heroTemplate.getDefense());
+        if ((shield != null) && (shield.getDefenseDice() != null) ) {
+            defense.addAll(shield.getDefenseDice());
+        }
+        
+        return defense;
+    }
+    
+    public void addFatigue(int moreFatigue) {
+        if ((fatigue + moreFatigue) > stamina) {
+            int damage = (fatigue + moreFatigue) - stamina;
+            setCurrentLife(Math.max(getCurrentLife() - damage, 0));
+            if (getCurrentLife() == 0) {
+                knockOutHero();
+            }
+        } else {
+            fatigue += moreFatigue;
+        }
+    }
+    
+    /**
+     * 1. full fatigue
+     * 2. full damage / no hp
+     * 3. remove all old conditions
+     */
+    public void knockOutHero() {
+        knockedOut = true;
+        fatigue = stamina;
+        setCurrentLife(0);
+        // TODO: remove all conditions
+    }
 
     public HeroTemplate getHeroTemplate() {
         return heroTemplate;
@@ -126,12 +167,12 @@ public class GameHero extends GameUnit implements Serializable {
         this.stamina = stamina;
     }
 
-    public int getExhaustion() {
-        return exhaustion;
+    public int getFatigue() {
+        return fatigue;
     }
 
-    public void setExhaustion(int exhaustion) {
-        this.exhaustion = exhaustion;
+    public void setFatigue(int fatigue) {
+        this.fatigue = fatigue;
     }
 
     public int getInitiative() {
@@ -140,6 +181,14 @@ public class GameHero extends GameUnit implements Serializable {
 
     public void setInitiative(int initiative) {
         this.initiative = initiative;
+    }
+
+    public boolean isKnockedOut() {
+        return knockedOut;
+    }
+
+    public void setKnockedOut(boolean knockedOut) {
+        this.knockedOut = knockedOut;
     }
 
     public Item getWeapon() {
@@ -207,7 +256,7 @@ public class GameHero extends GameUnit implements Serializable {
         int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.heroTemplate);
         hash = 53 * hash + this.stamina;
-        hash = 53 * hash + this.exhaustion;
+        hash = 53 * hash + this.fatigue;
         hash = 53 * hash + this.might;
         hash = 53 * hash + this.knowledge;
         hash = 53 * hash + this.willpower;
@@ -236,7 +285,7 @@ public class GameHero extends GameUnit implements Serializable {
         if (this.stamina != other.stamina) {
             return false;
         }
-        if (this.exhaustion != other.exhaustion) {
+        if (this.fatigue != other.fatigue) {
             return false;
         }
         if (this.might != other.might) {

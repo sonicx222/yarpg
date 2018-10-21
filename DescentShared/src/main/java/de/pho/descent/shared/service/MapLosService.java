@@ -56,17 +56,28 @@ public class MapLosService {
 
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
+        // error determines in which direction (x/y) to correct the line to reach the target coords
+        int error = dx - dy;
+        
+        // current position within the algorithm
         int xTmp = x0;
         int yTmp = y0;
+        
+        // max steps until target coords
+        // required not to "overshoot" pastt the target coords
         int n = 1 + dx + dy;
+        
+        // setting the raytrace direction (quadrant of coord system)
         int x_inc = (x1 > x0) ? 1 : -1;
         int y_inc = (y1 > y0) ? 1 : -1;
-        int error = dx - dy;
+        
         dx *= 2;
         dy *= 2;
 
         for (; n > 0; --n) {
+            // target coords reached
             if (xTmp == x1 && yTmp == y1) {
+                LOG.info("LOS to: " + xTmp + ", y=" + yTmp + ") works!");
                 break;
             }
             if ((xTmp != x0 || yTmp != y0)) { // starting point excluded
@@ -86,6 +97,7 @@ public class MapLosService {
                 }
             }
 
+            // calc in which axis (x/y) to correct the drawn raytrace line
             if (error > 0) {
                 xTmp += x_inc;
                 error -= dy;
@@ -96,13 +108,11 @@ public class MapLosService {
                 error -= dy;
                 yTmp += y_inc;
                 error += dx;
-                n--; // skip one loop step
+                n--; // skip one loop step since we did two (x&y) steps
             } else {
                 yTmp += y_inc;
                 error += dx;
             }
-
-            // error == 0: pass on edges
         }
 
         return true;

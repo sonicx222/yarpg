@@ -227,6 +227,8 @@ public class MapField implements Serializable {
         return true;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "MapField{" + "id=" + id + ", xPos=" + xPos + ", yPos=" + yPos + '}';
+    }
 }

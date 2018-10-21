@@ -3,9 +3,7 @@ package de.pho.descent.web.quest;
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.campaign.Campaign;
-import de.pho.descent.shared.model.campaign.CampaignPhase;
 import de.pho.descent.shared.model.hero.GameHero;
-import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -16,7 +14,6 @@ import de.pho.descent.web.map.MapFactory;
 import de.pho.descent.web.quest.encounter.FirstBlood;
 import de.pho.descent.web.service.PersistenceService;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedMap;
@@ -38,14 +35,12 @@ public class QuestController {
 
     @Inject
     private QuestService questService;
-    
-        @Inject
+
+    @Inject
     private CampaignController campaignController;
 
     @Inject
     private transient PersistenceService persistenceService;
-
-
 
     public QuestEncounter createQuestEncounter(QuestTemplate questTemplate, Campaign campaign, List<GameHero> heroes) throws NotFoundException, IOException, QuestValidationException {
         QuestEncounter encounter = new QuestEncounter();
@@ -131,7 +126,9 @@ public class QuestController {
                 return;
             } else {
                 // unflag active hero
-                activeQuest.getActiveHero().setActive(false);
+                if (activeQuest.getActiveHero() != null) {
+                    activeQuest.getActiveHero().setActive(false);
+                }
 
                 // set random monster as new active unit and activate monster group
                 activeMonsters.get(ThreadLocalRandom.current().nextInt(0, activeMonsters.size())).setActive(true);
@@ -201,19 +198,17 @@ public class QuestController {
         // increase round number
         activeQuest.setRound(activeQuest.getRound() + 1);
 
-            // reset all action points
-            activeQuest.getHeroes().stream()
-                    .forEach(hero -> hero.setActions(2));
-            activeQuest.getMonsters().stream()
-                    .forEach(monster -> monster.setActions(2));
+        // reset all action points
+        activeQuest.getHeroes().stream()
+                .forEach(hero -> hero.setActions(2));
+        activeQuest.getMonsters().stream()
+                .forEach(monster -> monster.setActions(2));
 
-            // set random hero for new  round
-            setNextActiveHero(activeQuest);
+        // set random hero for new  round
+        setNextActiveHero(activeQuest);
     }
-    
- 
-    
-        public boolean isActiveQuestFinished(QuestEncounter encounter) throws QuestValidationException {
+
+    public boolean isActiveQuestFinished(QuestEncounter encounter) throws QuestValidationException {
         boolean finished = false;
 
         switch (encounter.getQuest()) {

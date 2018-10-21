@@ -6,6 +6,7 @@ import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.message.Message;
+import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.web.action.handler.AttackHandler;
 import de.pho.descent.web.campaign.CampaignController;
 import de.pho.descent.web.exception.Messages;
@@ -49,29 +50,30 @@ public class ActionController {
      * @throws ActionException
      */
     public Campaign handleAction(Player actionPlayer, WsAction wsAction) throws NotFoundException, QuestValidationException, ActionException {
-        boolean questIsFinished = false;
         Campaign campaign = campaignController.getCampaignById(wsAction.getCampaignId());
-
+        QuestEncounter activeQuest = campaign.getActiveQuest();
+        
         // check correct encounter
-        if (wsAction.getQuestEncounterId() != campaign.getActiveQuest().getId()) {
+        if (wsAction.getQuestEncounterId() != activeQuest.getId()) {
             throw new QuestValidationException(Messages.WRONG_QUEST_ID);
         }
 
         GameUnit currentActiveUnit = null;
-        GameUnit sourceUnit = questController.getGamUnit(wsAction.getSourceUnitId());
+        GameUnit sourceUnit = questController.getGameUnit(wsAction.getSourceUnitId());
 
         // check if player is allowed to do a turn
         if (wsAction.isHeroAction()) {
-            currentActiveUnit = campaign.getActiveHero();
+            currentActiveUnit = activeQuest.getActiveHero();
         } else {
-            currentActiveUnit = campaign.getActiveQuest().getActiveMonster();
-        }
-        if (!currentActiveUnit.getPlayedBy().equals(actionPlayer)) {
-            throw new QuestValidationException("Not your turn! Currently active unit: " + currentActiveUnit.getName());
+            currentActiveUnit = activeQuest.getActiveMonster();
         }
         Objects.requireNonNull(currentActiveUnit, "Current active unit cannot be determined!");
+        
+        if (!currentActiveUnit.getPlayedBy().equals(actionPlayer)) {
+            throw new QuestValidationException("Not your turn! Currently active player: " + currentActiveUnit.getPlayedBy().getUsername());
+        }
 
-        // check if action unit is active
+        // check if given source unit of action is active
         if (sourceUnit != null && !currentActiveUnit.equals(sourceUnit)) {
             throw new ActionException(Messages.WRONG_UNIT_FOR_ACTION);
         }
@@ -81,41 +83,45 @@ public class ActionController {
             throw new ActionException(Messages.NO_ACTIONS_LEFT);
         }
 
-        // check if action source is the same as active unit
+        // check if source of action (location) is the same as active units location
         if (!currentActiveUnit.getCurrentLocation().containsAll(wsAction.getSourceFields())) {
             throw new ActionException(Messages.INVALID_START_POS_FOR_ACTION);
         }
 
         // handle different action types & check if action leads to quest ending
-        questIsFinished = handleActionType(actionPlayer, wsAction, currentActiveUnit, campaign);
+        handleActionType(actionPlayer, wsAction, currentActiveUnit, campaign);
 
+        // update triggers that will end the quest (if needed) based on actions
+        questController.updateQuestTrigger(activeQuest);
+
+        // check post action victory conditions for quest (based on updated quest ending triggers)
         // handle end of quest or set next unit active if needed
-        if (questIsFinished) {
-            campaign = campaignController.endActiveQuest(campaign);
+        if (questController.isActiveQuestFinished(activeQuest)) {
+            campaignController.endActiveQuest(campaign);
         } else if (currentActiveUnit.getActions() == 0) {
             questController.setNextActiveUnit(campaign);
+        } else {
+            // used one action point to handle & set last action
+            currentActiveUnit.setActions(currentActiveUnit.getActions() - 1);
+            currentActiveUnit.setLastAction(wsAction.getType());
         }
 
         return campaign;
     }
 
-    private boolean handleActionType(Player actionPlayer, WsAction wsAction, GameUnit activeUnit, Campaign campaign) throws ActionException, QuestValidationException {
+    private void handleActionType(Player actionPlayer, WsAction wsAction, GameUnit activeUnit, Campaign campaign) throws ActionException, QuestValidationException, NotFoundException {
         Message logMsg = null;
+        
         switch (wsAction.getType()) {
             case MOVE:
                 logMsg = MoveHandler.handle(campaign, actionPlayer, activeUnit, wsAction);
                 messageController.saveMessage(logMsg);
                 break;
             case ATTACK:
-                logMsg = AttackHandler.handle(campaign, actionPlayer, activeUnit, wsAction);
+                GameUnit targetUnit = questController.getGameUnit(wsAction.getTargetUnitId());
+                logMsg = AttackHandler.handle(campaign, actionPlayer, activeUnit, targetUnit, wsAction);
                 messageController.saveMessage(logMsg);
                 break;
         }
-
-        // update quest based on actions
-        questController.updateQuestTrigger(campaign.getActiveQuest());
-
-        // check post action victory conditions for quest
-        return questController.isActiveQuestFinished(campaign);
     }
 }

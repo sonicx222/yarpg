@@ -15,12 +15,15 @@ import de.pho.descent.web.exception.Messages;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  *
  * @author pho
  */
 public class MoveHandler {
+    
+    private static final Logger LOG = Logger.getLogger(MoveHandler.class.getName());
 
     public static Message handle(Campaign campaign, Player player, GameUnit activeUnit, WsAction wsAction) throws ActionException {
         StringBuilder sbLog = new StringBuilder();
@@ -64,6 +67,8 @@ public class MoveHandler {
         wsAction.getSourceFields().forEach(field -> sbLog.append(field.getId()).append(" "));
         sbLog.append("to field(s): ");
         wsAction.getTargetFields().forEach(field -> sbLog.append(field.getId()).append(" "));
+        
+        LOG.info(sbLog.toString());
         return new Message(campaign, MessageType.GAME, player, sbLog.toString());
     }
 
