@@ -271,6 +271,43 @@
 					"response": []
 				},
 				{
+					"name": "End Turn of Active Unit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOncvRk5ZWFIydi9reFRmbFR1YzhpVDJ2MFB2OENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/campaigns/5/endTurn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"campaigns",
+								"5",
+								"endTurn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Campaign By ID",
 					"request": {
 						"method": "GET",
@@ -338,6 +375,47 @@
 								"campaigns",
 								"3",
 								"start"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quest",
+			"item": [
+				{
+					"name": "Get Quest By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOm91dzBBVDVoQXdRTUxVYUVLeGFhTElEdHd4VUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"username\": \"pho\",\n    \"password\": \"obKoPyB3tt2rLzRQcecxK9Jz9AUCgM0MTgSVUNlbG9uaXMgUGFydG5lciBMaWNlbnNlIGZvciBFbm93YSAtIFNpbmdsZSBVc2VyIERlbW8gTGljZW5zZTogTm90I5xUYIZvpvEP7KggDqIJLvhxsoe6gWPnkVzfZtBFc+7BoBBaFyVXvj29EPr7XesP\",\n    \"deactive\": false\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/quests/183",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"quests",
+								"183"
 							]
 						}
 					},
@@ -439,7 +517,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "UNITID"
+							"raw": "COMBINED"
 						},
 						"url": {
 							"raw": "http://localhost:8080/server/rest/secured/maps/8/text",
@@ -478,7 +556,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"map\":1,\n\t\"source\": 44,\n\t\"target\":45\n}"
+							"raw": "{\n\t\"map\":8,\n\t\"source\": 183,\n\t\"target\":186\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/server/rest/secured/maps/los",
@@ -493,6 +571,123 @@
 								"secured",
 								"maps",
 								"los"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LOS Path",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOms5UWZnWVhKN3g2aEhGYVdoQ0lVSjBRZlh5RUNnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"map\":8,\n\t\"source\": 183,\n\t\"target\":188\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/maps/losfields",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"maps",
+								"losfields"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Action",
+			"item": [
+				{
+					"name": "Move",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOlVoWk90V2x4WHRxbGdsRktQTWhLY29ROTNVY0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"campaignId\":5,\n\t\"questEncounterId\": 183,\n\t\"heroAction\": false,\n\t\"type\": \"MOVE\",\n\t\"sourceUnitId\": 187,\n\t\"targetUnitId\": 185,\n\t\"sourceFields\": [{\n        \"id\": 44,\n        \"tileGroup\": {\n            \"id\": 43,\n            \"name\": \"26A\"\n        },\n        \"xPos\": 12,\n        \"yPos\": 5,\n        \"moveCost\": 1,\n        \"passable\": true,\n        \"heroSpawn\": false,\n        \"monsterSpawn\": true\n    }],\n\t\"targetFields\": [\n\t\t{\n                    \"id\": 138,\n                    \"tileGroup\": {\n                        \"id\": 137,\n                        \"name\": \"EXITA\"\n                    },\n                    \"xPos\": 10,\n                    \"yPos\": 10,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": true,\n                    \"monsterSpawn\": false\n                }\n\t\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/action",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"action"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Attack",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOlVoWk90V2x4WHRxbGdsRktQTWhLY29ROTNVY0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"campaignId\":5,\n\t\"questEncounterId\": 183,\n\t\"heroAction\": false,\n\t\"type\": \"ATTACK\",\n\t\"sourceUnitId\": 189,\n\t\"targetUnitId\": 185,\n\t\"sourceFields\": [\n\t\t{\n                    \"id\": 140,\n                    \"tileGroup\": {\n                        \"id\": 139,\n                        \"name\": \"8A\"\n                    },\n                    \"xPos\": 5,\n                    \"yPos\": 0,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": false,\n                    \"monsterSpawn\": true\n                },\n                {\n                    \"id\": 142,\n                    \"tileGroup\": {\n                        \"id\": 141,\n                        \"name\": \"8A\"\n                    },\n                    \"xPos\": 6,\n                    \"yPos\": 0,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": false,\n                    \"monsterSpawn\": true\n                },\n                {\n                    \"id\": 150,\n                    \"tileGroup\": {\n                        \"id\": 149,\n                        \"name\": \"8A\"\n                    },\n                    \"xPos\": 5,\n                    \"yPos\": 1,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": false,\n                    \"monsterSpawn\": true\n                },\n                {\n                    \"id\": 152,\n                    \"tileGroup\": {\n                        \"id\": 151,\n                        \"name\": \"8A\"\n                    },\n                    \"xPos\": 6,\n                    \"yPos\": 1,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": false,\n                    \"monsterSpawn\": true\n                }\n    ],\n\t\"targetFields\": [\n                {\n                    \"id\": 170,\n                    \"tileGroup\": {\n                        \"id\": 169,\n                        \"name\": \"8A\"\n                    },\n                    \"xPos\": 6,\n                    \"yPos\": 3,\n                    \"moveCost\": 1,\n                    \"passable\": true,\n                    \"heroSpawn\": false,\n                    \"monsterSpawn\": true\n                }\n\t\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/action",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"action"
 							]
 						}
 					},
