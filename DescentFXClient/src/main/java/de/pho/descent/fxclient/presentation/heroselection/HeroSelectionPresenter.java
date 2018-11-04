@@ -358,7 +358,7 @@ public class HeroSelectionPresenter implements Initializable {
 
             // hero class start skill
             if (template.getStartSkill() != null) {
-                StringBuilder ressourcePathStartSkill = new StringBuilder("/img/skills/0_");
+                StringBuilder ressourcePathStartSkill = new StringBuilder("/img/skills/");
                 ressourcePathStartSkill.append(template.getStartSkill().getImagePath());
                 ressourcePathStartSkill.append(gameDataModel.getImageSuffix());
 
@@ -380,15 +380,16 @@ public class HeroSelectionPresenter implements Initializable {
             }
 
             // hero class start item 2
+            StringBuilder ressourcePathStartItem2 = new StringBuilder("/img/items/");
             if (template.getStartShield() != null) {
-                StringBuilder ressourcePathStartItem2 = new StringBuilder("/img/items/");
                 ressourcePathStartItem2.append(template.getStartShield().getImagePath());
-                ressourcePathStartItem2.append(gameDataModel.getImageSuffix());
-
-                InputStream isStartItem2 = getClass().getResourceAsStream(ressourcePathStartItem2.toString());
-                if (isStartItem2 != null) {
-                    images[3] = new Image(isStartItem2);
-                }
+            } else {
+                ressourcePathStartItem2.append(template.getStartTrinket().getImagePath());
+            }
+            ressourcePathStartItem2.append(gameDataModel.getImageSuffix());
+            InputStream isStartItem2 = getClass().getResourceAsStream(ressourcePathStartItem2.toString());
+            if (isStartItem2 != null) {
+                images[3] = new Image(isStartItem2);
             }
 
             heroImages.put(template, images);

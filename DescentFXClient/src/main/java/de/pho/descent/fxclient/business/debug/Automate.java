@@ -20,10 +20,10 @@ import static de.pho.descent.shared.model.hero.HeroTemplate.*;
  */
 public class Automate {
 
-    private static final String credentialsOverlord = "overlord";
-    private static final String credentialsP1 = "player1";
-    private static final String credentialsP2 = "player2";
-    private static final String credentialsP3 = "player3";
+    private static final String credentialsOverlord = "ov";
+    private static final String credentialsP1 = "p1";
+    private static final String credentialsP2 = "p2";
+    private static final String credentialsP3 = "p3";
 
     private static Player overlord;
     private static Player player1;

@@ -1,19 +1,11 @@
 package de.pho.descent.fxclient.presentation.game.map;
 
-import static de.pho.descent.fxclient.MainApp.showError;
-import de.pho.descent.fxclient.business.auth.Credentials;
-import de.pho.descent.fxclient.business.ws.ActionClient;
-import de.pho.descent.fxclient.business.ws.ServerException;
 import static de.pho.descent.fxclient.presentation.game.map.MapDataModel.FIELD_SIZE;
+import de.pho.descent.fxclient.presentation.general.ActionService;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
-import de.pho.descent.fxclient.presentation.message.MessageService;
-import de.pho.descent.shared.dto.WsAction;
-import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.shared.model.GameUnit;
-import de.pho.descent.shared.model.PlaySide;
-import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.map.MapField;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -56,22 +48,19 @@ public class MapPresenter implements Initializable {
     private GridPane mapGridPane;
 
     @Inject
-    private Credentials credentials;
-
-    @Inject
     private GameDataModel gameDataModel;
 
     @Inject
     private GameService gameService;
 
     @Inject
-    private MessageService messageService;
-
-    @Inject
     private MapDataModel mapDataModel;
 
     @Inject
     private MapService mapService;
+
+    @Inject
+    private ActionService actionService;
 
     private Node selectedNode;
 
@@ -143,13 +132,11 @@ public class MapPresenter implements Initializable {
                 if (gameDataModel.getCurrentAction() != null) {
                     switch (gameDataModel.getCurrentAction()) {
                         case MOVE:
-                            handleMove((Rectangle) e.getSource());
-                            break;
-                        case ATTACK:
+                            actionService.handleMove((Rectangle) e.getSource());
+                            mapService.rebuildMap();
                             break;
                     }
                 }
-
             });
 
             // tooltip move cost
@@ -167,38 +154,6 @@ public class MapPresenter implements Initializable {
 //            mapGridPane.setHalignment(fieldPane, HPos.CENTER);
             mapGridPane.add(fieldArea, field.getxPos(), field.getyPos());
             mapDataModel.getGridElements().put(field, fieldArea);
-        }
-    }
-
-    private void handleMove(Rectangle r) {
-        WsCampaign updatedCampaign = null;
-        WsAction moveAction = new WsAction();
-        moveAction.setCampaignId(gameDataModel.getCurrentCampaign().getId());
-        moveAction.setQuestEncounterId(gameDataModel.getCurrentQuestEncounter().getId());
-        moveAction.setType(ActionType.MOVE);
-        moveAction.setSourceFields(mapDataModel.getActiveUnit().getKey().getCurrentLocation());
-        moveAction.getTargetFields().add((MapField) r.getUserData());
-
-        if (gameDataModel.getCurrentQuestEncounter().getCurrentTurn() == PlaySide.HEROES) {
-            moveAction.setHeroAction(true);
-        } else {
-            moveAction.setHeroAction(false);
-        }
-        moveAction.setSourceUnitId(mapDataModel.getActiveUnit().getKey().getId());
-
-        try {
-            updatedCampaign = ActionClient.sendAction(credentials, moveAction);
-        } catch (ServerException ex) {
-            showError(ex);
-        }
-        if (updatedCampaign != null) {
-            // update
-            gameService.updateGameState(updatedCampaign);
-
-            // UI controls
-//            gameService.enableOtherButtons();
-            gameDataModel.getMoveButton().setText("Move");
-            gameDataModel.setCurrentAction(null);
         }
     }
 

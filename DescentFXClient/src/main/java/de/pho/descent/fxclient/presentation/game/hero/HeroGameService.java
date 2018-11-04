@@ -33,20 +33,25 @@ public class HeroGameService {
 
         heroGameModel.getHealth().set(String.valueOf(hero.getCurrentLife()));
         heroGameModel.getMovementLeft().set(String.valueOf(hero.getMovementPoints() - hero.getMovementSpent()));
-        heroGameModel.getExhaustion().set(String.valueOf(hero.getExhaustion()));
+        heroGameModel.getExhaustion().set(String.valueOf(hero.getFatigue()));
         heroGameModel.getActionsLeft().set(String.valueOf(hero.getActions()));
     }
 
     public void updateUIControls() {
+        // round label
+        gameDataModel.getRound().set("Round " + gameDataModel.getCurrentQuestEncounter().getRound());
+        
         // disable controls when it's not players turn
         if (gameDataModel.getCurrentQuestEncounter().getActiveHero() != null
                 && gameDataModel.getCurrentQuestEncounter().getActiveHero().getPlayedBy().getUsername().equals(credentials.getUsername())
                 && gameDataModel.getCurrentQuestEncounter().getActiveHero().getActions() > 0) {
             gameDataModel.getMoveButton().setDisable(false);
             gameDataModel.getAttackButton().setDisable(false);
+            gameDataModel.getTurnButton().setDisable(false);
         } else {
             gameDataModel.getMoveButton().setDisable(true);
             gameDataModel.getAttackButton().setDisable(true);
+            gameDataModel.getTurnButton().setDisable(true);
         }
     }
 }

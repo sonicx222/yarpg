@@ -13,7 +13,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.overlord.OverlordGamePresenter">
     <children>
@@ -90,7 +89,7 @@
                         </TableView>
                         <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">
                             <children>
-                                <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" text="Attack">
+                                <Button fx:id="attackButton" layoutX="158.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#handleToggleAttack" text="Attack">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
@@ -100,6 +99,16 @@
                                         <Font size="18.0" />
                                     </font>
                                 </Button>
+                        <Button fx:id="turnButton" layoutX="44.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#endOverlordTurn" text="End Turn">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="activateButton" layoutX="281.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#activateMonsterGroup" text="Activate Group">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
                             </children>
                         </Pane>
                     </children>

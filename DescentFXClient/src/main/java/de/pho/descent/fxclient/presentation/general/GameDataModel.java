@@ -53,6 +53,10 @@ public class GameDataModel {
     private Button moveButton;
 
     private Button attackButton;
+    
+    private Button turnButton;
+    
+    private Button activateButton;
 
     @PostConstruct
     public void init() {
@@ -162,6 +166,22 @@ public class GameDataModel {
 
     public void setAttackButton(Button attackButton) {
         this.attackButton = attackButton;
+    }
+
+    public Button getTurnButton() {
+        return turnButton;
+    }
+
+    public void setTurnButton(Button turnButton) {
+        this.turnButton = turnButton;
+    }
+
+    public Button getActivateButton() {
+        return activateButton;
+    }
+
+    public void setActivateButton(Button activateButton) {
+        this.activateButton = activateButton;
     }
 
 }

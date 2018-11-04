@@ -5,8 +5,10 @@ import de.pho.descent.fxclient.presentation.game.map.MapService;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
+import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.monster.GameMonster;
+import de.pho.descent.shared.model.quest.QuestPhase;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -72,6 +74,12 @@ public class OverlordGamePresenter implements Initializable {
     @FXML
     private Button attackButton;
 
+    @FXML
+    private Button turnButton;
+
+    @FXML
+    private Button activateButton;
+
     @Inject
     private GameDataModel gameDataModel;
 
@@ -90,6 +98,8 @@ public class OverlordGamePresenter implements Initializable {
     private String buttonMoveText;
     private String buttonAttackText;
     private String buttonCancelText;
+
+    private GameMonster selectedMonster;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -122,13 +132,31 @@ public class OverlordGamePresenter implements Initializable {
 
         gameDataModel.setMoveButton(moveButton);
         gameDataModel.setAttackButton(attackButton);
+        gameDataModel.setTurnButton(turnButton);
+        overlordGameModel.setActivateButton(activateButton);
     }
 
     private void setupMonsterTable() {
         // table items
         monsterTable.setItems(overlordGameModel.getMonsters());
+        if (gameDataModel.getCurrentQuestEncounter().getCurrentTurn() == PlaySide.OVERLORD) {
+            monsterTable.setDisable(false);
+        } else {
+            monsterTable.setDisable(true);
+        }
+        
+        monsterTable.getSelectionModel().selectedItemProperty()
+                .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
+                    selectedMonster = (GameMonster) monsterTable.getSelectionModel().getSelectedItem();
 
-        // highlight row with active monster
+                    if (selectedMonster != null && !selectedMonster.isRemoved()
+                            && selectedMonster.getActions() > 0) {
+                        activateButton.setDisable(false);
+                    } else {
+                        activateButton.setDisable(true);
+                    }
+                }
+                );
         monsterTable.setRowFactory(tv -> new TableRow<GameMonster>() {
             @Override
             public void updateItem(GameMonster item, boolean empty) {
@@ -207,19 +235,37 @@ public class OverlordGamePresenter implements Initializable {
         }
     }
 
+    @FXML
+    public void handleToggleAttack(MouseEvent event) {
+        if (attackButton.getText().equalsIgnoreCase(buttonAttackText)) {
+            handleAttack(event);
+        } else {
+            handleCancel(event);
+        }
+    }
+
     private void handleMove(MouseEvent event) {
-        LOGGER.info("HeroGamePresenter: handleMove()");
+        LOGGER.info("OverlordGamePresenter: handleMove()");
         moveButton.setText(buttonCancelText);
         gameDataModel.setCurrentAction(ActionType.MOVE);
         gameService.disableOtherButtons();
-        mapService.calcAndDisplayAllowedPositions(gameService.getActiveUnit());
+        mapService.calcAndDisplayAllowedMovePositions(gameService.getActiveUnit());
+    }
+
+    private void handleAttack(MouseEvent event) {
+        LOGGER.info("OverlordGamePresenter: handleAttack()");
+        attackButton.setText(buttonCancelText);
+        gameDataModel.setCurrentAction(ActionType.ATTACK);
+        gameService.disableOtherButtons();
+        mapService.calcAndDisplayAllowedAttackTargets(gameService.getActiveUnit());
     }
 
     private void handleCancel(MouseEvent event) {
-        LOGGER.info("HeroGamePresenter: handleCancel()");
+        LOGGER.info("OverlordGamePresenter: handleCancel()");
         gameService.enableOtherButtons();
         mapService.resetHighlightedMapFields();
         moveButton.setText(buttonMoveText);
+        attackButton.setText(buttonAttackText);
         gameDataModel.setCurrentAction(null);
     }
 
@@ -229,10 +275,29 @@ public class OverlordGamePresenter implements Initializable {
     }
 
     @FXML
+    public void activateMonsterGroup() {
+        if (gameDataModel.getCurrentQuestEncounter().getPhase() == QuestPhase.MONSTER_ACTIVATION) {
+            if (selectedMonster != null) {
+            overlordGameService.activateMonsterGroup(selectedMonster.getMonsterTemplate().getGroup());
+            }
+            gameService.updateMessagesAndUnitStats();
+            mapService.rebuildMap();
+        }
+    }
+
+    @FXML
+    public void endOverlordTurn() {
+        gameService.endTurn();
+        gameService.updateMessagesAndUnitStats();
+        mapService.rebuildMap();
+    }
+
+    @FXML
     public void handleRefresh(MouseEvent event) {
         LOGGER.info("OverlordGamePresenter: handleRefresh()");
         gameService.updateCampaign();
         gameService.updateGameState(gameDataModel.getCurrentCampaign());
+        mapService.rebuildMap();
     }
 
     @FXML

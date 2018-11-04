@@ -7,7 +7,6 @@ import de.pho.descent.fxclient.business.ws.MapClient;
 import de.pho.descent.fxclient.business.ws.QuestClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.game.hero.HeroGameService;
-import de.pho.descent.fxclient.presentation.game.map.MapService;
 import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameService;
 import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.shared.dto.WsCampaign;
@@ -41,8 +40,6 @@ public class GameService {
     private OverlordGameService overlordGameService;
     @Inject
     private HeroGameService heroGameService;
-    @Inject
-    private MapService mapService;
     @Inject
     private MessageService messageService;
 
@@ -178,7 +175,10 @@ public class GameService {
         gameDataModel.setCurrentCampaign(updatedCampaign);
         loadQuestEncounter();
         loadQuestMap();
-        mapService.rebuildMap();
+        updateMessagesAndUnitStats();
+    }
+
+    public void updateMessagesAndUnitStats() {
         messageService.updateCampaignMessages();
 
         if (credentials.getPlayer().equals(gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
@@ -217,6 +217,21 @@ public class GameService {
         }
         if (wsGameMap != null) {
             gameDataModel.setCurrentQuestMap(wsGameMap);
+        }
+    }
+
+    public void endTurn() {
+        Objects.requireNonNull(gameDataModel.getCurrentQuestEncounter());
+        WsQuestEncounter wsQuestEncounter = null;
+        try {
+            wsQuestEncounter = QuestClient.endUnitTurn(
+                    credentials.getUsername(), credentials.getPassword(),
+                    gameDataModel.getCurrentCampaign().getQuestEncounterId());
+        } catch (ServerException ex) {
+            showError(ex);
+        }
+        if (wsQuestEncounter != null) {
+            gameDataModel.setCurrentQuestEncounter(wsQuestEncounter);
         }
     }
 }

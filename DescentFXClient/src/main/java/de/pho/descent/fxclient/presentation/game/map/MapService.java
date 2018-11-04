@@ -1,6 +1,7 @@
 package de.pho.descent.fxclient.presentation.game.map;
 
 import static de.pho.descent.fxclient.presentation.game.map.MapDataModel.FIELD_SIZE;
+import de.pho.descent.fxclient.presentation.general.ActionService;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.hero.GameHero;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -43,6 +45,9 @@ public class MapService {
     @Inject
     private MapDataModel mapDataModel;
 
+    @Inject
+    private ActionService actionService;
+
     @PostConstruct
     public void init() {
     }
@@ -68,7 +73,11 @@ public class MapService {
         node.setEffect(borderGlow);
     }
 
-    public void calcAndDisplayAllowedPositions(GameUnit unit) {
+    public void resetEffect(Node node) {
+        node.setEffect(null);
+    }
+
+    public void calcAndDisplayAllowedMovePositions(GameUnit unit) {
         // treat GameUnit locations as unpassable fields for range check
         List<MapField> unpassableFields = new ArrayList<>();
 
@@ -98,40 +107,70 @@ public class MapService {
 
     }
 
+    public void calcAndDisplayAllowedAttackTargets(GameUnit unit) {
+
+        // highlight grid fields
+        mapDataModel.getMarkedGridPaneElements().clear();
+        mapDataModel.getGridElements().keySet().stream().forEach(mapField -> {
+
+            if (mapField.getGameUnit() != null && !Objects.equals(unit, mapField.getGameUnit())) {
+                Rectangle fieldArea = mapDataModel.getGridElements().get(mapField);
+                fieldArea.setFill(Color.AQUA);
+                fieldArea.setOpacity(0.4d);
+                mapDataModel.getMarkedGridPaneElements().add(fieldArea);
+            }
+        });
+
+    }
+
     private void addHeroesToMap() {
         gameDataModel.getCurrentQuestEncounter().getGameHeroes().forEach((hero) -> {
             Button heroButton = createHeroFieldButton(hero);
             heroButton.setUserData(hero);
             if (hero.isActive()) {
                 applyHighlightEffect(heroButton);
-//            heroButton.setOnMouseClicked(e -> {
-//                Button b = (Button) e.getSource();
-//                handleHeroSelected(b);
-//            });
+            } else if (hero.isKnockedOut()) {
+                heroButton.setDisable(true);
             }
             heroButton.setTranslateX(hero.getCurrentLocation().get(0).getxPos() * FIELD_SIZE);
             heroButton.setTranslateY(hero.getCurrentLocation().get(0).getyPos() * FIELD_SIZE);
+
+            heroButton.setOnMouseClicked(e -> {
+                handleUnitClick((Button) e.getSource());
+            });
+            heroButton.setOnMouseEntered(e -> {
+                handleOnUnitMouseEntered((Button) e.getSource());
+            });
+            heroButton.setOnMouseExited(e -> {
+                handleOnUnitMouseExit((Button) e.getSource());
+            });
 
             mapDataModel.getMapStackPaneElements().add(heroButton);
         });
     }
 
     private void addMonstersToMap() {
-        gameDataModel.getCurrentQuestEncounter().getGameMonsters().forEach((monster) -> {
+        gameDataModel.getCurrentQuestEncounter().getAliveMonsters().forEach((monster) -> {
             Button monsterButton = createMonsterFieldButton(monster);
             monsterButton.setUserData(monster);
             if (monster.isActive()) {
                 applyHighlightEffect(monsterButton);
             }
-//            monsterButton.setOnMouseClicked(e -> {
-//                Button b = (Button) e.getSource();
-//                handleHeroSelected(b);
-//            });
 
-            // make sure the northwest field of 2x2 monsters is used: lowest field id
+            monsterButton.setOnMouseClicked(e -> {
+                handleUnitClick((Button) e.getSource());
+            });
+            monsterButton.setOnMouseEntered(e -> {
+                handleOnUnitMouseEntered((Button) e.getSource());
+            });
+            monsterButton.setOnMouseExited(e -> {
+                handleOnUnitMouseExit((Button) e.getSource());
+            });
+
+            // make sure the northwest field of 2x2 monsters is used
             MapField northwestField = monster.getCurrentLocation()
                     .stream()
-                    .min(Comparator.comparing(MapField::getId))
+                    .min(Comparator.comparing(MapField::getxPos).thenComparing(MapField::getyPos))
                     .orElseThrow(NoSuchElementException::new);
             monsterButton.setTranslateX(northwestField.getxPos() * FIELD_SIZE);
             monsterButton.setTranslateY(northwestField.getyPos() * FIELD_SIZE);
@@ -149,6 +188,50 @@ public class MapService {
             tokenButton.setTranslateY(token.getCurrentLocation().getyPos() * FIELD_SIZE);
 
             mapDataModel.getMapStackPaneElements().add(tokenButton);
+        }
+    }
+
+    private void handleUnitClick(Button button) {
+        if (gameDataModel.getCurrentAction() != null) {
+            switch (gameDataModel.getCurrentAction()) {
+                case ATTACK:
+                    actionService.handleAttack(button);
+                    rebuildMap();
+                    break;
+            }
+        } else {
+//                    Button b = (Button) e.getSource();
+//                    handleHeroSelected(b);
+        }
+    }
+
+    private void handleOnUnitMouseEntered(Button button) {
+        if (gameDataModel.getCurrentAction() != null) {
+            GameUnit activeUnit = gameDataModel.getCurrentQuestEncounter().getActiveHero() == null
+                    ? gameDataModel.getCurrentQuestEncounter().getActiveMonster()
+                    : gameDataModel.getCurrentQuestEncounter().getActiveHero();
+            if (!Objects.equals(activeUnit, (GameUnit) button.getUserData())) {
+                switch (gameDataModel.getCurrentAction()) {
+                    case ATTACK:
+                        applyHighlightEffect(button);
+                        break;
+                }
+            }
+        }
+    }
+
+    private void handleOnUnitMouseExit(Button button) {
+        if (gameDataModel.getCurrentAction() != null) {
+            GameUnit activeUnit = gameDataModel.getCurrentQuestEncounter().getActiveHero() == null
+                    ? gameDataModel.getCurrentQuestEncounter().getActiveMonster()
+                    : gameDataModel.getCurrentQuestEncounter().getActiveHero();
+            if (!Objects.equals(activeUnit, (GameUnit) button.getUserData())) {
+                switch (gameDataModel.getCurrentAction()) {
+                    case ATTACK:
+                        resetEffect(button);
+                        break;
+                }
+            }
         }
     }
 

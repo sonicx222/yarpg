@@ -5,7 +5,7 @@ import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.debug.Automate;
 import de.pho.descent.fxclient.business.ws.PlayerClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
-import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
+import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.fxclient.presentation.startmenu.StartMenuView;
@@ -85,9 +85,10 @@ public class LoginscreenPresenter implements Initializable {
     private void handleLogin(Event event) {
         if (loginUserText.getText().equals("debug")) {
             Object[] result = Automate.startCampaignWithThreeHeroes();
-            gameDataModel.setCurrentCampaign((WsCampaign) result[2]);
             credentials.setPlayer((Player) result[1]);
-            switchFullscreenScene(event, new OverlordGameView());
+            gameDataModel.setCurrentCampaign((WsCampaign) result[2]);
+            switchFullscreenScene(event, new HeroGameView());
+            gameService.updateGameState((WsCampaign) result[2]);
         }
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
                 && loginPwdText.getText() != null && !loginPwdText.getText().isEmpty()) {

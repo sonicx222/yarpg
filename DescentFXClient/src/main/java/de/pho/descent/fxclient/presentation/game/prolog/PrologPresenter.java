@@ -1,12 +1,15 @@
 package de.pho.descent.fxclient.presentation.game.prolog;
 
 import static de.pho.descent.fxclient.MainApp.gameFont;
-import de.pho.descent.fxclient.presentation.game.hero.HeroGameModel;
+import static de.pho.descent.fxclient.business.config.Configuration.PROLOG_PROPERTIES_FILE;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
-import de.pho.descent.shared.model.quest.QuestTemplate;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +22,8 @@ import javax.inject.Inject;
  */
 public class PrologPresenter implements Initializable {
 
+    private static final Logger LOGGER = Logger.getLogger(PrologPresenter.class.getName());
+
     @FXML
     private Text prologText;
 
@@ -30,8 +35,15 @@ public class PrologPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        prologText.setText(QuestTemplate.getTemplate(gameDataModel.getCurrentQuestEncounter().getQuest(),
-                gameDataModel.getCurrentQuestEncounter().getPart()).getProlog());
+        Properties prologTextByQuest = new Properties();
+        InputStream is = PrologPresenter.class.getClassLoader().getResourceAsStream(PROLOG_PROPERTIES_FILE);
+        try {
+            prologTextByQuest.load(is);
+        } catch (IOException ex) {
+            LOGGER.severe("Unable to read prolog text from file");
+        }
+        prologText.setText(prologTextByQuest.getProperty(gameDataModel.getCurrentQuestEncounter().getQuest() + "_"
+                + gameDataModel.getCurrentQuestEncounter().getPart()));
         prologText.setFont(gameFont);
     }
 

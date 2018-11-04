@@ -9,6 +9,7 @@ import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
 import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.hero.skill.HeroSkill;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javax.inject.Inject;
 
@@ -64,6 +66,32 @@ public class HeroGamePresenter implements Initializable {
     private Label labelHeroAbility;
     @FXML
     private Label labelHeroicFeat;
+    @FXML
+    private GridPane skillGridPane;
+    @FXML
+    private ImageView heroSkill1View;
+    @FXML
+    private ImageView heroSkill2View;
+    @FXML
+    private ImageView heroSkill3View;
+    @FXML
+    private ImageView heroSkill4View;
+    @FXML
+    private ImageView heroSkill5View;
+    @FXML
+    private ImageView heroSkill6View;
+    @FXML
+    private ImageView itemWeapon1View;
+    @FXML
+    private ImageView itemWeapon2View;
+    @FXML
+    private ImageView itemShieldView;
+    @FXML
+    private ImageView itemArmorView;
+    @FXML
+    private ImageView itemTrinket1View;
+    @FXML
+    private ImageView itemTrinket2View;
 
     /**
      * Hero Action Controls
@@ -73,6 +101,9 @@ public class HeroGamePresenter implements Initializable {
 
     @FXML
     private Button attackButton;
+
+    @FXML
+    private Button turnButton;
 
     @FXML
     private Label labelActionsLeft;
@@ -105,6 +136,8 @@ public class HeroGamePresenter implements Initializable {
         }
 
         setupHeroSheet();
+        setupHeroSkills();
+        setupHeroEquipment();
         setupUIControls(resources);
         heroGameService.updateUIControls();
 
@@ -127,6 +160,7 @@ public class HeroGamePresenter implements Initializable {
 
         gameDataModel.setMoveButton(moveButton);
         gameDataModel.setAttackButton(attackButton);
+        gameDataModel.setTurnButton(turnButton);
     }
 
     private void setupHeroSheet() {
@@ -167,6 +201,91 @@ public class HeroGamePresenter implements Initializable {
         }
     }
 
+    private void setupHeroSkills() {
+        GameHero hero = gameDataModel.getCurrentQuestEncounter().getGameHeroes().stream()
+                .filter(h -> h.getPlayedBy().getUsername().equals(credentials.getUsername()))
+                .findAny()
+                .orElse(null);
+
+        if (!hero.getAllSkills().isEmpty()) {
+            int index = 0;
+            for (HeroSkill skill : hero.getAllSkills()) {
+                StringBuilder ressourcePathHeroSkill = new StringBuilder("/img/skills/");
+                ressourcePathHeroSkill.append(skill.getImagePath());
+                ressourcePathHeroSkill.append(gameDataModel.getImageSuffix());
+                InputStream streamSkill = getClass().getResourceAsStream(ressourcePathHeroSkill.toString());
+                if (streamSkill != null) {
+                    Image skillImage = new Image(streamSkill);
+                    switch (index) {
+                        case 0:
+                            heroSkill1View.setImage(skillImage);
+                            break;
+                        case 1:
+                            heroSkill2View.setImage(skillImage);
+                            break;
+                        case 2:
+                            heroSkill3View.setImage(skillImage);
+                            break;
+                        case 3:
+                            heroSkill4View.setImage(skillImage);
+                            break;
+                        case 4:
+                            heroSkill5View.setImage(skillImage);
+                            break;
+                        case 5:
+                            heroSkill6View.setImage(skillImage);
+                            break;
+                    }
+                }
+                index++;
+            }
+        }
+    }
+
+    private void setupHeroEquipment() {
+        GameHero hero = gameDataModel.getCurrentQuestEncounter().getGameHeroes().stream()
+                .filter(h -> h.getPlayedBy().getUsername().equals(credentials.getUsername()))
+                .findAny()
+                .orElse(null);
+
+        if (hero.getWeapon() != null) {
+            StringBuilder ressourcePathEquip = new StringBuilder("/img/items/");
+            ressourcePathEquip.append(hero.getWeapon().getImagePath());
+            ressourcePathEquip.append(gameDataModel.getImageSuffix());
+            InputStream streamItem = getClass().getResourceAsStream(ressourcePathEquip.toString());
+            itemWeapon1View.setImage(new Image(streamItem));
+        }
+        if (hero.getShield() != null) {
+            StringBuilder ressourcePathEquip = new StringBuilder("/img/items/");
+            ressourcePathEquip.append(hero.getShield().getImagePath());
+            ressourcePathEquip.append(gameDataModel.getImageSuffix());
+            InputStream streamItem = getClass().getResourceAsStream(ressourcePathEquip.toString());
+            itemShieldView.setImage(new Image(streamItem));
+        }
+        if (hero.getArmor() != null) {
+            StringBuilder ressourcePathEquip = new StringBuilder("/img/items/");
+            ressourcePathEquip.append(hero.getArmor().getImagePath());
+            ressourcePathEquip.append(gameDataModel.getImageSuffix());
+            InputStream streamItem = getClass().getResourceAsStream(ressourcePathEquip.toString());
+            itemArmorView.setImage(new Image(streamItem));
+        }
+        if (hero.getTrinket1() != null) {
+            StringBuilder ressourcePathEquip = new StringBuilder("/img/items/");
+            ressourcePathEquip.append(hero.getTrinket1().getImagePath());
+            ressourcePathEquip.append(gameDataModel.getImageSuffix());
+            InputStream streamItem = getClass().getResourceAsStream(ressourcePathEquip.toString());
+            itemTrinket1View.setImage(new Image(streamItem));
+        }
+        if (hero.getTrinket2() != null) {
+            StringBuilder ressourcePathEquip = new StringBuilder("/img/items/");
+            ressourcePathEquip.append(hero.getTrinket2().getImagePath());
+            ressourcePathEquip.append(gameDataModel.getImageSuffix());
+            InputStream streamItem = getClass().getResourceAsStream(ressourcePathEquip.toString());
+            itemTrinket2View.setImage(new Image(streamItem));
+        }
+
+    }
+
     @FXML
     public void handleOk(MouseEvent event) {
         prologBox.setVisible(false);
@@ -177,12 +296,20 @@ public class HeroGamePresenter implements Initializable {
         LOGGER.info("HeroGamePresenter: handleRefresh()");
         gameService.updateCampaign();
         gameService.updateGameState(gameDataModel.getCurrentCampaign());
+        mapService.rebuildMap();
     }
 
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("HeroGamePresenter: handleNavigationBack()");
         switchFullscreenScene(event, new CampaignSelectionView());
+    }
+
+    @FXML
+    public void endHeroTurn() {
+        gameService.endTurn();
+        gameService.updateMessagesAndUnitStats();
+        mapService.rebuildMap();
     }
 
     @FXML
@@ -199,7 +326,24 @@ public class HeroGamePresenter implements Initializable {
         moveButton.setText(buttonCancelText);
         gameDataModel.setCurrentAction(ActionType.MOVE);
         gameService.disableOtherButtons();
-        mapService.calcAndDisplayAllowedPositions(gameService.getActiveUnit());
+        mapService.calcAndDisplayAllowedMovePositions(gameService.getActiveUnit());
+    }
+
+    @FXML
+    public void handleToggleAttack(MouseEvent event) {
+        if (attackButton.getText().equalsIgnoreCase(buttonAttackText)) {
+            handleAttack(event);
+        } else {
+            handleCancel(event);
+        }
+    }
+
+    private void handleAttack(MouseEvent event) {
+        LOGGER.info("HeroGamePresenter: handleAttack()");
+        attackButton.setText(buttonCancelText);
+        gameDataModel.setCurrentAction(ActionType.ATTACK);
+        gameService.disableOtherButtons();
+        mapService.calcAndDisplayAllowedAttackTargets(gameService.getActiveUnit());
     }
 
     private void handleCancel(MouseEvent event) {

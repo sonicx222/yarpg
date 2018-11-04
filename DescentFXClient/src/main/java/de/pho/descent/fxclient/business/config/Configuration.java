@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class Configuration {
 
     public static final String LOGGING_PROPERTIES_FILE = "logging.properties";
+    public static final String PROLOG_PROPERTIES_FILE = "prolog.properties";
     public static final String ERROR_LOGGING_PROPERTIES = "Error loading the configuration from 'logging.properties'";
     
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
