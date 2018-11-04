@@ -30,7 +30,7 @@ public enum Item {
     START_BERSERKER_WEAPON("Chipped Greataxe", WARRIOR, BERSERKER, ZERO, Arrays.asList(BLUE, RED), null, null, Arrays.asList(ONE_DAMAGE, ONE_DAMAGE), MELEE, AXE, TWO_HAND, 0, 25, "warrior_berserker_axe"),
     START_DISCIPLE_WEAPON("Iron Mace", HEALER, DISCIPLE, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(STUN), MELEE, HAMMER, ONE_HAND, 0, 25, "healer_disciple_hammer"),
     START_DISCIPLE_SHIELD("Wooden Shield", HEALER, DISCIPLE, ZERO, null, null, ADD_ONE_DEFENSE_AFTER_ROLL, null, null, SHIELD, ONE_HAND, 0, 25, "warrior_knight_shield"),
-    START_SPIRITSPEAKER_WEAPON("Oak Staff", HEALER, SPIRITSPEAKER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(ONE_DAMAGE), RANGED_MELE, STAFF, TWO_HAND, 0, 25, "healer_spiritspeaker_staff"),
+    START_SPIRITSPEAKER_WEAPON("Oak Staff", HEALER, SPIRITSPEAKER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(ONE_DAMAGE), RANGED_MELEE, STAFF, TWO_HAND, 0, 25, "healer_spiritspeaker_staff"),
     START_THIEF_WEAPON("Throwing Knives", SCOUT, THIEF, ZERO, Arrays.asList(BLUE, YELLOW), null, ADJACENT_ONE_DAMAGE, Arrays.asList(ONE_RANGE), RANGED, BLADE, ONE_HAND, 0, 25, "scout_thief_blade"),
     START_THIEF_TRINKET("Lucky Charm", SCOUT, THIEF, ZERO, null, null, REROLL_ATTRIBUTE_TEST, null, null, TRINKET, OTHER, 0, 25, "scout_thief_trinket"),
     START_WILDLANDER_WEAPON("Yew Shortbow", SCOUT, WILDLANDER, ZERO, Arrays.asList(BLUE, YELLOW), null, null, Arrays.asList(TWO_RANGE, ONE_DAMAGE), RANGED, BOW, TWO_HAND, 0, 25, "scout_wildlander_bow"),
@@ -55,7 +55,7 @@ public enum Item {
 
     private final List<SurgeAction> surgeActions;
 
-    private final AttackType range;
+    private final AttackType attackType;
 
     private final ItemCategory trait;
 
@@ -76,7 +76,7 @@ public enum Item {
         this.defenseDice = defenseDice;
         this.itemEffect = itemEffect;
         this.surgeActions = surgeActions;
-        this.range = range;
+        this.attackType = range;
         this.trait = trait;
         this.worn = worn;
         this.value = value;
@@ -127,8 +127,8 @@ public enum Item {
         return surgeActions;
     }
 
-    public AttackType getRange() {
-        return range;
+    public AttackType getAttackType() {
+        return attackType;
     }
 
     public ItemCategory getTrait() {

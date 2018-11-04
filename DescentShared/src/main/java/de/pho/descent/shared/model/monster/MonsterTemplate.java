@@ -64,7 +64,7 @@ public enum MonsterTemplate {
 
     private final int speed;
     
-    private final AttackType attacktype;
+    private final AttackType attackType;
 
     private final List<AttackDice> attack;
 
@@ -82,7 +82,7 @@ public enum MonsterTemplate {
         this.group = group;
         this.health = health;
         this.speed = speed;
-        this.attacktype = attacktype;
+        this.attackType = attacktype;
         this.attack = attack;
         this.defense = defense;
         this.abilities = abilities;
@@ -103,8 +103,8 @@ public enum MonsterTemplate {
         return speed;
     }
 
-    public AttackType getAttacktype() {
-        return attacktype;
+    public AttackType getAttackType() {
+        return attackType;
     }
 
     public List<AttackDice> getAttack() {

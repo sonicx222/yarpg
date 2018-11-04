@@ -20,6 +20,16 @@ public class GameMonster extends GameUnit implements Serializable {
     
     @Enumerated(EnumType.STRING)
     private MonsterTemplate monsterTemplate;
+    
+    private boolean removed;
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
 
     public GameMonster() {
     }
@@ -31,6 +41,7 @@ public class GameMonster extends GameUnit implements Serializable {
         super.setCurrentLife(template.getHealth());
         super.setActions(2);
         this.monsterTemplate = template;
+        this.removed = false;
     }
     
     public MonsterTemplate getMonsterTemplate() {
@@ -40,6 +51,8 @@ public class GameMonster extends GameUnit implements Serializable {
     public void setMonsterTemplate(MonsterTemplate monsterTemplate) {
         this.monsterTemplate = monsterTemplate;
     }
+    
+   
 
     @Override
     public int hashCode() {

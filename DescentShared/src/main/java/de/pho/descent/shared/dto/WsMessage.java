@@ -38,7 +38,8 @@ public class WsMessage {
         long campaignId = message.getCampaign() == null ? 0 : message.getCampaign().getId();
         wsMessage.setType(message.getType());
         wsMessage.setCampaignId(campaignId);
-        wsMessage.setUsername(message.getPlayer().getUsername());
+        String username = message.getPlayer() == null ? "" : message.getPlayer().getUsername();
+        wsMessage.setUsername(username);
         wsMessage.setCreatedOn(message.getCreatedOn());
         wsMessage.setMessageText(message.getText());
 

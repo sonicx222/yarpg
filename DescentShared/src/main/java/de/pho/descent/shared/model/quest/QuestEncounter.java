@@ -1,13 +1,17 @@
 package de.pho.descent.shared.model.quest;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.PlaySide;
+import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.monster.GameMonster;
+import de.pho.descent.shared.model.monster.MonsterGroup;
 import de.pho.descent.shared.model.token.Token;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -49,6 +53,13 @@ public class QuestEncounter implements Serializable {
     @Enumerated(EnumType.STRING)
     private QuestPart part;
 
+    @OneToOne(optional = true)
+    @JoinColumn(name = "campaign_id", nullable = true)
+    @JsonBackReference(value = "active_campaign_quest")
+    private Campaign campaign;
+
+    private QuestPhase phase;
+
     private boolean active;
 
     private int round;
@@ -80,10 +91,16 @@ public class QuestEncounter implements Serializable {
         return heroes.stream()
                 .filter(hero -> hero.isActive()).findAny().orElse(null);
     }
-    
+
     public GameMonster getActiveMonster() {
         return monsters.stream()
                 .filter(monster -> monster.isActive()).findAny().orElse(null);
+    }
+
+    public List<GameMonster> getMonsterGroup(MonsterGroup group) {
+        return monsters.stream()
+                .filter(monster -> (monster.getMonsterTemplate().getGroup() == group))
+                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -108,6 +125,22 @@ public class QuestEncounter implements Serializable {
 
     public void setPart(QuestPart part) {
         this.part = part;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+    }
+
+    public QuestPhase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(QuestPhase phase) {
+        this.phase = phase;
     }
 
     public boolean isActive() {
@@ -206,5 +239,4 @@ public class QuestEncounter implements Serializable {
     public String toString() {
         return "de.pho.descent.shared.model.QuestEncounter[ id=" + id + " ]";
     }
-
 }

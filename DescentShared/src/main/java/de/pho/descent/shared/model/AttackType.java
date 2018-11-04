@@ -6,6 +6,6 @@ package de.pho.descent.shared.model;
  */
 public enum AttackType {
     MELEE,
-    RANGED_MELE,
+    RANGED_MELEE,
     RANGED;
 }

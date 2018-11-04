@@ -77,7 +77,7 @@ public class MapLosService {
         for (; n > 0; --n) {
             // target coords reached
             if (xTmp == x1 && yTmp == y1) {
-                LOG.info("LOS to: " + xTmp + ", y=" + yTmp + ") works!");
+                LOG.info("LOS to: (x=" + xTmp + ", y=" + yTmp + ") works!");
                 break;
             }
             if ((xTmp != x0 || yTmp != y0)) { // starting point excluded

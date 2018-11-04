@@ -6,10 +6,12 @@ import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestEncounter;
 import de.pho.descent.shared.model.quest.QuestPart;
+import de.pho.descent.shared.model.quest.QuestPhase;
 import de.pho.descent.shared.model.token.Token;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -23,6 +25,8 @@ public class WsQuestEncounter {
     private Quest quest;
 
     private QuestPart part;
+
+    private QuestPhase phase;
 
     private boolean isActive;
 
@@ -55,6 +59,13 @@ public class WsQuestEncounter {
                 .filter(monster -> monster.isActive()).findAny().orElse(null);
     }
 
+    @XmlTransient
+    public List<GameMonster> getAliveMonsters() {
+        return gameMonsters.stream()
+                .filter(monster -> !monster.isRemoved())
+                .collect(Collectors.toList());
+    }
+
     public long getId() {
         return id;
     }
@@ -77,6 +88,14 @@ public class WsQuestEncounter {
 
     public void setPart(QuestPart part) {
         this.part = part;
+    }
+
+    public QuestPhase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(QuestPhase phase) {
+        this.phase = phase;
     }
 
     public boolean isIsActive() {
@@ -159,6 +178,7 @@ public class WsQuestEncounter {
         wsEncounter.setPart(qe.getPart());
         wsEncounter.setQuest(qe.getQuest());
         wsEncounter.setCurrentTurn(qe.getCurrentTurn());
+        wsEncounter.setPhase(qe.getPhase());
         wsEncounter.setWinner(qe.getWinner());
         wsEncounter.setRound(qe.getRound());
         wsEncounter.setGameHeroes(new ArrayList<>(qe.getHeroes()));

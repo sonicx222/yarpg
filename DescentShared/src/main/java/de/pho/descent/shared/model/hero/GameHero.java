@@ -3,8 +3,8 @@ package de.pho.descent.shared.model.hero;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.dice.DefenseDice;
+import de.pho.descent.shared.model.hero.skill.HeroSkill;
 import de.pho.descent.shared.model.item.Item;
-import de.pho.descent.shared.model.map.MapField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +18,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -32,7 +30,7 @@ import javax.persistence.Transient;
 public class GameHero extends GameUnit implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Enumerated(EnumType.STRING)
     private HeroTemplate heroTemplate;
 
@@ -49,7 +47,7 @@ public class GameHero extends GameUnit implements Serializable {
     private int awareness;
 
     private int initiative;
-    
+
     private boolean knockedOut;
 
     @Enumerated(EnumType.STRING)
@@ -58,11 +56,26 @@ public class GameHero extends GameUnit implements Serializable {
     @Enumerated(EnumType.STRING)
     private Item shield;
 
-    @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Item armor;
+
+    @Enumerated(EnumType.STRING)
+    private Item trinket1;
+
+    @Enumerated(EnumType.STRING)
+    private Item trinket2;
+
+    @ElementCollection(targetClass = Item.class)
     @Column(name = "item", nullable = false)
     @CollectionTable(name = "hero_inventory")
     @Enumerated(EnumType.STRING)
     private Collection<Item> inventory = new ArrayList<>();
+
+    @ElementCollection(targetClass = HeroSkill.class)
+    @Column(name = "skill", nullable = false)
+    @CollectionTable(name = "hero_skills")
+    @Enumerated(EnumType.STRING)
+    private Collection<HeroSkill> skills = new ArrayList<>();
 
     private int xp;
 
@@ -88,9 +101,7 @@ public class GameHero extends GameUnit implements Serializable {
         // starting gear
         this.weapon = template.getStartWeapon();
         this.shield = template.getStartShield();
-        if (template.getStartTrinket() != null) {
-            this.inventory.add(template.getStartTrinket());
-        }
+        this.trinket1 = template.getStartTrinket();
 
         this.xp = 0;
     }
@@ -98,19 +109,45 @@ public class GameHero extends GameUnit implements Serializable {
     public int rollInitiative() {
         return ThreadLocalRandom.current().nextInt(0, 20) + initiative;
     }
-    
+
     @Transient
     @JsonIgnore
     public List<DefenseDice> getDefense() {
         List<DefenseDice> defense = new ArrayList<>();
         defense.add(heroTemplate.getDefense());
-        if ((shield != null) && (shield.getDefenseDice() != null) ) {
+        if ((shield != null) && (shield.getDefenseDice() != null)) {
             defense.addAll(shield.getDefenseDice());
         }
-        
+        if ((armor != null) && (armor.getDefenseDice() != null)) {
+            defense.addAll(armor.getDefenseDice());
+        }
+        if ((trinket1 != null) && (trinket1.getDefenseDice() != null)) {
+            defense.addAll(trinket1.getDefenseDice());
+        }
+        if ((trinket2 != null) && (trinket2.getDefenseDice() != null)) {
+            defense.addAll(trinket2.getDefenseDice());
+        }
+
+        for (Item item : inventory) {
+            if (item.getDefenseDice() != null && !item.getDefenseDice().isEmpty()) {
+                defense.addAll(item.getDefenseDice());
+
+            }
+        }
+
         return defense;
     }
-    
+
+    @Transient
+    @JsonIgnore
+    public List<HeroSkill> getAllSkills() {
+        List<HeroSkill> heroSkills = new ArrayList<>();
+        heroSkills.add(heroTemplate.getStartSkill());
+        heroSkills.addAll(skills);
+
+        return heroSkills;
+    }
+
     public void addFatigue(int moreFatigue) {
         if ((fatigue + moreFatigue) > stamina) {
             int damage = (fatigue + moreFatigue) - stamina;
@@ -122,11 +159,9 @@ public class GameHero extends GameUnit implements Serializable {
             fatigue += moreFatigue;
         }
     }
-    
+
     /**
-     * 1. full fatigue
-     * 2. full damage / no hp
-     * 3. remove all old conditions
+     * 1. full fatigue 2. full damage / no hp 3. remove all old conditions
      */
     public void knockOutHero() {
         knockedOut = true;
@@ -207,12 +242,44 @@ public class GameHero extends GameUnit implements Serializable {
         this.shield = shield;
     }
 
+    public Item getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Item armor) {
+        this.armor = armor;
+    }
+
+    public Item getTrinket1() {
+        return trinket1;
+    }
+
+    public void setTrinket1(Item trinket1) {
+        this.trinket1 = trinket1;
+    }
+
+    public Item getTrinket2() {
+        return trinket2;
+    }
+
+    public void setTrinket2(Item trinket2) {
+        this.trinket2 = trinket2;
+    }
+
     public Collection<Item> getInventory() {
         return inventory;
     }
 
     public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
+    }
+
+    public Collection<HeroSkill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Collection<HeroSkill> skills) {
+        this.skills = skills;
     }
 
     public int getXp() {

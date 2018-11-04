@@ -103,12 +103,16 @@ public class GameMap implements Serializable {
         return this.mapLayout;
     }
 
+    @XmlTransient
+    @Transient
     public List<MapField> getHeroSpawnFields() {
         return mapFields.stream()
                 .filter(field -> field.isHeroSpawn())
                 .collect(Collectors.toList());
     }
 
+    @XmlTransient
+    @Transient
     public List<MapField> getMonsterSpawnFields() {
         return mapFields.stream()
                 .filter(field -> field.isMonsterSpawn())
@@ -178,7 +182,7 @@ public class GameMap implements Serializable {
     }
 
     public String asText(FieldAttribute fieldAttribute) {
-        
+
         String[][] layout = new String[gridXSize][gridYSize];
 
         for (int x = 0; x < gridXSize; x++) {

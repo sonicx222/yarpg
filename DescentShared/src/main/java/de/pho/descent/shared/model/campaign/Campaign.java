@@ -1,5 +1,6 @@
 package de.pho.descent.shared.model.campaign;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.quest.QuestEncounter;
@@ -56,7 +57,8 @@ public class Campaign implements Serializable {
     @OneToOne
     private Overlord overlord;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "campaign", cascade = CascadeType.ALL)
+    @JsonManagedReference(value="active_campaign_quest")
     private QuestEncounter activeQuest;
     
     private int gold;
