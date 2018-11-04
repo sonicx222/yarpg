@@ -125,19 +125,4 @@ public class CampaignBoundary {
 
         return Response.created(uri).entity(WsCampaign.createInstance(campaign)).build();
     }
-
-    @POST
-    @Path("/{" + ParamValue.CAMPAIGN_ID + "}/endTurn")
-    public Response endActiveUnitTurn(
-            @HeaderParam(ParamValue.AUTHORIZATION_HEADER_KEY) String authToken,
-            @PathParam(ParamValue.CAMPAIGN_ID) String campaignId) throws NotFoundException, UserValidationException, QuestValidationException {
-        Player player = playerController.getPlayerByToken(authToken);
-        LOG.log(Level.INFO, "Player {0} ending current turn for active quest id {1}", new Object[]{player.getUsername(), campaignId});
-        Campaign campaign = campaignController.getCampaignById(Long.parseLong(campaignId));
-
-        // end turn
-        campaignController.endActiveUnitTurn(campaign);
-
-        return Response.ok().entity(WsCampaign.createInstance(campaign)).build();
-    }
 }

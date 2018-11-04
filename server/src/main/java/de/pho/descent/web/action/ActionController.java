@@ -52,7 +52,7 @@ public class ActionController {
     public Campaign handleAction(Player actionPlayer, WsAction wsAction) throws NotFoundException, QuestValidationException, ActionException {
         Campaign campaign = campaignController.getCampaignById(wsAction.getCampaignId());
         QuestEncounter activeQuest = campaign.getActiveQuest();
-        
+
         // check correct encounter
         if (wsAction.getQuestEncounterId() != activeQuest.getId()) {
             throw new QuestValidationException(Messages.WRONG_QUEST_ID);
@@ -68,7 +68,7 @@ public class ActionController {
             currentActiveUnit = activeQuest.getActiveMonster();
         }
         Objects.requireNonNull(currentActiveUnit, "Current active unit cannot be determined!");
-        
+
         if (!currentActiveUnit.getPlayedBy().equals(actionPlayer)) {
             throw new QuestValidationException("Not your turn! Currently active player: " + currentActiveUnit.getPlayedBy().getUsername());
         }
@@ -89,7 +89,7 @@ public class ActionController {
         }
 
         // handle different action types & check if action leads to quest ending
-        handleActionType(actionPlayer, wsAction, currentActiveUnit, campaign);
+        handleActionType(wsAction, currentActiveUnit, campaign);
 
         // update triggers that will end the quest (if needed) based on actions
         questController.updateQuestTrigger(activeQuest);
@@ -97,29 +97,25 @@ public class ActionController {
         // check post action victory conditions for quest (based on updated quest ending triggers)
         // handle end of quest or set next unit active if needed
         if (questController.isActiveQuestFinished(activeQuest)) {
-            campaignController.endActiveQuest(campaign);
+            questController.endActiveQuest(activeQuest);
         } else if (currentActiveUnit.getActions() == 0) {
-            questController.setNextActiveUnit(campaign);
-        } else {
-            // used one action point to handle & set last action
-            currentActiveUnit.setActions(currentActiveUnit.getActions() - 1);
-            currentActiveUnit.setLastAction(wsAction.getType());
+            questController.endActiveUnitTurn(activeQuest);
         }
 
         return campaign;
     }
 
-    private void handleActionType(Player actionPlayer, WsAction wsAction, GameUnit activeUnit, Campaign campaign) throws ActionException, QuestValidationException, NotFoundException {
+    private void handleActionType(WsAction wsAction, GameUnit activeUnit, Campaign campaign) throws ActionException, QuestValidationException, NotFoundException {
         Message logMsg = null;
-        
+
         switch (wsAction.getType()) {
             case MOVE:
-                logMsg = MoveHandler.handle(campaign, actionPlayer, activeUnit, wsAction);
+                logMsg = MoveHandler.handle(campaign, activeUnit, wsAction);
                 messageController.saveMessage(logMsg);
                 break;
             case ATTACK:
                 GameUnit targetUnit = questController.getGameUnit(wsAction.getTargetUnitId());
-                logMsg = AttackHandler.handle(campaign, actionPlayer, activeUnit, targetUnit, wsAction);
+                logMsg = AttackHandler.handle(campaign, activeUnit, targetUnit, wsAction);
                 messageController.saveMessage(logMsg);
                 break;
         }

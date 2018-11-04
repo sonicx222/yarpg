@@ -3,7 +3,6 @@ package de.pho.descent.web.campaign;
 import static java.util.Objects.requireNonNull;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsHeroSelection;
-import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.Player;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.campaign.CampaignPhase;
@@ -11,15 +10,12 @@ import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.hero.HeroSelection;
 import de.pho.descent.shared.model.overlord.Overlord;
 import de.pho.descent.shared.model.overlord.OverlordClass;
-import de.pho.descent.shared.model.quest.LootBox;
 import de.pho.descent.shared.model.quest.QuestEncounter;
-import de.pho.descent.shared.model.quest.QuestReward;
 import de.pho.descent.shared.model.quest.QuestTemplate;
 import de.pho.descent.web.auth.UserValidationException;
 import de.pho.descent.web.exception.NotFoundException;
 import de.pho.descent.web.quest.QuestController;
 import de.pho.descent.web.quest.QuestValidationException;
-import de.pho.descent.web.quest.encounter.FirstBlood;
 import de.pho.descent.web.service.PersistenceService;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -183,31 +179,6 @@ public class CampaignController {
         return campaignService.saveCampaign(c);
     }
 
-    public void endActiveUnitTurn(Campaign campaign) throws QuestValidationException, NotFoundException {
-        questController.deactivateCurrentUnit(campaign.getActiveQuest());
-        questController.setNextActiveUnit(campaign);
-    }
-
-    public void endActiveQuest(Campaign campaign) throws QuestValidationException, NotFoundException {
-        QuestEncounter encounter = campaign.getActiveQuest();
-        LootBox box = null;
-
-        encounter.setActive(false);
-        switch (encounter.getQuest()) {
-            case FIRST_BLOOD: {
-                box = FirstBlood.getQuestRewards();
-            }
-            break;
-            default:
-                break;
-        }
-        // rewards
-        handleQuestReward(campaign, box);
-
-        // next phase
-        campaign = setNextCampaignPhase(campaign);
-    }
-
     public QuestEncounter startNextQuestEncounter(Campaign campaign) throws NotFoundException, IOException, QuestValidationException {
         List<GameHero> heroes = null;
 
@@ -228,37 +199,15 @@ public class CampaignController {
         return questController.createQuestEncounter(campaign.getNextQuestTemplate(), campaign, heroes);
     }
 
-    private void handleQuestReward(Campaign campaign, LootBox box) {
-        QuestEncounter encounter = campaign.getActiveQuest();
-
-        if (encounter.getWinner() == PlaySide.HEROES) {
-            QuestReward heroesReward = box.getRewardBySide(PlaySide.HEROES);
-
-            // gold
-            campaign.setGold(campaign.getGold() + heroesReward.getGold());
-
-            // xp
-            encounter.getHeroes().stream()
-                    .forEach(hero -> hero.addXp(heroesReward.getXp()));
-
-            // TODO item e.g relics
-        } else {
-            QuestReward overlordReward = box.getRewardBySide(PlaySide.OVERLORD);
-
-            // xp
-            campaign.getOverlord().addXp(overlordReward.getXp());
-
-            // TODO item e.g relics
-        }
-    }
-
     public Campaign setNextCampaignPhase(String campaignId) throws NotFoundException {
         Campaign campaign = campaignService.getCampaignById(Long.parseLong(campaignId));
 
-        return setNextCampaignPhase(campaign);
+        setNextCampaignPhase(campaign);
+
+        return campaign;
     }
 
-    public Campaign setNextCampaignPhase(Campaign campaign) throws NotFoundException {
+    public void setNextCampaignPhase(Campaign campaign) throws NotFoundException {
 
         switch (campaign.getPhase()) {
             case HERO_SELECTION:
@@ -267,7 +216,7 @@ public class CampaignController {
             case ENCOUNTER:
                 campaign.setPhase(CampaignPhase.FINISHED_ENCOUNTER);
                 break;
-            case FINISHED:
+            case FINISHED_ENCOUNTER:
                 campaign.setPhase(CampaignPhase.MARKETPLACE);
                 break;
             case MARKETPLACE:
@@ -283,8 +232,6 @@ public class CampaignController {
                 campaign.setPhase(CampaignPhase.ENCOUNTER);
                 break;
         }
-
-        return campaign;
     }
 
     /**

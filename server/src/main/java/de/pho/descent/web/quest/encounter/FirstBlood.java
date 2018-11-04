@@ -74,16 +74,18 @@ public class FirstBlood {
 
         // calculate successfully fled goblins => EXITA
         List<GameMonster> goblins = encounter.getMonsters().stream()
-                .filter(monster -> (monster.getMonsterTemplate() == GOBLIN_ARCHER_NORMAL_ACT1
-                || monster.getMonsterTemplate() == GOBLIN_ARCHER_ELITE_ACT1))
+                .filter(monster -> (monster.getMonsterTemplate().getGroup() == GOBLIN_ARCHER)
+                && !monster.isRemoved())
+                .collect(Collectors.toList());
+        List<GameMonster> fledGoblins = goblins.stream()
                 .filter(monster -> monster.getCurrentLocation().get(0).getTileGroup().getName().equals("EXITA"))
                 .collect(Collectors.toList());
 
         // update amount of fled goblins
-        encounter.setTrigger(encounter.getTrigger() + goblins.size());
+        encounter.setTrigger(encounter.getTrigger() + fledGoblins.size());
 
         // remove successfully fled goblins from map
-        encounter.getMonsters().removeAll(goblins);
+        encounter.getMonsters().removeAll(fledGoblins);
     }
 
     public static LootBox getQuestRewards() {

@@ -271,43 +271,6 @@
 					"response": []
 				},
 				{
-					"name": "End Turn of Active Unit",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "cGhvOncvRk5ZWFIydi9reFRmbFR1YzhpVDJ2MFB2OENnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8080/server/rest/secured/campaigns/5/endTurn",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"server",
-								"rest",
-								"secured",
-								"campaigns",
-								"5",
-								"endTurn"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get Campaign By ID",
 					"request": {
 						"method": "GET",
@@ -416,6 +379,80 @@
 								"secured",
 								"quests",
 								"183"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "End Turn of Active Unit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOjhLUnY5R1o4MjlyL05odkRRdmg3R1dmV3E0Y0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/quests/183/endTurn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"quests",
+								"183",
+								"endTurn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate Monster Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "cGhvOjllUE9rNzJDWEoxdkh6M2hrT0twTE5wb1N6a0NnTTBNVGdTVlVObGJHOXVhWE1nVUdGeWRHNWxjaUJNYVdObGJuTmxJR1p2Y2lCRmJtOTNZU0F0SUZOcGJtZHNaU0JWYzJWeUlFUmxiVzhnVEdsalpXNXpaVG9nVG05MEk1eFVZSVp2cHZFUDdLZ2dEcUlKTHZoeHNvZTZnV1Bua1Z6Zlp0QkZjKzdCb0JCYUZ5Vlh2ajI5RVByN1hlc1A="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "GOBLIN_ARCHER"
+						},
+						"url": {
+							"raw": "http://localhost:8080/server/rest/secured/quests/183/activateMonsterGroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"server",
+								"rest",
+								"secured",
+								"quests",
+								"183",
+								"activateMonsterGroup"
 							]
 						}
 					},

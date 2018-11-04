@@ -2,7 +2,7 @@ package de.pho.descent.web.action.handler;
 
 import de.pho.descent.shared.dto.WsAction;
 import de.pho.descent.shared.model.GameUnit;
-import de.pho.descent.shared.model.Player;
+import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.campaign.Campaign;
 import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.MapField;
@@ -22,10 +22,10 @@ import java.util.logging.Logger;
  * @author pho
  */
 public class MoveHandler {
-    
+
     private static final Logger LOG = Logger.getLogger(MoveHandler.class.getName());
 
-    public static Message handle(Campaign campaign, Player player, GameUnit activeUnit, WsAction wsAction) throws ActionException {
+    public static Message handle(Campaign campaign, GameUnit activeUnit, WsAction wsAction) throws ActionException {
         StringBuilder sbLog = new StringBuilder();
 
         // treat GameUnit locations as unpassable fields for range check
@@ -62,14 +62,18 @@ public class MoveHandler {
         }
         activeUnit.setCurrentLocation(targetLocation);
 
+        // used one action point to handle & set last action
+        activeUnit.setActions(activeUnit.getActions() - 1);
+        activeUnit.setLastAction(ActionType.MOVE);
+
         //create log message
         sbLog.append("Unit '").append(activeUnit.getName()).append("' moved from field(s): ");
         wsAction.getSourceFields().forEach(field -> sbLog.append(field.getId()).append(" "));
         sbLog.append("to field(s): ");
         wsAction.getTargetFields().forEach(field -> sbLog.append(field.getId()).append(" "));
-        
+
         LOG.info(sbLog.toString());
-        return new Message(campaign, MessageType.GAME, player, sbLog.toString());
+        return new Message(campaign, MessageType.GAME, activeUnit.getPlayedBy(), sbLog.toString());
     }
 
 }

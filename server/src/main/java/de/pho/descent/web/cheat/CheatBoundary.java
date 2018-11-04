@@ -56,7 +56,7 @@ public class CheatBoundary {
         if (campaign == null) {
             throw new NotFoundException("Campaign with id " + cheatBox.getCampaignId() + " not found!");
         }
-        
+
         GameUnit unit = questController.getGameUnit(cheatBox.getUnitId());
 
         MapField targetField = persistenceService.find(MapField.class, cheatBox.getFieldId());
@@ -69,7 +69,7 @@ public class CheatBoundary {
         unit.getCurrentLocation().forEach(field -> field.setGameUnit(null));
         targetField.setGameUnit(unit);
         targetLocation.add(targetField);
-        
+
         if (unit instanceof GameMonster && ((GameMonster) unit).getMonsterTemplate().getFieldSize() > 1) {
             // big monster
             MapField east = campaign.getActiveQuest().getMap().getField(targetField.getxPos() + 1, targetField.getyPos());
@@ -83,8 +83,8 @@ public class CheatBoundary {
             MapField south = campaign.getActiveQuest().getMap().getField(targetField.getxPos(), targetField.getyPos() + 1);
             south.setGameUnit(unit);
             targetLocation.add(south);
-        }       
-        unit.setCurrentLocation(targetLocation);     
+        }
+        unit.setCurrentLocation(targetLocation);
 
         LOG.log(Level.INFO, "Cheat used => setUnitLocation for unit id {0}", cheatBox.getUnitId());
 
@@ -109,7 +109,7 @@ public class CheatBoundary {
 
         // set winning side
         encounter.setWinner(cheatBox.getWinner());
-        campaignController.endActiveQuest(campaign);
+        questController.endActiveQuest(encounter);
 
         LOG.log(Level.INFO, "Cheat used => endActiveQuest for campaign id {0}", cheatBox.getCampaignId());
 
