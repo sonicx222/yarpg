@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="epilogBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.pho.descent.fxclient.presentation.game.epilog.EpilogPresenter">
+   <children>
+      <Pane id="Pane" fx:id="prologPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="616.0">
+         <children>
+            <ImageView fitHeight="453.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@textlist.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" prefHeight="76.0" prefWidth="616.0">
+               <children>
+                  <Label fx:id="questLabel" alignment="CENTER" text="Quest Text" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="winnerLabel" alignment="CENTER" text="Winner Text" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Text fx:id="epilogText" fill="WHITE" layoutX="14.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As you are travelling toward Arhynn, you come across the still-smoldering remains of a travelling caravan. One of the caravan guards, wearing the livery of Baron Greigory, lies wounded nearby.&quot;An ambush,&quot; he gasps. &quot;That ettin is sending his minions straight into Arhynn through the secret path! How could he have known? Ahead, you see the lumbering, two-headed form of an ettin. &quot;He said his name was Mauler. You must stop him!&quot; Mauler's goblin minions are taking a secret route to attack Arhynn, Baron Greigory's seat. If too many of his goblins escape off the far side of the trail, Mauler will have triumphed over you. Your goal is to kill him before that happens." textAlignment="JUSTIFY" wrappingWidth="588.21875" />
+            <Text fx:id="rewardText" fill="WHITE" layoutX="14.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="As you are travelling toward Arhynn, you come across the still-smoldering remains of a travelling caravan. One of the caravan guards, wearing the livery of Baron Greigory, lies wounded nearby.&quot;An ambush,&quot; he gasps. &quot;That ettin is sending his minions straight into Arhynn through the secret path! How could he have known? Ahead, you see the lumbering, two-headed form of an ettin. &quot;He said his name was Mauler. You must stop him!&quot; Mauler's goblin minions are taking a secret route to attack Arhynn, Baron Greigory's seat. If too many of his goblins escape off the far side of the trail, Mauler will have triumphed over you. Your goal is to kill him before that happens." textAlignment="JUSTIFY" wrappingWidth="588.2187604904175" />
+            <VBox fx:id="boxContinue" layoutX="497.0" layoutY="399.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefWidth="100.0">
+               <children>
+                  <Line endX="100.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneContinue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleContinue" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="100.0">
+                     <children>
+                        <Rectangle fx:id="itemContinue" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="100.0" />
+                        <Text fx:id="textContinue" fill="DARKGRAY" strokeType="OUTSIDE" strokeWidth="0.0" text="Continue">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </StackPane>
+                  <Line endX="100.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+            <VBox layoutX="14.0" layoutY="399.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefWidth="100.0">
+               <children>
+                  <Line endX="100.0" stroke="DARKGRAY" />
+                  <StackPane fx:id="paneBack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleNavigationBack" onMouseEntered="#handleOnMouseEntered" onMouseExited="#handleOnMouseExited" onMousePressed="#handleOnMousePressed" onMouseReleased="#handleOnMouseReleased" prefHeight="30.0" prefWidth="100.0">
+                     <children>
+                        <Rectangle fx:id="itemBack" arcHeight="5.0" arcWidth="5.0" height="30.0" opacity="0.6" stroke="TRANSPARENT" strokeType="INSIDE" width="100.0" />
+                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="Back" textFill="DARKGRAY">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <Line endX="100.0" stroke="DARKGRAY" />
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</VBox>

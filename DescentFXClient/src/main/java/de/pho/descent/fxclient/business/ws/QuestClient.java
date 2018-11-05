@@ -6,6 +6,7 @@ import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.exception.ErrorMessage;
 import de.pho.descent.shared.model.monster.MonsterGroup;
+import de.pho.descent.shared.model.quest.LootBox;
 import java.util.logging.Logger;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
@@ -53,6 +54,43 @@ public class QuestClient extends BaseRESTClient {
             }
 
             return wsQuestEncounter;
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+    }
+
+    public static LootBox getQuestReward(String username, String pwdHash, long questId) throws ServerException {
+
+        Client client = null;
+
+        try {
+            client = ClientBuilder.newClient();
+            WebTarget securedTarget = client.target(getSecuredBaseUri());
+            WebTarget questsTarget = securedTarget.path("quests").path("{" + ParamValue.QUEST_ID + "}/reward");
+
+            String uriPath = questsTarget.resolveTemplate(ParamValue.QUEST_ID, questId).getUri().getPath();
+            String authToken = SecurityTools.createAuthenticationToken(username,
+                    pwdHash,
+                    HttpMethod.GET, uriPath);
+
+            Response getResponse = questsTarget
+                    .resolveTemplate(ParamValue.QUEST_ID, questId)
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(ParamValue.AUTHORIZATION_HEADER_KEY, authToken)
+                    .get();
+//            LOG.info(getResponse.toString());
+
+            LootBox box = null;
+            if (getResponse.getStatus() == Response.Status.OK.getStatusCode()) {
+                box = getResponse.readEntity(LootBox.class);
+            } else {
+                ErrorMessage errorMsg = getResponse.readEntity(ErrorMessage.class);
+                throw new ServerException(errorMsg.getErrorMessage());
+            }
+
+            return box;
         } finally {
             if (client != null) {
                 client.close();
