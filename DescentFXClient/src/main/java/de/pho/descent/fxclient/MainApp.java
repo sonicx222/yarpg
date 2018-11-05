@@ -24,6 +24,7 @@ public class MainApp extends Application {
     private static final LogManager LOGMANAGER = LogManager.getLogManager();
     private static final Logger LOGGER = Logger.getLogger(MainApp.class.getName());
     public static Font gameFont;
+    public static Stage currentStage;
 
     //setup logging configuration
     static {
@@ -58,6 +59,7 @@ public class MainApp extends Application {
         // load Font
         gameFont = Font.loadFont(MainApp.class.getClassLoader().getResourceAsStream("fonts/Garamond_Premier_Pro.ttf"), 18);
 
+        currentStage = stage;
         LoginscreenView loginscreenView = new LoginscreenView();
         Scene scene = new Scene(loginscreenView.getView());
 
@@ -70,7 +72,7 @@ public class MainApp extends Application {
         LOGMANAGER.reset();
     }
 
-    public static void switchToScene(final Stage previousStage, FXMLView viewOfScene) {
+    public static void switchToNewStageScene(final Stage previousStage, FXMLView viewOfScene) {
         if (previousStage != null) {
             previousStage.close();
         }
@@ -80,12 +82,17 @@ public class MainApp extends Application {
         }
     }
 
-    public static void switchFullscreenScene(final Stage currentStage, FXMLView viewOfScene) {
+    public static void switchFullscreenScene(FXMLView viewOfScene) {
         currentStage.getScene().setRoot(viewOfScene.getView());
     }
 
     public static void switchFullscreenScene(final Event event, FXMLView viewOfScene) {
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.getScene().setRoot(viewOfScene.getView());
+    }
+
+    public static void switchFullscreenScene(final Node node, FXMLView viewOfScene) {
+        Stage currentStage = (Stage) (node).getScene().getWindow();
         currentStage.getScene().setRoot(viewOfScene.getView());
     }
 
@@ -96,7 +103,7 @@ public class MainApp extends Application {
     }
 
     private static void showSceneInFullscreen(Stage stage, Scene scene) {
-        stage.setFullScreen(true);
+        stage.setFullScreen(false);
         // disable popup message
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);

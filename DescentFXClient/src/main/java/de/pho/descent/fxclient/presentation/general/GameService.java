@@ -1,18 +1,24 @@
 package de.pho.descent.fxclient.presentation.general;
 
 import static de.pho.descent.fxclient.MainApp.showError;
+import static de.pho.descent.fxclient.MainApp.switchFullscreenScene;
 import de.pho.descent.fxclient.business.auth.Credentials;
 import de.pho.descent.fxclient.business.ws.CampaignClient;
 import de.pho.descent.fxclient.business.ws.MapClient;
 import de.pho.descent.fxclient.business.ws.QuestClient;
 import de.pho.descent.fxclient.business.ws.ServerException;
+import de.pho.descent.fxclient.presentation.game.epilog.EpilogView;
 import de.pho.descent.fxclient.presentation.game.hero.HeroGameService;
+import de.pho.descent.fxclient.presentation.game.hero.HeroGameView;
 import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameService;
+import de.pho.descent.fxclient.presentation.game.overlord.OverlordGameView;
+import de.pho.descent.fxclient.presentation.heroselection.HeroSelectionView;
 import de.pho.descent.fxclient.presentation.message.MessageService;
 import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.dto.WsGameMap;
 import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.campaign.CampaignPhase;
 import java.util.Objects;
 import java.util.logging.Logger;
 import javafx.scene.control.Label;
@@ -172,10 +178,32 @@ public class GameService {
     }
 
     public void updateGameState(WsCampaign updatedCampaign) {
+        CampaignPhase oldPhase = gameDataModel.getCurrentCampaign().getPhase();
+        CampaignPhase newPhase = updatedCampaign.getPhase();
+
         gameDataModel.setCurrentCampaign(updatedCampaign);
         loadQuestEncounter();
         loadQuestMap();
         updateMessagesAndUnitStats();
+
+        if (oldPhase != newPhase) {
+            navigateToScene(gameDataModel.getCurrentCampaign());
+        }
+    }
+
+    public void navigateToScene(WsCampaign campaign) {
+        switch (campaign.getPhase()) {
+            case HERO_SELECTION:
+                switchFullscreenScene(new HeroSelectionView());
+            case ENCOUNTER:
+                if (Objects.equals(credentials.getPlayer(), campaign.getOverlord().getPlayedBy())) {
+                    switchFullscreenScene(new OverlordGameView());
+                } else {
+                    switchFullscreenScene(new HeroGameView());
+                }
+            case FINISHED_ENCOUNTER:
+                switchFullscreenScene(new EpilogView());
+        }
     }
 
     public void updateMessagesAndUnitStats() {
