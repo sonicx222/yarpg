@@ -81,6 +81,12 @@
                         <configuration>
                             <excludeScope>system</excludeScope>
                             <excludeGroupIds>junit,
+                                javax,
+                                com.airhacks,
+                                com.fasterxml.jackson.datatype,
+                                org.glassfish.jersey.core,
+                                org.glassfish.jersey.media,
+                                org.controlsfx,
                                 org.mockito,
                                 org.hamcrest,
                                 org.assertj
@@ -152,7 +158,7 @@
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
@@ -170,7 +176,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>
