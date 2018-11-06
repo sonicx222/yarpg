@@ -73,6 +73,19 @@ public class MapService {
         node.setEffect(borderGlow);
     }
 
+    public void applyActiveUnitEffect(Node node) {
+        // apply highlight effect
+        int depth = 70;
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+        borderGlow.setColor(Color.ALICEBLUE);
+        borderGlow.setWidth(depth);
+        borderGlow.setHeight(depth);
+
+        node.setEffect(borderGlow);
+    }
+
     public void resetEffect(Node node) {
         node.setEffect(null);
     }
@@ -128,7 +141,7 @@ public class MapService {
             Button heroButton = createHeroFieldButton(hero);
             heroButton.setUserData(hero);
             if (hero.isActive()) {
-                applyHighlightEffect(heroButton);
+                applyActiveUnitEffect(heroButton);
             } else if (hero.isKnockedOut()) {
                 heroButton.setDisable(true);
             }
@@ -154,7 +167,7 @@ public class MapService {
             Button monsterButton = createMonsterFieldButton(monster);
             monsterButton.setUserData(monster);
             if (monster.isActive()) {
-                applyHighlightEffect(monsterButton);
+                applyActiveUnitEffect(monsterButton);
             }
 
             monsterButton.setOnMouseClicked(e -> {

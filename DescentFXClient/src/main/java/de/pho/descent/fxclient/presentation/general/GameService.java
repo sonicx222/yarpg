@@ -195,14 +195,17 @@ public class GameService {
         switch (campaign.getPhase()) {
             case HERO_SELECTION:
                 switchFullscreenScene(new HeroSelectionView());
+                break;
             case ENCOUNTER:
                 if (Objects.equals(credentials.getPlayer(), campaign.getOverlord().getPlayedBy())) {
                     switchFullscreenScene(new OverlordGameView());
                 } else {
                     switchFullscreenScene(new HeroGameView());
                 }
+                break;
             case FINISHED_ENCOUNTER:
                 switchFullscreenScene(new EpilogView());
+                break;
         }
     }
 
