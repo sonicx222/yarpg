@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" ppkg="de.pho.descent.shared.model" epkg=".map" v="4.7" status="GENERATED" persistenceUnitName="DEFAULT_PU" sm="false" id="_1541525229498247" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:mapped-superclass abs="false" class="GameEntity" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229613267">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="name" ft="false" id="_1541525229614269"/>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229613268">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:mapped-superclass>
+    <jpa:entity abs="false" class="GameMap" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229556248">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.Quest" v="true" name="quest" ft="false" id="_1541525229568250">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.QuestPart" v="true" name="part" ft="false" id="_1541525229569251">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" name="gridXSize" ft="false" id="_1541525229569252"/>
+            <jpa:basic attribute-type="int" v="true" name="gridYSize" ft="false" id="_1541525229569253"/>
+            <jpa:basic attribute-type="String" v="true" name="imagePath" ft="false" id="_1541525229572256">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+            </jpa:basic>
+            <jpa:one-to-many own="true" collection-type="java.util.List" connected-entity-id="_1541525229908339" fetch="EAGER" v="true" name="mapFields" ft="false" id="_1541525229569254">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="map_id"/>
+            </jpa:one-to-many>
+            <jpa:transient attribute-type="java.util.Map&lt;java.lang.Integer,java.util.Map&lt;java.lang.Integer,de.pho.descent.shared.model.map.MapField&gt;&gt;" v="true" name="mapLayout" ft="false" id="_1541525229561249">
+                <jpa:an e="true" n="@javax.xml.bind.annotation.XmlTransient"/>
+            </jpa:transient>
+            <jpa:id attribute-type="long" v="true" name="id" ft="false" id="_1541525229572255">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.map.findMapByQuestAndPart">
+            <jpa:query>select g from GameMap as g where g.quest = :paramQuest and g.part = :paramQuestPart</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity abs="false" class="GameUnit" superclassId="_1541525229613267" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229594257">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="int" v="true" name="actions" ft="false" id="_1541525229608260"/>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.action.ActionType" v="true" name="lastAction" ft="false" id="_1541525229609261">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" name="totalLife" ft="false" id="_1541525229609262"/>
+            <jpa:basic attribute-type="int" v="true" name="currentLife" ft="false" id="_1541525229609263"/>
+            <jpa:basic attribute-type="int" v="true" name="movementPoints" ft="false" id="_1541525229609264"/>
+            <jpa:basic attribute-type="int" v="true" name="movementSpent" ft="false" id="_1541525229609265"/>
+            <jpa:basic attribute-type="boolean" v="true" name="active" ft="false" id="_1541525229609266"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229722286" v="true" name="playedBy" ft="false" id="_1541525229601259"/>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_1541525229908339" connected-attribute-id="_1541525229909342" v="true" name="currentLocation" ft="false" id="_1541525229594258">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonManagedReference(&quot;unit-location&quot;)"/>
+            </jpa:one-to-many>
+        </jpa:attributes>
+        <jpa:inheritance strategy="TABLE_PER_CLASS"/>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Message" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229628270">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.message.MessageType" v="true" name="type" ft="false" id="_1541525229628272">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.util.Date" v="true" name="createdOn" ft="false" id="_1541525229629275">
+                <jpa:temporal>TIMESTAMP</jpa:temporal>
+            </jpa:basic>
+            <jpa:basic attribute-type="String" v="true" name="text" ft="false" id="_1541525229629276">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="2000"/>
+            </jpa:basic>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229927350" v="true" name="campaign" ft="false" id="_1541525229629273"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229722286" v="true" name="player" ft="false" id="_1541525229629274"/>
+            <jpa:id attribute-type="long" v="true" name="id" ft="false" id="_1541525229628271">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.message.Message.findGeneral">
+            <jpa:query>select m from Message as m where m.campaign is null order by m.createdOn desc</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.message.Message.findbyCampaign">
+            <jpa:query>select m from Message as m where m.campaign.id = :paramCampaignId order by m.createdOn desc</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.message.Message.findbyCampaignAndDate">
+            <jpa:query>select m from Message as m where m.campaign.id = :paramCampaignId and m.createdOn &gt; :paramDate order by m.createdOn desc</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.message.Message.findbyCampaignIDPlayerId">
+            <jpa:query>select m from Message as m where m.campaign.id = :paramCampaignId and m.player.id = :paramPlayerId order by m.createdOn desc</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity abs="false" class="GameMonster" superclassId="_1541525229594257" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229647277">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="boolean" v="true" name="removed" ft="false" id="_1541525229647278"/>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.monster.MonsterTemplate" v="true" name="monsterTemplate" ft="false" id="_1541525229648279">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Overlord" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229701280">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.overlord.OverlordClass" v="true" name="overlordClass" ft="false" id="_1541525229702283">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" name="xp" ft="false" id="_1541525229702284"/>
+            <jpa:basic attribute-type="java.util.Date" v="true" name="lastMessageUpdate" ft="false" id="_1541525229702285">
+                <jpa:temporal>TIMESTAMP</jpa:temporal>
+            </jpa:basic>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229722286" v="true" name="playedBy" ft="false" id="_1541525229702282"/>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229702281">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Player" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229722286">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="username" ft="false" id="_1541525229722288"/>
+            <jpa:basic attribute-type="String" v="true" name="password" ft="false" id="_1541525229722289">
+                <jpa:an e="true" n="@javax.xml.bind.annotation.XmlTransient"/>
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="400"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="deactive" ft="false" id="_1541525229722290">
+                <jpa:column name="DEACTIVE"/>
+            </jpa:basic>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229722287">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.Player.findAll">
+            <jpa:query>select p from Player as p</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.Player.findAllByUsername">
+            <jpa:query>select p from Player as p where LOWER(p.username) = LOWER(:usernameParam) </jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity abs="false" class="HeroSelection" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229744291">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.hero.HeroTemplate" v="true" name="selectedHero" ft="false" id="_1541525229744295">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="ready" ft="false" id="_1541525229744296"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229927350" v="true" name="campaign" ft="false" id="_1541525229744293"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229722286" v="true" name="player" ft="false" id="_1541525229744294"/>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229744292">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="GameHero" superclassId="_1541525229594257" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229768297">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.hero.HeroTemplate" v="true" name="heroTemplate" ft="false" id="_1541525229768298">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" name="stamina" ft="false" id="_1541525229768299"/>
+            <jpa:basic attribute-type="int" v="true" name="fatigue" ft="false" id="_1541525229768300"/>
+            <jpa:basic attribute-type="int" v="true" name="initiative" ft="false" id="_1541525229768301"/>
+            <jpa:basic attribute-type="boolean" v="true" name="knockedOut" ft="false" id="_1541525229769302"/>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.item.Item" v="true" name="weapon" ft="false" id="_1541525229769303">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.item.Item" v="true" name="shield" ft="false" id="_1541525229769304">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.item.Item" v="true" name="armor" ft="false" id="_1541525229769305">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.item.Item" v="true" name="trinket1" ft="false" id="_1541525229769306">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.item.Item" v="true" name="trinket2" ft="false" id="_1541525229769307">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="int" v="true" name="xp" ft="false" id="_1541525229792310"/>
+            <jpa:basic attribute-type="int" v="true" name="might" ft="false" id="_1541525229792311"/>
+            <jpa:basic attribute-type="int" v="true" name="knowledge" ft="false" id="_1541525229792312"/>
+            <jpa:basic attribute-type="int" v="true" name="willpower" ft="false" id="_1541525229792313"/>
+            <jpa:basic attribute-type="int" v="true" name="awareness" ft="false" id="_1541525229792314"/>
+            <jpa:basic attribute-type="java.util.Date" v="true" name="lastMessageUpdate" ft="false" id="_1541525229792315">
+                <jpa:temporal>TIMESTAMP</jpa:temporal>
+            </jpa:basic>
+            <jpa:element-collection target-class="de.pho.descent.shared.model.item.Item" collection-type="java.util.Collection" v="true" name="inventory" ft="false" id="_1541525229769308">
+                <jpa:column name="item" nullable="false"/>
+                <jpa:enumerated>STRING</jpa:enumerated>
+                <jpa:collection-table name="hero_inventory"/>
+            </jpa:element-collection>
+            <jpa:element-collection target-class="de.pho.descent.shared.model.hero.skill.HeroSkill" collection-type="java.util.Collection" v="true" name="skills" ft="false" id="_1541525229784309">
+                <jpa:column name="skill" nullable="false"/>
+                <jpa:enumerated>STRING</jpa:enumerated>
+                <jpa:collection-table name="hero_skills"/>
+            </jpa:element-collection>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Token" superclassId="_1541525229613267" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229817316">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.token.TokenType" v="true" name="type" ft="false" id="_1541525229818318">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="active" ft="false" id="_1541525229818319"/>
+            <jpa:one-to-one own="false" primaryKey="false" connected-entity-id="_1541525229908339" connected-attribute-id="_1541525229909343" v="true" name="currentLocation" ft="false" id="_1541525229818317">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonManagedReference(&quot;token-location&quot;)"/>
+            </jpa:one-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="MapTileGroup" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229846320">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="name" ft="false" id="_1541525229846322"/>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229846321">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity abs="false" class="QuestEncounter" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229868323">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.Quest" v="true" name="quest" ft="false" id="_1541525229868325">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.QuestPart" v="true" name="part" ft="false" id="_1541525229868326">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.QuestPhase" v="true" name="phase" ft="false" id="_1541525229869328"/>
+            <jpa:basic attribute-type="boolean" v="true" name="active" ft="false" id="_1541525229869329"/>
+            <jpa:basic attribute-type="int" v="true" name="trigger" ft="false" id="_1541525229869330"/>
+            <jpa:basic attribute-type="int" v="true" name="round" ft="false" id="_1541525229869331"/>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.PlaySide" v="true" name="currentTurn" ft="false" id="_1541525229869332">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.PlaySide" v="true" name="winner" ft="false" id="_1541525229869333">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:one-to-many own="true" collection-type="java.util.List" connected-entity-id="_1541525229768297" v="true" name="heroes" ft="false" id="_1541525229869335">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="encounter_id"/>
+            </jpa:one-to-many>
+            <jpa:one-to-many own="true" collection-type="java.util.List" connected-entity-id="_1541525229647277" v="true" name="monsters" ft="false" id="_1541525229874336">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="encounter_id"/>
+            </jpa:one-to-many>
+            <jpa:one-to-many own="true" collection-type="java.util.List" connected-entity-id="_1541525229817316" v="true" name="token" ft="false" id="_1541525229874337">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="encounter_id"/>
+            </jpa:one-to-many>
+            <jpa:one-to-one own="true" optional="true" primaryKey="false" connected-entity-id="_1541525229927350" connected-attribute-id="_1541525229927352" v="true" name="campaign" ft="false" id="_1541525229868327">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonBackReference(&quot;active_campaign_quest&quot;)"/>
+                <jpa:join-column name="campaign_id" nullable="true"/>
+            </jpa:one-to-one>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1541525229556248" v="true" name="map" ft="false" id="_1541525229869334">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229868324">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.quest.QuestEncounter.findByQuestAndPart">
+            <jpa:query>select distinct qe from QuestEncounter as qe where qe.quest=:questParam and qe.part=:questPartParam</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Inventory" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229892338">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity abs="false" class="MapField" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229908339">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="int" v="true" name="xPos" id="_1541525229909344"/>
+            <jpa:basic attribute-type="int" v="true" name="yPos" id="_1541525229909345"/>
+            <jpa:basic attribute-type="int" v="true" name="moveCost" ft="false" id="_1541525229909346"/>
+            <jpa:basic attribute-type="boolean" v="true" name="passable" ft="false" id="_1541525229909347"/>
+            <jpa:basic attribute-type="boolean" v="true" name="heroSpawn" ft="false" id="_1541525229909348"/>
+            <jpa:basic attribute-type="boolean" v="true" name="monsterSpawn" ft="false" id="_1541525229909349"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1541525229846320" v="true" name="tileGroup" ft="false" id="_1541525229909341">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:many-to-one>
+            <jpa:many-to-one optional="true" primaryKey="false" connected-entity-id="_1541525229594257" connected-attribute-id="_1541525229594258" v="true" name="gameUnit" ft="false" id="_1541525229909342">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonBackReference(&quot;unit-location&quot;)"/>
+                <jpa:join-column name="gameunit_id" nullable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-one own="true" optional="true" primaryKey="false" connected-entity-id="_1541525229817316" connected-attribute-id="_1541525229818317" v="true" name="token" ft="false" id="_1541525229909343">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonBackReference(&quot;token-location&quot;)"/>
+                <jpa:join-column name="token_id" nullable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229908340">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.MapField.findSpawnsByGroupId">
+            <jpa:query>select mf from MapField as mf where mf.heroSpawn = true and mf.tileGroup.id = :paramGroupId</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity abs="false" class="Campaign" v="true" xre="false" m="false" rootElement="_1541525229498247" id="_1541525229927350">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="int" v="true" name="gold" ft="false" id="_1541525229927353"/>
+            <jpa:basic attribute-type="java.util.Date" v="true" name="createdOn" ft="false" id="_1541525229927354">
+                <jpa:temporal>TIMESTAMP</jpa:temporal>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.util.Date" v="true" name="startedOn" ft="false" id="_1541525229928355">
+                <jpa:temporal>TIMESTAMP</jpa:temporal>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.campaign.CampaignPhase" v="true" name="phase" ft="false" id="_1541525229928356">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="de.pho.descent.shared.model.quest.QuestTemplate" v="true" name="nextQuestTemplate" ft="false" id="_1541525229928357">
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:one-to-many own="true" collection-type="java.util.List" connected-entity-id="_1541525229744291" v="true" name="heroSelections" ft="false" id="_1541525229928359">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="campaign_id"/>
+            </jpa:one-to-many>
+            <jpa:one-to-one own="false" primaryKey="false" connected-entity-id="_1541525229868323" connected-attribute-id="_1541525229868327" v="true" name="activeQuest" ft="false" id="_1541525229927352">
+                <jpa:an e="true" n="@com.fasterxml.jackson.annotation.JsonManagedReference(&quot;active_campaign_quest&quot;)"/>
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:one-to-one>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1541525229701280" v="true" name="overlord" ft="false" id="_1541525229928358"/>
+            <jpa:id attribute-type="Long" v="true" name="id" ft="false" id="_1541525229927351">
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="true" name="de.pho.descent.shared.model.Campaign.findActive">
+            <jpa:query>select c from Campaign as c where c.phase &lt;&gt; de.pho.descent.shared.model.campaign.CampaignPhase.FINISHED</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:snp loc="BEFORE_PACKAGE" e="true">/**
+ * This file was generated by the Jeddict
+ */</jpa:snp>
+</jpa:entity-mappings>
