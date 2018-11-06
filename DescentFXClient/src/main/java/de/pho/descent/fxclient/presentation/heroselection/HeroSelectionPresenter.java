@@ -254,9 +254,9 @@ public class HeroSelectionPresenter implements Initializable {
                 break;
             case ENCOUNTER:
                 if (Objects.equals(credentials.getPlayer(), gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
-                    switchFullscreenScene(event, new OverlordGameView());
+                    switchFullscreenScene(new OverlordGameView());
                 } else {
-                    switchFullscreenScene(event, new HeroGameView());
+                    switchFullscreenScene(new HeroGameView());
                 }
         }
     }
@@ -269,9 +269,9 @@ public class HeroSelectionPresenter implements Initializable {
         if (gameDataModel.getCurrentCampaign() != null
                 && gameDataModel.getCurrentCampaign().getPhase() == ENCOUNTER) {
             if (Objects.equals(credentials.getPlayer(), gameDataModel.getCurrentCampaign().getOverlord().getPlayedBy())) {
-                switchFullscreenScene(event, new OverlordGameView());
+                switchFullscreenScene(new OverlordGameView());
             } else {
-                switchFullscreenScene(event, new HeroGameView());
+                switchFullscreenScene(new HeroGameView());
             }
         }
     }
@@ -279,7 +279,7 @@ public class HeroSelectionPresenter implements Initializable {
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("HeroSelectionPresenter: handleNavigationBack()");
-        switchFullscreenScene(event, new StartMenuView());
+        switchFullscreenScene(new StartMenuView());
     }
 
     @FXML

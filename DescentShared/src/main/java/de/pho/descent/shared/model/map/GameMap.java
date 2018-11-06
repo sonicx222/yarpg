@@ -1,6 +1,8 @@
 package de.pho.descent.shared.model.map;
 
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.model.quest.Quest;
 import de.pho.descent.shared.model.quest.QuestPart;
 import java.io.Serializable;
@@ -116,6 +118,22 @@ public class GameMap implements Serializable {
     public List<MapField> getMonsterSpawnFields() {
         return mapFields.stream()
                 .filter(field -> field.isMonsterSpawn())
+                .collect(Collectors.toList());
+    }
+
+    @XmlTransient
+    @Transient
+    public List<MapField> getMonsterFields() {
+        return mapFields.stream()
+                .filter(field -> (field.getGameUnit() != null) && (field.getGameUnit() instanceof GameMonster))
+                .collect(Collectors.toList());
+    }
+
+    @XmlTransient
+    @Transient
+    public List<MapField> getHeroFields() {
+        return mapFields.stream()
+                .filter(field -> (field.getGameUnit() != null) && (field.getGameUnit() instanceof GameHero))
                 .collect(Collectors.toList());
     }
 

@@ -52,6 +52,9 @@ public class OverlordGamePresenter implements Initializable {
 
     @FXML
     private TableColumn<GameMonster, String> colMonsterActive;
+    
+    @FXML
+    private TableColumn<GameMonster, String> colMonsterRemoved;
 
     @FXML
     private TableColumn<GameMonster, String> colMonsterActions;
@@ -144,7 +147,7 @@ public class OverlordGamePresenter implements Initializable {
         } else {
             monsterTable.setDisable(true);
         }
-        
+
         monsterTable.getSelectionModel().selectedItemProperty()
                 .addListener((ObservableValue observable, Object oldValue, Object newValue) -> {
                     selectedMonster = (GameMonster) monsterTable.getSelectionModel().getSelectedItem();
@@ -183,6 +186,12 @@ public class OverlordGamePresenter implements Initializable {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<GameMonster, String> p) {
                 return new SimpleStringProperty(p.getValue().isActive() ? "X" : "");
+            }
+        });
+        colMonsterRemoved.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<GameMonster, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<GameMonster, String> p) {
+                return new SimpleStringProperty(p.getValue().isRemoved() ? "X" : "");
             }
         });
         colMonsterActions.setCellValueFactory(new PropertyValueFactory<>("actions"));
@@ -278,7 +287,7 @@ public class OverlordGamePresenter implements Initializable {
     public void activateMonsterGroup() {
         if (gameDataModel.getCurrentQuestEncounter().getPhase() == QuestPhase.MONSTER_ACTIVATION) {
             if (selectedMonster != null) {
-            overlordGameService.activateMonsterGroup(selectedMonster.getMonsterTemplate().getGroup());
+                overlordGameService.activateMonsterGroup(selectedMonster.getMonsterTemplate().getGroup());
             }
             gameService.updateMessagesAndUnitStats();
             mapService.rebuildMap();
@@ -303,7 +312,7 @@ public class OverlordGamePresenter implements Initializable {
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("OverlordGamePresenter: handleNavigationBack()");
-        switchFullscreenScene(event, new StartMenuView());
+        switchFullscreenScene(new StartMenuView());
     }
 
 }

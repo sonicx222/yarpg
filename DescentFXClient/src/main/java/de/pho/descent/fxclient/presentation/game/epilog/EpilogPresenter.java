@@ -8,7 +8,6 @@ import de.pho.descent.fxclient.business.ws.ServerException;
 import de.pho.descent.fxclient.presentation.campaignselection.CampaignSelectionView;
 import de.pho.descent.fxclient.presentation.general.GameDataModel;
 import de.pho.descent.fxclient.presentation.general.GameService;
-import de.pho.descent.shared.auth.SecurityTools;
 import de.pho.descent.shared.dto.WsQuestEncounter;
 import de.pho.descent.shared.model.PlaySide;
 import de.pho.descent.shared.model.quest.LootBox;
@@ -72,13 +71,13 @@ public class EpilogPresenter implements Initializable {
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("EpilogPresenter: handleNavigationBack()");
-        switchFullscreenScene(event, new CampaignSelectionView());
+        switchFullscreenScene(new CampaignSelectionView());
     }
 
     @FXML
     public void handleContinue(MouseEvent event) {
         LOGGER.info("EpilogPresenter: handleContinue()");
-        switchFullscreenScene(event, new CampaignSelectionView());
+        switchFullscreenScene(new CampaignSelectionView());
     }
 
     private void getQuestReward() {

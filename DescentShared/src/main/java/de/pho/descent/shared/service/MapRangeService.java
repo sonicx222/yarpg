@@ -1,6 +1,7 @@
 package de.pho.descent.shared.service;
 
 import de.pho.descent.shared.model.GameUnit;
+import de.pho.descent.shared.model.hero.GameHero;
 import de.pho.descent.shared.model.map.MapField;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,21 +18,35 @@ public class MapRangeService {
 
     private static final Logger LOGGER = Logger.getLogger(MapRangeService.class.getName());
 
-    public static Set<MapField> getFieldsInMovementRange(List<MapField> rootFields, int range, List<MapField> mapFields, List<MapField> heroFields) {
+    public static Set<MapField> getFieldsInMovementRange(List<MapField> rootFields, int range, List<MapField> mapFields, List<MapField> heroFields, List<MapField> monsterFields) {
         Set<MapField> inRangeSet = new HashSet<>();
 
+        // treat enemy GameUnit locations as unpassable fields for range check
+        List<MapField> unpassableFields = new ArrayList<>();
+
+        if (rootFields.get(0).getGameUnit() instanceof GameHero) {
+            unpassableFields.addAll(monsterFields);
+        } else {
+            unpassableFields.addAll(heroFields);
+        }
+
         for (MapField rootField : rootFields) {
-            searchFieldsInRange(rootField, true, 0, range, mapFields, heroFields, inRangeSet);
-            inRangeSet.remove(rootField);
+            searchFieldsInRange(rootField, true, 0, range, mapFields, unpassableFields, inRangeSet);
+        }
+
+        if (rootFields.get(0).getGameUnit() instanceof GameHero) {
+            inRangeSet.removeAll(heroFields);
+        } else {
+            inRangeSet.removeAll(monsterFields);
         }
 
         return inRangeSet;
     }
 
-    public static Set<MapField> getFieldsInMovementRange(MapField rootField, int range, List<MapField> mapFields, List<MapField> heroFields) {
+    public static Set<MapField> getFieldsInMovementRange(MapField rootField, int range, List<MapField> mapFields, List<MapField> unpassableFields) {
         Set<MapField> inRangeSet = new HashSet<>();
 
-        searchFieldsInRange(rootField, true, 0, range, mapFields, heroFields, inRangeSet);
+        searchFieldsInRange(rootField, true, 0, range, mapFields, unpassableFields, inRangeSet);
         inRangeSet.remove(rootField);
 
         return inRangeSet;

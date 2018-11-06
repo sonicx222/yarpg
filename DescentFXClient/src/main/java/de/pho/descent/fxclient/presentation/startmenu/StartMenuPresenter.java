@@ -15,7 +15,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -79,7 +78,7 @@ public class StartMenuPresenter implements Initializable {
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ESCAPE) {
-            handleExit((Event) event);
+            exit();
         }
     }
 
@@ -107,7 +106,7 @@ public class StartMenuPresenter implements Initializable {
     public void handleNewCampaign(MouseEvent event) {
 
         if (credentials == null || !credentials.isValid()) {
-            switchFullscreenScene(event, new LoginscreenView());
+            switchFullscreenScene(new LoginscreenView());
             Notifications.create()
                     .darkStyle().position(Pos.TOP_RIGHT)
                     .text("No credentials found. Please log in first")
@@ -122,15 +121,14 @@ public class StartMenuPresenter implements Initializable {
             }
             if (campaign != null) {
                 gameDataModel.setCurrentCampaign(campaign);
-//                switchFullscreenScene(event, new HeroGameView());
-                switchFullscreenScene(event, new HeroSelectionView());
+                switchFullscreenScene(new HeroSelectionView());
             }
         }
     }
 
     @FXML
     public void handleJoinCampaign(MouseEvent event) {
-        switchFullscreenScene(event, new CampaignSelectionView());
+        switchFullscreenScene(new CampaignSelectionView());
     }
 
     @FXML
@@ -140,15 +138,15 @@ public class StartMenuPresenter implements Initializable {
     @FXML
     public void handleLogout(MouseEvent event) {
         credentials.setPlayer(null);
-        switchFullscreenScene(event, new LoginscreenView());
+        switchFullscreenScene(new LoginscreenView());
     }
 
     @FXML
     public void handleExit(MouseEvent event) {
-        handleExit((Event) event);
+        exit();
     }
 
-    private void handleExit(Event event) {
+    private void exit() {
         System.exit(0);
     }
 

@@ -302,7 +302,7 @@ public class HeroGamePresenter implements Initializable {
     @FXML
     public void handleNavigationBack(MouseEvent event) {
         LOGGER.info("HeroGamePresenter: handleNavigationBack()");
-        switchFullscreenScene(event, new CampaignSelectionView());
+        switchFullscreenScene(new CampaignSelectionView());
     }
 
     @FXML

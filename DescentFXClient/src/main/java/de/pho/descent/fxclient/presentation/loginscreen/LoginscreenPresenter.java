@@ -13,7 +13,6 @@ import de.pho.descent.shared.dto.WsCampaign;
 import de.pho.descent.shared.model.Player;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -50,7 +49,7 @@ public class LoginscreenPresenter implements Initializable {
         // return key on pwd field
         loginPwdText.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                handleLogin(e);
+                login();
             }
         });
     }
@@ -74,7 +73,7 @@ public class LoginscreenPresenter implements Initializable {
 
     @FXML
     public void handleLogin(MouseEvent event) {
-        handleLogin((Event) event);
+        login();
     }
 
     @FXML
@@ -82,12 +81,12 @@ public class LoginscreenPresenter implements Initializable {
         System.exit(0);
     }
 
-    private void handleLogin(Event event) {
+    private void login() {
         if (loginUserText.getText().equals("debug")) {
             Object[] result = Automate.startCampaignWithThreeHeroes();
             credentials.setPlayer((Player) result[1]);
             gameDataModel.setCurrentCampaign((WsCampaign) result[2]);
-            switchFullscreenScene(event, new HeroGameView());
+            switchFullscreenScene(new HeroGameView());
             gameService.updateGameState((WsCampaign) result[2]);
         }
         if (loginUserText.getText() != null && !loginUserText.getText().isEmpty()
@@ -101,7 +100,7 @@ public class LoginscreenPresenter implements Initializable {
             }
             if (player != null) {
                 credentials.setPlayer(player);
-                switchFullscreenScene(event, new StartMenuView());
+                switchFullscreenScene(new StartMenuView());
             }
         }
     }

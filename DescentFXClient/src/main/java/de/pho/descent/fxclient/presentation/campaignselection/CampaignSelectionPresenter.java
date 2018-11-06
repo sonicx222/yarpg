@@ -196,7 +196,7 @@ public class CampaignSelectionPresenter implements Initializable {
 
     @FXML
     public void handleBack(MouseEvent event) {
-        switchFullscreenScene(event, new StartMenuView());
+        switchFullscreenScene(new StartMenuView());
     }
 
     @FXML

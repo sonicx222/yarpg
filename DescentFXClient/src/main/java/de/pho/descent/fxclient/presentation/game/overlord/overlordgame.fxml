@@ -81,10 +81,11 @@
                                 <TableColumn fx:id="colMonsterName" prefWidth="112.0" text="Name" />
                                 <TableColumn fx:id="colMonsterGroup" prefWidth="121.0" text="Monster Group" />
                                 <TableColumn fx:id="colMonsterActive" prefWidth="47.0" text="Active" />
-                                <TableColumn fx:id="colMonsterActions" prefWidth="53.0" text="Actions" />
+                        <TableColumn fx:id="colMonsterRemoved" prefWidth="64.0" text="Removed" />
+                                <TableColumn fx:id="colMonsterActions" prefWidth="57.0" text="Actions" />
                                 <TableColumn fx:id="colMonsterSpeed" prefWidth="51.0" text="Speed" />
-                                <TableColumn fx:id="colMonsterHealth" prefWidth="46.0" text="Health" />
-                                <TableColumn fx:id="colMonsterSpecials" prefWidth="197.0" text="Specials" />
+                                <TableColumn fx:id="colMonsterHealth" prefWidth="47.0" text="Health" />
+                                <TableColumn fx:id="colMonsterSpecials" prefWidth="131.0" text="Specials" />
                             </columns>
                         </TableView>
                         <Pane fx:id="actionsPane" layoutX="892.0" layoutY="581.0" prefHeight="268.0" prefWidth="587.0" style="-fx-background-color: BLACK;">

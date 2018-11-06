@@ -92,20 +92,21 @@ public class MapService {
 
     public void calcAndDisplayAllowedMovePositions(GameUnit unit) {
         // treat GameUnit locations as unpassable fields for range check
-        List<MapField> unpassableFields = new ArrayList<>();
+        List<MapField> heroFields = new ArrayList<>();
+        List<MapField> monsterFields = new ArrayList<>();
 
         // add hero locations
         for (GameHero hero : gameDataModel.getCurrentQuestEncounter().getGameHeroes()) {
-            unpassableFields.addAll(hero.getCurrentLocation());
+            heroFields.addAll(hero.getCurrentLocation());
         }
         // add monster locations
         for (GameMonster monster : gameDataModel.getCurrentQuestEncounter().getGameMonsters()) {
-            unpassableFields.addAll(monster.getCurrentLocation());
+            monsterFields.addAll(monster.getCurrentLocation());
         }
 
         Set<MapField> fieldsInRange = MapRangeService.getFieldsInMovementRange(
                 unit.getCurrentLocation(),
-                unit.getMovementPoints(), gameDataModel.getCurrentQuestMap().getMapFields(), unpassableFields);
+                unit.getMovementPoints(), gameDataModel.getCurrentQuestMap().getMapFields(), heroFields, monsterFields);
 
         // highlight grid fields
         mapDataModel.getMarkedGridPaneElements().clear();

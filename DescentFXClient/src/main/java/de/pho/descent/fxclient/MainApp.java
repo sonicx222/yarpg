@@ -10,9 +10,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.event.Event;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Font;
@@ -50,6 +48,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        currentStage = stage;
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
             showError(throwable);
         });
@@ -59,7 +58,6 @@ public class MainApp extends Application {
         // load Font
         gameFont = Font.loadFont(MainApp.class.getClassLoader().getResourceAsStream("fonts/Garamond_Premier_Pro.ttf"), 18);
 
-        currentStage = stage;
         LoginscreenView loginscreenView = new LoginscreenView();
         Scene scene = new Scene(loginscreenView.getView());
 
@@ -72,50 +70,8 @@ public class MainApp extends Application {
         LOGMANAGER.reset();
     }
 
-    public static void switchToNewStageScene(final Stage previousStage, FXMLView viewOfScene) {
-        if (previousStage != null) {
-            previousStage.close();
-        }
-
-        if (viewOfScene != null) {
-            showSceneInStage(new Stage(), new Scene(viewOfScene.getView()));
-        }
-    }
-
-    public static void switchFullscreenScene(FXMLView viewOfScene) {
-        currentStage.getScene().setRoot(viewOfScene.getView());
-    }
-
-    public static void switchFullscreenScene(final Event event, FXMLView viewOfScene) {
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.getScene().setRoot(viewOfScene.getView());
-    }
-
-    public static void switchFullscreenScene(final Node node, FXMLView viewOfScene) {
-        Stage currentStage = (Stage) (node).getScene().getWindow();
-        currentStage.getScene().setRoot(viewOfScene.getView());
-    }
-
-    private static void showSceneInStage(Stage stage, Scene scene) {
-        stage.setScene(scene);
-
-        stage.show();
-    }
-
-    private static void showSceneInFullscreen(Stage stage, Scene scene) {
-        stage.setFullScreen(false);
-        // disable popup message
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        stage.setScene(scene);
-
-        stage.show();
-    }
-
     public static void showError(Throwable t) {
-        LOGGER.log(Level.SEVERE, t.getMessage(), t);
-
-        Notifications tmp = Notifications.create();
-        tmp.darkStyle().position(Pos.TOP_RIGHT).text(t.getMessage()).showError();
+        showError(t.getMessage());
     }
 
     public static void showError(String errorMsg) {
@@ -124,4 +80,41 @@ public class MainApp extends Application {
         Notifications tmp = Notifications.create();
         tmp.darkStyle().position(Pos.TOP_RIGHT).text(errorMsg).showError();
     }
+
+    public static void switchFullscreenScene(FXMLView viewOfScene) {
+        currentStage.getScene().setRoot(viewOfScene.getView());
+    }
+
+    private static void showSceneInFullscreen(Stage stage, Scene scene) {
+        stage.setFullScreen(true);
+        // disable popup message
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    private static void showSceneInStage(Stage stage, Scene scene) {
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+//        public static void switchToNewStageScene(final Stage previousStage, FXMLView viewOfScene) {
+//        if (previousStage != null) {
+//            previousStage.close();
+//        }
+//
+//        if (viewOfScene != null) {
+//            showSceneInStage(new Stage(), new Scene(viewOfScene.getView()));
+//        }
+//    }
+//    public static void switchFullscreenScene(final Event event, FXMLView viewOfScene) {
+//        switchFullscreenScene((Node) event.getSource(), viewOfScene);
+//    }
+//
+//    public static void switchFullscreenScene(final Node node, FXMLView viewOfScene) {
+//        Stage currentStage = (Stage) (node).getScene().getWindow();
+//        currentStage.getScene().setRoot(viewOfScene.getView());
+//    }
 }

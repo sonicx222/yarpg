@@ -4,11 +4,10 @@ import de.pho.descent.shared.dto.WsAction;
 import de.pho.descent.shared.model.GameUnit;
 import de.pho.descent.shared.model.action.ActionType;
 import de.pho.descent.shared.model.campaign.Campaign;
-import de.pho.descent.shared.model.hero.GameHero;
+import de.pho.descent.shared.model.map.GameMap;
 import de.pho.descent.shared.model.map.MapField;
 import de.pho.descent.shared.model.message.Message;
 import de.pho.descent.shared.model.message.MessageType;
-import de.pho.descent.shared.model.monster.GameMonster;
 import de.pho.descent.shared.service.MapRangeService;
 import de.pho.descent.web.action.ActionException;
 import de.pho.descent.web.exception.Messages;
@@ -26,25 +25,14 @@ public class MoveHandler {
     private static final Logger LOG = Logger.getLogger(MoveHandler.class.getName());
 
     public static Message handle(Campaign campaign, GameUnit activeUnit, WsAction wsAction) throws ActionException {
+        GameMap map = campaign.getActiveQuest().getMap();
         StringBuilder sbLog = new StringBuilder();
-
-        // treat GameUnit locations as unpassable fields for range check
-        List<MapField> unpassableFields = new ArrayList<>();
-
-        // add hero locations
-        for (GameHero hero : campaign.getActiveQuest().getHeroes()) {
-            unpassableFields.addAll(hero.getCurrentLocation());
-        }
-        // add monster locations
-        for (GameMonster monster : campaign.getActiveQuest().getMonsters()) {
-            unpassableFields.addAll(monster.getCurrentLocation());
-        }
 
         // calculate possible fields based on movement range and unpassable ingame fields
         Set<MapField> fieldsInRange = MapRangeService.getFieldsInMovementRange(
                 activeUnit.getCurrentLocation(), activeUnit.getMovementPoints(),
                 campaign.getActiveQuest().getMap().getMapFields(),
-                unpassableFields);
+                map.getHeroFields(), map.getMonsterFields());
 
         // range check
         if (!fieldsInRange.containsAll(wsAction.getTargetFields())) {
